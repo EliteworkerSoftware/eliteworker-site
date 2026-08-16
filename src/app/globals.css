@@ -1,0 +1,54 @@
+@import "tailwindcss";
+
+:root {
+  /* EliteWorker brand — pulled directly from the logo file */
+  --graphite: #000000;       /* base background — matches logo's black card */
+  --graphite-2: #0a0d12;     /* raised surface */
+  --wire-line: #1b2230;      /* schematic line / border, blue-tinted */
+  --signal-amber: #3b82f6;   /* primary brand blue (logo "st2") */
+  --brand-blue-dark: #1e40af;/* logo "st3" */
+  --live-cyan: #60a5fa;      /* logo "st4" — secondary accent */
+  --paper: #ffffff;          /* text — matches logo wordmark white */
+}
+
+@theme inline {
+  --color-graphite: var(--graphite);
+  --color-graphite-2: var(--graphite-2);
+  --color-wire-line: var(--wire-line);
+  --color-signal-amber: var(--signal-amber);
+  --color-brand-blue-dark: var(--brand-blue-dark);
+  --color-live-cyan: var(--live-cyan);
+  --color-paper: var(--paper);
+  --font-display: var(--font-space-grotesk);
+  --font-sans: var(--font-inter);
+  --font-mono: var(--font-jetbrains-mono);
+}
+
+body {
+  background: var(--graphite);
+  color: var(--paper);
+  font-family: var(--font-sans);
+}
+
+/* Blueprint grid — the recurring texture that ties every section back to
+   the schematics/floor-plans EliteWorker's users read every day. */
+.blueprint-grid {
+  background-image:
+    linear-gradient(var(--wire-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--wire-line) 1px, transparent 1px);
+  background-size: 40px 40px;
+  background-position: center;
+  opacity: 0.35;
+}
+
+.text-balance {
+  text-wrap: balance;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
