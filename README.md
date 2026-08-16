@@ -45,14 +45,16 @@ Then in Supabase go to Project Settings → API and copy:
 Copy `.env.example` to `.env.local` first (`.env.local` is where your real keys live —
 it's never uploaded to GitHub).
 
-## 4. Connect Resend (sends you an email every time someone submits the form)
+## 4. Connect Mailgun (sends you an email every time someone submits the form)
 
-1. Sign up free at https://resend.com
-2. Create an API key → paste into `.env.local` as `RESEND_API_KEY`
-3. Set `CONTACT_TO_EMAIL` to whatever inbox should get the leads
-4. For now you can leave `CONTACT_FROM_EMAIL` as the Resend test address; once
-   you verify your own domain in Resend (a few DNS records), switch it to
-   something like `EliteWorker <hello@eliteworker.io>`
+1. Sign up free at https://mailgun.com
+2. Create an API key → paste into `.env.local` as `MAILGUN_API_KEY`
+3. Copy your sending domain (Mailgun gives you a sandbox domain to start, or
+   verify your own domain under Sending → Domains) → paste as `MAILGUN_DOMAIN`
+4. Set `CONTACT_TO_EMAIL` to whatever inbox should get the leads
+5. For now you can leave `CONTACT_FROM_EMAIL` unset to use the Mailgun sandbox
+   address; once you verify your own domain in Mailgun (a few DNS records),
+   set it to something like `EliteWorker <hello@eliteworker.io>`
 
 ## 5. Connect Cal.com (demo booking calendar)
 
@@ -89,7 +91,7 @@ preview link so you can check changes before they go live.
 
 - `/` — homepage: hero, features, workflow, contact form
 - `/demo` — dedicated demo booking page (Cal.com embed)
-- Contact form → saves to Supabase + emails you via Resend
+- Contact form → saves to Supabase + emails you via Mailgun
 - SEO: page titles/descriptions, sitemap.xml, robots.txt, Open Graph tags
 
 ## Swapping in your real brand

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import { Resend } from "resend";
+import Mailgun from "mailgun.js";
+import formData from "form-data";
 import { getSupabaseAdmin } from "@/lib/supabase";
 
 export async function POST(req: NextRequest) {
@@ -20,10 +21,14 @@ export async function POST(req: NextRequest) {
       console.error("Supabase insert error:", dbError);
     }
 
-    // 2. Notify your team by email via Resend
-    const resend = new Resend(process.env.RESEND_API_KEY);
-    await resend.emails.send({
-      from: process.env.CONTACT_FROM_EMAIL || "EliteWorker Site <onboarding@resend.dev>",
+    // 2. Notify your team by email via Mailgun
+    const mailgun = new Mailgun(formData);
+    const mg = mailgun.client({
+      username: "api",
+      key: process.env.MAILGUN_API_KEY || "",
+    });
+    await mg.messages.create(process.env.MAILGUN_DOMAIN || "", {
+      from: process.env.CONTACT_FROM_EMAIL || `EliteWorker Site <postmaster@${process.env.MAILGUN_DOMAIN}>`,
       to: process.env.CONTACT_TO_EMAIL || "you@example.com",
       subject: `New EliteWorker inquiry from ${name}`,
       text: `Name: ${name}\nEmail: ${email}\nCompany: ${company || "—"}\n\n${message}`,
