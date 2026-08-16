@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg id="Layer_1" xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="460 235 570 95">
+<svg id="Layer_1" xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 1272 594">
   <defs>
     <style>
       .st0 {
@@ -23,6 +23,7 @@
       }
     </style>
   </defs>
+  <rect id="background" x="1.25" y="1.02" width="1272" height="594" fill="#000000"/>
   <rect id="E_bar_top" class="st3" x="472.13" y="249" width="70.58" height="18.68" rx="3.11" ry="3.11"/>
   <rect id="E_bar_middle" class="st2" x="472.13" y="274.95" width="47.74" height="18.68" rx="3.11" ry="3.11"/>
   <rect id="E_bar_bottom" class="st4" x="472.13" y="300.9" width="70.58" height="18.68" rx="3.11" ry="3.11"/>
