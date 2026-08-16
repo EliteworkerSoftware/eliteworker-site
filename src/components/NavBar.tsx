@@ -6,7 +6,13 @@ export default function NavBar() {
     <header className="sticky top-0 z-50 border-b border-wire-line/80 bg-graphite/90 backdrop-blur">
       <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
         <Link href="/" className="flex items-center">
-          <Image src="/logo.svg" alt="EliteWorker" width={150} height={25} priority />
+          <Image
+            src="/EW%20Final%20Logo.svg"
+            alt="EliteWorker"
+            width={180}
+            height={84}
+            priority
+          />
         </Link>
         <nav className="hidden items-center gap-8 text-sm text-paper/70 md:flex">
           <Link href="/#features" className="transition hover:text-paper">Features</Link>
