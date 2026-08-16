@@ -1,48 +1,118 @@
 @import "tailwindcss";
 
 :root {
-  /* EliteWorker brand — pulled directly from the logo file */
-  --graphite: #000000;       /* base background — matches logo's black card */
-  --graphite-2: #0a0d12;     /* raised surface */
-  --wire-line: #1b2230;      /* schematic line / border, blue-tinted */
-  --signal-amber: #3b82f6;   /* primary brand blue (logo "st2") */
-  --brand-blue-dark: #1e40af;/* logo "st3" */
-  --live-cyan: #60a5fa;      /* logo "st4" — secondary accent */
-  --paper: #ffffff;          /* text — matches logo wordmark white */
+  --paper: #ffffff;
+  --paper-alt: #f7f9fc;
+  --line: #e3e8f0;
+  --ink: #0f172a;
+  --brand: #3b82f6;
+  --brand-dark: #1e40af;
+  --brand-light: #60a5fa;
+  --accent: #f59e0b;
+  --accent-light: #fbbf24;
+  --nav: #05080e;
+  --nav-line: #1c2636;
 }
 
 @theme inline {
-  --color-graphite: var(--graphite);
-  --color-graphite-2: var(--graphite-2);
-  --color-wire-line: var(--wire-line);
-  --color-signal-amber: var(--signal-amber);
-  --color-brand-blue-dark: var(--brand-blue-dark);
-  --color-live-cyan: var(--live-cyan);
   --color-paper: var(--paper);
+  --color-paper-alt: var(--paper-alt);
+  --color-line: var(--line);
+  --color-ink: var(--ink);
+  --color-brand: var(--brand);
+  --color-brand-dark: var(--brand-dark);
+  --color-brand-light: var(--brand-light);
+  --color-accent: var(--accent);
+  --color-accent-light: var(--accent-light);
+  --color-nav: var(--nav);
+  --color-nav-line: var(--nav-line);
   --font-display: var(--font-space-grotesk);
   --font-sans: var(--font-inter);
   --font-mono: var(--font-jetbrains-mono);
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 body {
-  background: var(--graphite);
-  color: var(--paper);
+  background:
+    radial-gradient(ellipse 900px 500px at 12% 0%, rgba(59, 130, 246, 0.07), transparent 60%),
+    radial-gradient(ellipse 700px 500px at 100% 5%, rgba(245, 158, 11, 0.05), transparent 55%),
+    var(--paper);
+  color: var(--ink);
   font-family: var(--font-sans);
 }
 
-/* Blueprint grid — the recurring texture that ties every section back to
-   the schematics/floor-plans EliteWorker's users read every day. */
-.blueprint-grid {
-  background-image:
-    linear-gradient(var(--wire-line) 1px, transparent 1px),
-    linear-gradient(90deg, var(--wire-line) 1px, transparent 1px);
-  background-size: 40px 40px;
-  background-position: center;
-  opacity: 0.35;
+::selection {
+  background: rgba(59, 130, 246, 0.18);
+  color: var(--ink);
 }
 
 .text-balance {
   text-wrap: balance;
+}
+
+.font-display {
+  font-family: var(--font-display);
+}
+
+.text-gradient {
+  background: linear-gradient(100deg, var(--brand-dark) 10%, var(--brand) 50%, var(--accent) 90%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
+/* Faint grid for light surfaces */
+.bg-grid-light {
+  background-image:
+    linear-gradient(rgba(15, 23, 42, 0.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(15, 23, 42, 0.045) 1px, transparent 1px);
+  background-size: 44px 44px;
+}
+
+/* Faint grid for dark surfaces (device screens, nav) */
+.bg-grid-dark {
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.06) 1px, transparent 1px);
+  background-size: 12px 12px;
+}
+
+@keyframes float-slow {
+  0%, 100% { transform: translateY(0) rotate(var(--rot, 0deg)); }
+  50% { transform: translateY(-14px) rotate(var(--rot, 0deg)); }
+}
+
+.animate-float {
+  animation: float-slow 7s ease-in-out infinite;
+}
+
+.animate-float-delayed {
+  animation: float-slow 8s ease-in-out 1.2s infinite;
+}
+
+@keyframes pulse-dot {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.7); opacity: 0.45; }
+}
+
+.animate-pulse-dot {
+  animation: pulse-dot 2.2s ease-in-out infinite;
+}
+
+@keyframes rise-in {
+  from { opacity: 0; transform: translateY(18px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.reveal {
+  opacity: 0;
+}
+
+.reveal.is-visible {
+  animation: rise-in 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -50,5 +120,8 @@ body {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+  }
+  .reveal {
+    opacity: 1;
   }
 }

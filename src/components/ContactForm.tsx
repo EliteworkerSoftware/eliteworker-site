@@ -31,48 +31,51 @@ export default function ContactForm() {
 
   if (status === "sent") {
     return (
-      <p className="rounded-md border border-live-cyan/40 bg-live-cyan/10 p-4 text-sm text-paper">
+      <p className="rounded-2xl border border-brand-light/40 bg-brand/6 p-6 text-sm text-ink">
         Thanks — we got it and will follow up shortly.
       </p>
     );
   }
 
   return (
-    <form onSubmit={handleSubmit} className="grid gap-4">
+    <form
+      onSubmit={handleSubmit}
+      className="grid gap-4 rounded-2xl border border-line bg-paper p-7 shadow-[0_2px_10px_rgba(15,23,42,0.03)]"
+    >
       <input
         name="name"
         required
         placeholder="Your name"
-        className="rounded-md border border-wire-line bg-graphite px-4 py-3 text-sm text-paper placeholder:text-paper/40 focus:border-signal-amber focus:outline-none"
+        className="rounded-lg border border-line bg-paper px-4 py-3 text-sm text-ink placeholder:text-ink/35 focus:border-accent focus:outline-none"
       />
       <input
         name="email"
         type="email"
         required
         placeholder="Work email"
-        className="rounded-md border border-wire-line bg-graphite px-4 py-3 text-sm text-paper placeholder:text-paper/40 focus:border-signal-amber focus:outline-none"
+        className="rounded-lg border border-line bg-paper px-4 py-3 text-sm text-ink placeholder:text-ink/35 focus:border-accent focus:outline-none"
       />
       <input
         name="company"
         placeholder="Company name"
-        className="rounded-md border border-wire-line bg-graphite px-4 py-3 text-sm text-paper placeholder:text-paper/40 focus:border-signal-amber focus:outline-none"
+        className="rounded-lg border border-line bg-paper px-4 py-3 text-sm text-ink placeholder:text-ink/35 focus:border-accent focus:outline-none"
       />
       <textarea
         name="message"
         required
         rows={4}
         placeholder="What are you looking to solve?"
-        className="rounded-md border border-wire-line bg-graphite px-4 py-3 text-sm text-paper placeholder:text-paper/40 focus:border-signal-amber focus:outline-none"
+        className="rounded-lg border border-line bg-paper px-4 py-3 text-sm text-ink placeholder:text-ink/35 focus:border-accent focus:outline-none"
       />
       <button
         type="submit"
         disabled={status === "sending"}
-        className="rounded-md bg-signal-amber px-6 py-3 text-sm font-semibold text-white transition hover:brightness-110 disabled:opacity-60"
+        className="rounded-lg bg-accent px-6 py-3 text-sm font-semibold text-ink transition hover:brightness-105 disabled:opacity-60"
       >
         {status === "sending" ? "Sending…" : "Send message"}
       </button>
       {status === "error" && (
-        <p className="text-sm text-red-400">Something went wrong — try again or email us directly.</p>
+        <p className="text-sm text-red-500">Something went wrong — try again or email us directly.</p>
       )}
     </form>
   );

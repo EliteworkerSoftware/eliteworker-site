@@ -1,130 +1,222 @@
 import Link from "next/link";
 import NavBar from "@/components/NavBar";
-import JobStatusSchematic from "@/components/JobStatusSchematic";
-import ContactForm from "@/components/ContactForm";
+import Footer from "@/components/Footer";
+import FadeIn from "@/components/FadeIn";
+import { Laptop, Tablet, Phone } from "@/components/devices/DeviceFrames";
+import { DesktopDashboardScreen, TabletFieldScreen, PhoneTechScreen } from "@/components/devices/AppScreens";
+
+const trustCategories = ["AV", "Security", "Networking", "Shading", "Smart home", "Networking & IT"];
+
+const capabilities = ["Sales", "Estimating", "Scheduling", "Dispatch", "Field ops", "Inventory", "Support"];
+
+const teasers = [
+  {
+    title: "Desktop command center",
+    body: "Drag-and-drop crew scheduling and a live job board for the whole office.",
+  },
+  {
+    title: "iPad field & PM view",
+    body: "Stage checklists, photo documentation, and one-tap sign-off on site.",
+  },
+  {
+    title: "iPhone technician app",
+    body: "Clock in, log parts, and get today's job without calling the office.",
+  },
+];
 
 const features = [
   {
     label: "Scheduling & dispatch",
-    body: "Assign jobs to the right crew, see every truck's day at a glance, and reshuffle when a job runs long — without a wall of sticky notes.",
+    body: "Assign jobs to the right crew and reshuffle when a job runs long — without sticky notes or status chaos.",
   },
   {
     label: "Field mobile app",
-    body: "Techs clock in, log parts, and update job status from their phone or Apple Watch, with GPS so you know where every crew is right now.",
+    body: "Techs clock in, log parts, and update job status from their phone, with GPS visibility for every crew.",
   },
   {
     label: "PM-managed workflow",
-    body: "Every job moves through the same stages — prewire, trim, programming, final walkthrough — so nothing slips through the cracks between handoffs.",
+    body: "Every job moves through the same stages so handoffs stay clean and no task slips through.",
   },
   {
     label: "Reporting & KPIs",
-    body: "See job profitability, technician performance, and callback rates without exporting a spreadsheet.",
+    body: "Track call-backs, profitability, and technician performance without exporting spreadsheets.",
   },
-];
-
-const workflow = [
-  { step: "01", label: "Prewire", body: "Job is scheduled and dispatched to the crew before drywall goes up." },
-  { step: "02", label: "Trim", body: "Devices, panels, and displays go in. Techs log parts used against the job." },
-  { step: "03", label: "Programming", body: "Systems are configured and tested against the original design." },
-  { step: "04", label: "Final walkthrough", body: "Client sign-off, punch list closed, job handed to support." },
 ];
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-graphite text-paper">
+    <div className="min-h-screen bg-paper text-ink">
       <NavBar />
 
-      {/* Hero */}
-      <section className="mx-auto grid max-w-6xl gap-12 px-6 py-20 md:grid-cols-2 md:items-center md:py-28">
-        <div>
-          <p className="font-mono text-xs uppercase tracking-[0.2em] text-live-cyan">
-            Built for smart home integrators
-          </p>
-          <h1 className="mt-4 font-display text-4xl font-semibold leading-tight text-balance md:text-5xl">
-            Run every job from prewire to final walkthrough — in one place.
-          </h1>
-          <p className="mt-6 max-w-md text-paper/70">
-            EliteWorker is the operations platform for AV, security, networking,
-            and shading contractors. Scheduling, dispatch, field reporting, and
-            job tracking, built by people who run integration jobs every day.
-          </p>
-          <div className="mt-8 flex flex-wrap gap-4">
-            <Link
-              href="/demo"
-              className="rounded-md bg-signal-amber px-6 py-3 text-sm font-semibold text-white transition hover:brightness-110"
-            >
-              Book a demo
-            </Link>
-            <Link
-              href="/#features"
-              className="rounded-md border border-wire-line px-6 py-3 text-sm font-semibold text-paper/80 transition hover:border-paper/40 hover:text-paper"
-            >
-              See what it does
-            </Link>
-          </div>
-        </div>
-        <JobStatusSchematic />
-      </section>
+      <main>
+        <section className="mx-auto max-w-7xl px-6 pb-20 pt-20 md:pb-28 md:pt-28">
+          <div className="grid items-center gap-16 lg:grid-cols-[1.05fr_1.15fr]">
+            <div className="space-y-8">
+              <FadeIn>
+                <div className="inline-flex items-center gap-2 rounded-full border border-brand/25 bg-brand/[0.06] px-3 py-1.5 text-[11px] font-medium uppercase tracking-[0.2em] text-brand-dark">
+                  The all-in-one platform for smart home companies
+                </div>
+              </FadeIn>
 
-      {/* Credibility strip */}
-      <section className="border-y border-wire-line bg-graphite-2/60">
-        <div className="mx-auto max-w-6xl px-6 py-6 text-center text-sm text-paper/60">
-          Built inside a working integration company and refined on real jobs before anyone else ever saw it.
-        </div>
-      </section>
+              <FadeIn delay={80}>
+                <h1 className="max-w-xl text-balance font-display text-5xl font-semibold leading-[1.05] tracking-[-0.03em] text-ink md:text-6xl">
+                  Your whole business. <span className="text-gradient">One platform.</span>
+                </h1>
+              </FadeIn>
 
-      {/* Features */}
-      <section id="features" className="mx-auto max-w-6xl px-6 py-24">
-        <h2 className="font-display text-3xl font-semibold text-balance md:text-4xl">
-          Everything a job needs, nothing it doesn&apos;t.
-        </h2>
-        <div className="mt-12 grid gap-px overflow-hidden rounded-lg border border-wire-line bg-wire-line md:grid-cols-2">
-          {features.map((f) => (
-            <div key={f.label} className="bg-graphite-2 p-8">
-              <h3 className="font-display text-lg font-semibold text-signal-amber">{f.label}</h3>
-              <p className="mt-3 text-sm leading-relaxed text-paper/70">{f.body}</p>
+              <FadeIn delay={170}>
+                <p className="max-w-lg text-balance text-base leading-7 text-ink/60 md:text-lg">
+                  One solution designed to scale all aspects of your smart home business.
+                </p>
+              </FadeIn>
+
+              <FadeIn delay={220}>
+                <div className="flex flex-wrap gap-4">
+                  <Link
+                    href="/demo"
+                    className="rounded-xl bg-accent px-6 py-3.5 text-sm font-semibold text-ink shadow-[0_18px_35px_rgba(245,158,11,0.28)] transition hover:-translate-y-0.5 hover:brightness-105"
+                  >
+                    Book a demo
+                  </Link>
+                  <Link
+                    href="/platform"
+                    className="rounded-xl border border-line px-6 py-3.5 text-sm font-semibold text-ink/80 transition hover:border-ink/25 hover:text-ink"
+                  >
+                    Explore the platform
+                  </Link>
+                </div>
+              </FadeIn>
+
+              <FadeIn delay={260}>
+                <div className="flex flex-wrap gap-2 pt-2">
+                  {capabilities.map((c) => (
+                    <span
+                      key={c}
+                      className="rounded-full border border-line bg-paper-alt px-3 py-1.5 text-[11px] font-medium text-ink/60"
+                    >
+                      {c}
+                    </span>
+                  ))}
+                </div>
+              </FadeIn>
             </div>
-          ))}
-        </div>
-      </section>
 
-      {/* Workflow */}
-      <section id="workflow" className="mx-auto max-w-6xl px-6 py-24">
-        <h2 className="font-display text-3xl font-semibold text-balance md:text-4xl">
-          A job&apos;s path through EliteWorker.
-        </h2>
-        <div className="mt-12 grid gap-8 md:grid-cols-4">
-          {workflow.map((w) => (
-            <div key={w.step} className="border-t-2 border-live-cyan pt-4">
-              <span className="font-mono text-xs text-live-cyan">{w.step}</span>
-              <h3 className="mt-2 font-display text-base font-semibold">{w.label}</h3>
-              <p className="mt-2 text-sm text-paper/60">{w.body}</p>
-            </div>
-          ))}
-        </div>
-      </section>
+            <FadeIn delay={160} className="relative mx-auto w-full max-w-[620px] py-6">
+              <div className="pointer-events-none absolute inset-0 -z-10 rounded-[3rem] bg-[radial-gradient(circle,_rgba(96,165,250,0.16),_transparent_62%)] blur-3xl" />
 
-      {/* CTA band */}
-      <section id="contact" className="border-t border-wire-line bg-graphite-2/60">
-        <div className="mx-auto grid max-w-6xl gap-12 px-6 py-16 md:grid-cols-2">
-          <div>
-            <h2 className="font-display text-2xl font-semibold">See it running on a real job.</h2>
-            <p className="mt-2 text-sm text-paper/60">30 minutes, no slides — we&apos;ll walk through a live account.</p>
-            <Link
-              href="/demo"
-              className="mt-6 inline-block rounded-md bg-signal-amber px-6 py-3 text-sm font-semibold text-white transition hover:brightness-110"
-            >
-              Book a demo
-            </Link>
-            <p className="mt-8 text-sm text-paper/50">Prefer to just ask a question first? Use the form.</p>
+              <Laptop className="mx-auto w-full max-w-[520px]">
+                <DesktopDashboardScreen />
+              </Laptop>
+
+              <Tablet
+                orientation="portrait"
+                className="animate-float absolute -right-2 top-2 hidden w-[150px] rotate-[9deg] sm:block"
+                style={{ ["--rot" as string]: "9deg" }}
+              >
+                <TabletFieldScreen />
+              </Tablet>
+
+              <Phone
+                className="animate-float-delayed absolute -bottom-8 -left-4 w-[110px] rotate-[-11deg]"
+                style={{ ["--rot" as string]: "-11deg" }}
+              >
+                <PhoneTechScreen />
+              </Phone>
+            </FadeIn>
           </div>
-          <ContactForm />
-        </div>
-      </section>
+        </section>
 
-      <footer className="border-t border-wire-line px-6 py-10 text-center text-xs text-paper/40">
-        © {new Date().getFullYear()} EliteWorker. Built by Elite Smart Home, LLC.
-      </footer>
+        <section className="border-y border-line bg-paper-alt">
+          <div className="mx-auto flex max-w-7xl flex-col gap-5 px-6 py-6 text-center text-sm md:flex-row md:items-center md:justify-between md:text-left">
+            <p className="uppercase tracking-[0.22em] text-ink/40">Built for teams running real jobs</p>
+            <div className="flex flex-wrap items-center justify-center gap-4 text-xs uppercase tracking-[0.18em] text-ink/50 md:justify-end">
+              {trustCategories.map((c) => (
+                <span key={c}>{c}</span>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section className="mx-auto max-w-7xl px-6 py-24 md:py-32">
+          <FadeIn className="mx-auto max-w-2xl text-center">
+            <p className="text-xs font-semibold uppercase tracking-[0.24em] text-brand">One platform, every screen</p>
+            <h2 className="mt-4 text-balance font-display text-3xl font-semibold tracking-[-0.03em] text-ink md:text-5xl">
+              The same job, live everywhere your team works.
+            </h2>
+          </FadeIn>
+
+          <div className="mt-16 grid gap-6 md:grid-cols-3">
+            {teasers.map((t, i) => (
+              <FadeIn
+                key={t.title}
+                delay={i * 60}
+                className="rounded-[1.75rem] border border-line bg-paper p-8 shadow-[0_2px_10px_rgba(15,23,42,0.03)] transition hover:-translate-y-1 hover:border-brand-light/40 hover:shadow-[0_20px_40px_rgba(15,23,42,0.06)]"
+              >
+                <h3 className="text-lg font-semibold text-ink">{t.title}</h3>
+                <p className="mt-3 text-sm leading-6 text-ink/60">{t.body}</p>
+              </FadeIn>
+            ))}
+          </div>
+
+          <FadeIn className="mt-10 text-center">
+            <Link href="/platform" className="text-sm font-semibold text-brand-dark transition hover:text-brand">
+              See the full platform walkthrough →
+            </Link>
+          </FadeIn>
+        </section>
+
+        <section className="border-t border-line bg-paper-alt">
+          <div className="mx-auto max-w-7xl px-6 py-24 md:py-32">
+            <FadeIn className="mx-auto max-w-2xl text-center">
+              <p className="text-xs font-semibold uppercase tracking-[0.24em] text-brand">Why teams switch</p>
+              <h2 className="mt-4 text-balance font-display text-3xl font-semibold tracking-[-0.03em] text-ink md:text-5xl">
+                Everything a modern install business needs to run clean.
+              </h2>
+            </FadeIn>
+
+            <div className="mt-16 grid gap-6 md:grid-cols-2 xl:grid-cols-4">
+              {features.map((feature, i) => (
+                <FadeIn
+                  key={feature.label}
+                  delay={i * 60}
+                  className="rounded-[1.75rem] border border-line bg-paper p-7 shadow-[0_2px_10px_rgba(15,23,42,0.03)] transition hover:-translate-y-1 hover:border-brand-light/40 hover:shadow-[0_20px_40px_rgba(15,23,42,0.06)]"
+                >
+                  <h3 className="text-lg font-semibold text-ink">{feature.label}</h3>
+                  <p className="mt-3 text-sm leading-6 text-ink/60">{feature.body}</p>
+                </FadeIn>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section className="mx-auto max-w-7xl px-6 py-24 md:py-32">
+          <FadeIn className="rounded-[2rem] border border-line bg-paper-alt px-8 py-14 text-center md:px-16 md:py-20">
+            <h2 className="text-balance font-display text-3xl font-semibold tracking-[-0.03em] text-ink md:text-5xl">
+              See your jobs running without the guesswork.
+            </h2>
+            <p className="mx-auto mt-4 max-w-lg text-base leading-7 text-ink/60">
+              Let us walk through a real account and show how EliteWorker keeps crews, projects, and client
+              expectations aligned from day one.
+            </p>
+            <div className="mt-8 flex flex-wrap justify-center gap-4">
+              <Link
+                href="/demo"
+                className="rounded-xl bg-accent px-7 py-3.5 text-sm font-semibold text-ink shadow-[0_18px_35px_rgba(245,158,11,0.28)] transition hover:-translate-y-0.5 hover:brightness-105"
+              >
+                Book a demo
+              </Link>
+              <Link
+                href="/contact"
+                className="rounded-xl border border-line bg-paper px-7 py-3.5 text-sm font-semibold text-ink/80 transition hover:border-ink/25 hover:text-ink"
+              >
+                Contact us
+              </Link>
+            </div>
+          </FadeIn>
+        </section>
+      </main>
+
+      <Footer />
     </div>
   );
 }
