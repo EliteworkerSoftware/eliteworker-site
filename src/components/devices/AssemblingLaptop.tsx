@@ -60,7 +60,7 @@ export function AssemblingLaptop({
 
   return (
     <div ref={ref} className={`relative ${className}`} style={{ aspectRatio: `${laptopWidth} / ${laptopHeight}` }}>
-      <Image src={blankSrc} alt={alt} fill priority className="object-contain" />
+      <Image src={blankSrc} alt={alt} fill priority quality={95} className="object-contain" />
 
       <div
         className="absolute overflow-hidden"

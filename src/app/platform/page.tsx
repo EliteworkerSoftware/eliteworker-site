@@ -94,7 +94,7 @@ export default function PlatformPage() {
                     )}
                     {s.device === "phone" && (
                       <IphoneMockup
-                        src="/Iphone%20Mockups/IMG_8655-portrait.png"
+                        src="/Iphone%20Mockups/IMG_8657-portrait.png"
                         alt="EliteWorker technician clock-in on iPhone"
                         className="w-55 drop-shadow-[0_35px_60px_rgba(0,0,0,0.3)]"
                       />

@@ -19,6 +19,7 @@ export function IpadMockup({ src, alt, className = "", style, priority }: Mockup
       className={`h-auto ${className}`}
       style={style}
       priority={priority}
+      quality={95}
     />
   );
 }
@@ -33,6 +34,7 @@ export function IphoneMockup({ src, alt, className = "", style, priority }: Mock
       className={`h-auto ${className}`}
       style={style}
       priority={priority}
+      quality={95}
     />
   );
 }
@@ -47,6 +49,7 @@ export function LaptopMockup({ src, alt, className = "", style, priority }: Mock
       className={`h-auto ${className}`}
       style={style}
       priority={priority}
+      quality={95}
     />
   );
 }
