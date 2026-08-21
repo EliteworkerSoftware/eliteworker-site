@@ -59,21 +59,26 @@ export function CommandCenterShowcase({
 
       <div className="flex justify-center">
         <div className="relative h-120 w-full max-w-140">
-          <div className="pointer-events-none absolute inset-0 -z-10 rounded-[3rem] bg-[radial-gradient(circle,rgba(59,130,246,0.14),transparent_65%)] blur-3xl" />
-
           <div className="absolute inset-x-0 top-0 flex justify-center">
             {device === "laptop" && (
-              <div className="w-140 drop-shadow-[0_35px_60px_rgba(0,0,0,0.3)]">
-                <div className="aspect-2000/1151 w-full overflow-hidden">
+              <div className="relative w-full max-w-140">
+                <div className="pointer-events-none absolute -inset-5 sm:-inset-8 -z-10 rounded-[3rem] bg-[radial-gradient(circle,rgba(59,130,246,0.14),transparent_65%)] blur-3xl" />
+                <div className="aspect-2000/1151 w-full overflow-hidden drop-shadow-[0_35px_60px_rgba(0,0,0,0.3)]">
                   <LaptopMockup src={current.src} alt={current.alt} className="w-full translate-y-[-21.2%]" />
                 </div>
               </div>
             )}
             {device === "tablet" && (
-              <IpadMockup src={current.src} alt={current.alt} className="w-105 drop-shadow-[0_35px_60px_rgba(0,0,0,0.3)]" />
+              <div className="relative">
+                <div className="pointer-events-none absolute -inset-5 sm:-inset-8 -z-10 rounded-[3rem] bg-[radial-gradient(circle,rgba(59,130,246,0.14),transparent_65%)] blur-3xl" />
+                <IpadMockup src={current.src} alt={current.alt} className="w-105 drop-shadow-[0_35px_60px_rgba(0,0,0,0.3)]" />
+              </div>
             )}
             {device === "phone" && (
-              <IphoneMockup src={current.src} alt={current.alt} className="w-55 drop-shadow-[0_35px_60px_rgba(0,0,0,0.3)]" />
+              <div className="relative">
+                <div className="pointer-events-none absolute -inset-5 sm:-inset-8 -z-10 rounded-[3rem] bg-[radial-gradient(circle,rgba(59,130,246,0.14),transparent_65%)] blur-3xl" />
+                <IphoneMockup src={current.src} alt={current.alt} className="w-55 drop-shadow-[0_35px_60px_rgba(0,0,0,0.3)]" />
+              </div>
             )}
           </div>
 
