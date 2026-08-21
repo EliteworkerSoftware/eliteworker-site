@@ -53,7 +53,7 @@ export function ShowcaseItem({
 
       <div className={`flex justify-center ${reverse ? "lg:order-1" : ""}`}>
         <div className="relative">
-          <div className="pointer-events-none absolute inset-0 -z-10 rounded-[3rem] bg-[radial-gradient(circle,rgba(59,130,246,0.14),transparent_65%)] blur-3xl" />
+          <div className="pointer-events-none absolute inset-0 -z-10 hidden rounded-[3rem] bg-[radial-gradient(circle,rgba(59,130,246,0.14),transparent_65%)] blur-3xl sm:block" />
           {device === "laptop" && (
             <LaptopMockup
               src={current.image}
