@@ -5,7 +5,6 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 
 const links = [
-  { href: "/platform", label: "Platform" },
   { href: "/how-it-works", label: "How it works" },
   { href: "/contact", label: "Contact" },
 ];

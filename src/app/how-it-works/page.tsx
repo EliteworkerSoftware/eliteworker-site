@@ -77,7 +77,7 @@ export default function HowItWorksPage() {
                   Book a demo
                 </Link>
                 <Link
-                  href="/platform"
+                  href="/"
                   className="rounded-xl border border-line bg-paper px-7 py-3.5 text-sm font-semibold text-ink/80 transition hover:border-ink/25 hover:text-ink"
                 >
                   Explore the platform
