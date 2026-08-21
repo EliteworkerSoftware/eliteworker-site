@@ -316,7 +316,7 @@ export default function Home() {
                   <span className="block">running itself.</span>
                 </h1>
                 <p className="mt-7 max-w-lg text-balance text-lg leading-8 text-ink/60 md:text-xl">
-                  Built in workflows that have been battle tested to scale your service business.
+                  Every job, every customer, every worker — orchestrated automatically, all in one place.
                 </p>
                 <div className="mt-10 flex flex-wrap gap-4">
                   <Link
@@ -335,14 +335,12 @@ export default function Home() {
               </FadeIn>
 
               <div className="relative mx-auto w-full max-w-lg">
-                <div className="pointer-events-none absolute inset-0 -z-10 rounded-[3rem] bg-[radial-gradient(circle,rgba(96,165,250,0.16),transparent_62%)] blur-3xl" />
-
                 <FadeIn delay={140} className="relative z-10">
                   <LaptopMockup
                     src="/Laptop%20Mockups/Screenshot%202026-08-20%20191526-front.png"
                     alt="EliteWorker dashboard on laptop"
                     priority
-                    className="mx-auto w-[92%] drop-shadow-[0_35px_60px_rgba(0,0,0,0.2)]"
+                    className="mx-auto w-[92%]"
                   />
                 </FadeIn>
 
@@ -351,7 +349,7 @@ export default function Home() {
                     src="/Ipad%20Mockups/IMG_0528-landscape.png"
                     alt="EliteWorker job stage checklists on iPad"
                     priority
-                    className="w-full drop-shadow-[0_25px_45px_rgba(0,0,0,0.22)]"
+                    className="w-full"
                   />
                 </FadeIn>
 
@@ -360,7 +358,7 @@ export default function Home() {
                     src="/Iphone%20Mockups/IMG_8657-portrait.png"
                     alt="EliteWorker technician schedule on iPhone"
                     priority
-                    className="w-full drop-shadow-[0_25px_45px_rgba(0,0,0,0.22)]"
+                    className="w-full"
                   />
                 </FadeIn>
               </div>

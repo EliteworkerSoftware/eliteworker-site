@@ -61,24 +61,17 @@ export function CommandCenterShowcase({
         <div className="relative h-120 w-full max-w-140">
           <div className="absolute inset-x-0 top-0 flex justify-center">
             {device === "laptop" && (
-              <div className="relative w-full max-w-140">
-                <div className="pointer-events-none absolute -inset-5 sm:-inset-8 -z-10 hidden rounded-[3rem] bg-[radial-gradient(circle,rgba(59,130,246,0.14),transparent_65%)] blur-3xl sm:block" />
-                <div className="aspect-2000/1151 w-full overflow-hidden drop-shadow-[0_35px_60px_rgba(0,0,0,0.3)]">
+              <div className="w-full max-w-140">
+                <div className="aspect-2000/1151 w-full overflow-hidden">
                   <LaptopMockup src={current.src} alt={current.alt} className="w-full translate-y-[-21.2%]" />
                 </div>
               </div>
             )}
             {device === "tablet" && (
-              <div className="relative">
-                <div className="pointer-events-none absolute -inset-5 sm:-inset-8 -z-10 hidden rounded-[3rem] bg-[radial-gradient(circle,rgba(59,130,246,0.14),transparent_65%)] blur-3xl sm:block" />
-                <IpadMockup src={current.src} alt={current.alt} className="w-105 drop-shadow-[0_35px_60px_rgba(0,0,0,0.3)]" />
-              </div>
+              <IpadMockup src={current.src} alt={current.alt} className="w-105" />
             )}
             {device === "phone" && (
-              <div className="relative">
-                <div className="pointer-events-none absolute -inset-5 sm:-inset-8 -z-10 hidden rounded-[3rem] bg-[radial-gradient(circle,rgba(59,130,246,0.14),transparent_65%)] blur-3xl sm:block" />
-                <IphoneMockup src={current.src} alt={current.alt} className="w-55 drop-shadow-[0_35px_60px_rgba(0,0,0,0.3)]" />
-              </div>
+              <IphoneMockup src={current.src} alt={current.alt} className="w-55" />
             )}
           </div>
 
