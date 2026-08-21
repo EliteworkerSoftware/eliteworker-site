@@ -6,11 +6,21 @@ import { ParallaxBlob } from "@/components/ParallaxBlob";
 import { LaptopMockup, IpadMockup, IphoneMockup } from "@/components/devices/DeviceMockups";
 import { ShowcaseItem } from "@/components/ShowcaseItem";
 import { CommandCenterShowcase } from "@/components/CommandCenterShowcase";
+import {
+  SaleIcon,
+  OrderIcon,
+  ScheduleIcon,
+  WiringIcon,
+  InstallationIcon,
+  ProgrammingIcon,
+  QualityCheckIcon,
+  TutorialIcon,
+  BillingIcon,
+} from "@/components/SolutionIcons";
 
 const commandCenter = {
   kicker: "COMMAND CENTER",
   title: "Your entire company, at a glance.",
-  body: "No Spreadsheets, No Sticky notes, No Text messages. One centralized system managing everything from anywhere on any device.",
   points: [
     {
       label: "Estimating",
@@ -219,44 +229,79 @@ const commandCenter = {
   ],
 } as const;
 
+// Starts near the sidebar (right where the click just landed) at body height —
+// not the page header — then sweeps left-to-right across the body.
+const contentSweep = [
+  { x: 20, y: 42 },
+  { x: 90, y: 42 },
+] as const;
+
+const customerPortalDemoSteps = [
+  {
+    src: "/No%20Device%20Screenshots/Customer_overview.png",
+    alt: "EliteWorker customer portal overview tab",
+    tabTarget: { x: 6, y: 24 },
+    contentPan: contentSweep,
+  },
+  {
+    src: "/No%20Device%20Screenshots/customer_proposals.png",
+    alt: "EliteWorker customer portal proposals tab",
+    tabTarget: { x: 6, y: 27.6 },
+    contentPan: contentSweep,
+  },
+  {
+    src: "/No%20Device%20Screenshots/Customer_credits.png",
+    alt: "EliteWorker customer portal credits tab",
+    tabTarget: { x: 6, y: 30.8 },
+    contentPan: contentSweep,
+  },
+  {
+    src: "/No%20Device%20Screenshots/Customer_invoices.png",
+    alt: "EliteWorker customer portal invoices tab",
+    tabTarget: { x: 6, y: 34.1 },
+    contentPan: contentSweep,
+  },
+] as const;
+
 const showcase = [
   {
     kicker: "Customer Portal",
     title: "No More \"Can You Send Me an Update?\"",
-    body: "Give your customers a live view of their project — proposals to review, invoices to pay, and approvals to sign off on, all in one place, without a single phone call.",
     points: [
       {
         label: "Review and accept proposals online, with a full history of past approvals",
-        image: "/Ipad%20Mockups/IMG_0522-landscape.png",
-        alt: "EliteWorker proposal history on iPad",
+        image: "/No%20Device%20Screenshots/Customer_invoices.png",
+        alt: "EliteWorker invoices in the customer portal",
       },
       {
         label: "Pay invoices securely, with partial payment tracking so nothing's a mystery",
-        image: "/Ipad%20Mockups/IMG_0523-landscape.png",
-        alt: "EliteWorker invoice payment on iPad",
+        image: "/No%20Device%20Screenshots/Customer_invoices.png",
+        alt: "EliteWorker invoices in the customer portal",
       },
       {
         label: "See account credits and where they've been applied",
-        image: "/Ipad%20Mockups/IMG_0524-landscape.png",
-        alt: "EliteWorker account credits on iPad",
+        image: "/No%20Device%20Screenshots/Customer_invoices.png",
+        alt: "EliteWorker invoices in the customer portal",
       },
       {
         label: "Track project status in real time — no \"can you send me an update?\" emails",
-        image: "/Ipad%20Mockups/IMG_0526-landscape.png",
-        alt: "EliteWorker project status on iPad",
+        image: "/No%20Device%20Screenshots/Customer_invoices.png",
+        alt: "EliteWorker invoices in the customer portal",
       },
       {
         label: "One login, always current — no more digging through email threads for the latest version",
-        image: "/Ipad%20Mockups/IMG_0527-landscape.png",
-        alt: "EliteWorker customer portal login on iPad",
+        image: "/No%20Device%20Screenshots/Customer_invoices.png",
+        alt: "EliteWorker invoices in the customer portal",
       },
     ],
     device: "tablet" as const,
+    interactive: false,
+    bare: true,
+    demoSteps: customerPortalDemoSteps,
   },
   {
     kicker: "Partner Portal",
     title: "Your Partners, Always in the Loop",
-    body: "Give your referral and channel partners visibility into their own commissions — tied directly to real project data, without a single spreadsheet.",
     points: [
       {
         label: "Track commission on every referred project, automatically calculated from real job data",
@@ -280,15 +325,23 @@ const showcase = [
       },
     ],
     device: "phone" as const,
+    interactive: true,
+    bare: false,
+    demoSteps: undefined,
   },
 ] as const;
 
-const stats = [
-  { value: "4", label: "job stages tracked automatically" },
-  { value: "1", label: "platform for office, PM, and crew" },
-  { value: "3", label: "device views — desktop, tablet, phone" },
-  { value: "0", label: "spreadsheets required" },
-];
+const journeySteps = [
+  { label: "Sale", Icon: SaleIcon },
+  { label: "Bill", Icon: BillingIcon },
+  { label: "Order", Icon: OrderIcon },
+  { label: "Schedule", Icon: ScheduleIcon },
+  { label: "Prewire", Icon: WiringIcon },
+  { label: "Install", Icon: InstallationIcon },
+  { label: "Program", Icon: ProgrammingIcon },
+  { label: "Quality", Icon: QualityCheckIcon },
+  { label: "Tutorial", Icon: TutorialIcon },
+] as const;
 
 const sectionPadding = "py-24 md:py-32";
 
@@ -299,7 +352,7 @@ export default function Home() {
 
       <main>
         {/* Hero */}
-        <section className={`relative overflow-hidden ${sectionPadding}`}>
+        <section className={`relative overflow-x-clip ${sectionPadding}`}>
           <ParallaxBlob
             speed={0.12}
             className="pointer-events-none absolute -left-24 top-[-10%] -z-10 h-104 w-104 rounded-full bg-brand/10 blur-3xl"
@@ -309,7 +362,7 @@ export default function Home() {
             className="pointer-events-none absolute -right-32 top-[40%] -z-10 h-88 w-88 rounded-full bg-accent/10 blur-3xl"
           />
           <div className="mx-auto max-w-7xl px-6">
-            <div className="grid items-center gap-16 lg:grid-cols-2">
+            <div className="grid items-center gap-16 lg:grid-cols-[1fr_1.35fr]">
               <FadeIn>
                 <h1 className="font-display text-5xl font-semibold leading-[0.95] tracking-[-0.04em] text-ink whitespace-nowrap sm:text-6xl md:text-7xl">
                   <span className="block">Your business,</span>
@@ -334,7 +387,7 @@ export default function Home() {
                 </div>
               </FadeIn>
 
-              <div className="relative mx-auto w-full max-w-lg">
+              <div className="relative mx-auto -mb-40 w-full max-w-3xl">
                 <FadeIn delay={140} className="relative z-10">
                   <LaptopMockup
                     src="/Laptop%20Mockups/Screenshot%202026-08-20%20191526-front.png"
@@ -366,16 +419,35 @@ export default function Home() {
           </div>
         </section>
 
+        {/* Journey */}
+        <section className="relative bg-paper-alt">
+          <div className="mx-auto max-w-5xl px-6 pt-28 pb-16 text-center md:pt-36 md:pb-20">
+            <p className="text-xs font-semibold uppercase tracking-[0.22em] text-ink/40">
+              A single solution to run and scale your business every step of the way
+            </p>
+            <FadeIn className="mt-10 flex flex-nowrap justify-center gap-6 overflow-x-auto px-2 scrollbar-none sm:gap-8">
+              {journeySteps.map(({ label, Icon }) => (
+                <div key={label} className="flex w-16 shrink-0 flex-col items-center gap-3 sm:w-20">
+                  <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full border border-line bg-paper sm:h-16 sm:w-16">
+                    <Icon className="h-6 w-6 text-ink/70 sm:h-7 sm:w-7" />
+                  </div>
+                  <span className="text-[10px] font-medium uppercase tracking-[0.08em] text-ink/60 sm:text-xs">{label}</span>
+                </div>
+              ))}
+            </FadeIn>
+          </div>
+        </section>
+
         {/* Platform showcase */}
-        <section className={`border-t border-line ${sectionPadding}`}>
+        <section className={sectionPadding}>
           <div className="mx-auto max-w-7xl px-6">
             <div className="space-y-28 md:space-y-36">
               <FadeIn>
                 <CommandCenterShowcase
                   kicker={commandCenter.kicker}
                   title={commandCenter.title}
-                  body={commandCenter.body}
                   points={commandCenter.points}
+                  reverse
                 />
               </FadeIn>
 
@@ -384,10 +456,12 @@ export default function Home() {
                   <ShowcaseItem
                     kicker={s.kicker}
                     title={s.title}
-                    body={s.body}
                     points={s.points}
                     device={s.device}
-                    reverse={i % 2 === 0}
+                    reverse={i % 2 !== 0}
+                    interactive={s.interactive}
+                    bare={s.bare}
+                    demoSteps={s.demoSteps}
                   />
                 </FadeIn>
               ))}
@@ -395,17 +469,6 @@ export default function Home() {
           </div>
         </section>
 
-        {/* Stats */}
-        <section className="border-y border-line bg-paper-alt">
-          <div className="mx-auto grid max-w-7xl grid-cols-2 gap-8 px-6 py-16 md:grid-cols-4">
-            {stats.map((stat) => (
-              <FadeIn key={stat.label} className="text-center md:text-left">
-                <p className="font-display text-4xl font-semibold text-ink md:text-5xl">{stat.value}</p>
-                <p className="mt-2 text-xs uppercase tracking-[0.16em] text-ink/50">{stat.label}</p>
-              </FadeIn>
-            ))}
-          </div>
-        </section>
 
         {/* Final CTA */}
         <section className="mx-auto max-w-7xl px-6 py-24 md:py-32">

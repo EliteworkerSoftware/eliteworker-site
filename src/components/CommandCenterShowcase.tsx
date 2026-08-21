@@ -16,13 +16,13 @@ const deviceContentHeight: Record<DeviceKey, number> = { laptop: 322, tablet: 30
 export function CommandCenterShowcase({
   kicker,
   title,
-  body,
   points,
+  reverse,
 }: {
   kicker: string;
   title: string;
-  body: string;
   points: readonly Point[];
+  reverse?: boolean;
 }) {
   const [device, setDevice] = useState<DeviceKey>("laptop");
   const [active, setActive] = useState(0);
@@ -30,10 +30,9 @@ export function CommandCenterShowcase({
 
   return (
     <div className="grid items-start gap-14 lg:grid-cols-2">
-      <div>
+      <div className={reverse ? "lg:order-2" : ""}>
         <p className="text-xs font-semibold uppercase tracking-[0.22em] text-brand">{kicker}</p>
         <h2 className="mt-3 text-balance text-2xl font-semibold tracking-[-0.02em] text-ink md:text-3xl">{title}</h2>
-        <p className="mt-4 max-w-md text-sm leading-7 text-ink/60 md:text-base">{body}</p>
 
         <ul className="mt-6 grid grid-cols-3 gap-x-4 gap-y-1">
           {points.map((p, i) => (
@@ -57,7 +56,7 @@ export function CommandCenterShowcase({
         </ul>
       </div>
 
-      <div className="flex justify-center">
+      <div className={`flex justify-center ${reverse ? "lg:order-1" : ""}`}>
         <div className="relative h-120 w-full max-w-140">
           <div className="absolute inset-x-0 top-0 flex justify-center">
             {device === "laptop" && (
