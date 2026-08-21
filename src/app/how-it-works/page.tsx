@@ -72,7 +72,7 @@ export default function HowItWorksPage() {
               <div className="mt-8 flex flex-wrap justify-center gap-4">
                 <Link
                   href="/demo"
-                  className="rounded-xl bg-accent px-7 py-3.5 text-sm font-semibold text-ink shadow-[0_18px_35px_rgba(245,158,11,0.28)] transition hover:-translate-y-0.5 hover:brightness-105"
+                  className="rounded-xl bg-accent px-7 py-3.5 text-sm font-semibold text-ink transition hover:-translate-y-0.5 hover:brightness-105"
                 >
                   Book a demo
                 </Link>

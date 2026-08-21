@@ -2,8 +2,10 @@ import Link from "next/link";
 import NavBar from "@/components/NavBar";
 import Footer from "@/components/Footer";
 import FadeIn from "@/components/FadeIn";
-import { Laptop, Tablet, Phone } from "@/components/devices/DeviceFrames";
-import { DesktopDashboardScreen, TabletFieldScreen, PhoneTechScreen } from "@/components/devices/AppScreens";
+import { LaptopMockup, IpadMockup, IphoneMockup } from "@/components/devices/DeviceMockups";
+import { AssemblingLaptop } from "@/components/devices/AssemblingLaptop";
+
+const heroScreenRect = { left: 160 / 2000, top: 452 / 2000, width: 1679 / 2000, height: 938 / 2000 };
 
 const trustCategories = ["AV", "Security", "Networking", "Shading", "Smart home", "Networking & IT"];
 
@@ -12,15 +14,27 @@ const capabilities = ["Sales", "Estimating", "Scheduling", "Dispatch", "Field op
 const teasers = [
   {
     title: "Desktop command center",
-    body: "Drag-and-drop crew scheduling and a live job board for the whole office.",
+    body: "See every crew's week laid out by day, drag jobs between technicians, and spot delays before they become callbacks.",
+    points: ["Drag-and-drop crew scheduling", "Live job board across every stage", "KPIs that update as work happens"],
+    device: "laptop",
+    image: "/Laptop%20Mockups/Screenshot%202026-08-20%20191552-front.png",
+    alt: "EliteWorker scheduling calendar on laptop",
   },
   {
     title: "iPad field & PM view",
-    body: "Stage checklists, photo documentation, and one-tap sign-off on site.",
+    body: "Project managers walk a site with the full job history in hand — checklists, photos, and stage sign-off, synced the moment they tap complete.",
+    points: ["Stage-by-stage checklists", "Photo documentation per job", "One tap to advance a job's stage"],
+    device: "ipad",
+    image: "/Ipad%20Mockups/IMG_0528-landscape.png",
+    alt: "EliteWorker job stage checklists on iPad",
   },
   {
     title: "iPhone technician app",
-    body: "Clock in, log parts, and get today's job without calling the office.",
+    body: "Clock in, see today's job, log parts, and drop a pin — techs get exactly what they need on site without calling the office.",
+    points: ["GPS-verified clock in/out", "Parts logged against the job", "Push alerts the moment plans change"],
+    device: "iphone",
+    image: "/Iphone%20Mockups/IMG_8655-portrait.png",
+    alt: "EliteWorker technician clock-in on iPhone",
   },
 ];
 
@@ -49,80 +63,72 @@ export default function Home() {
       <NavBar />
 
       <main>
-        <section className="mx-auto max-w-7xl px-6 pb-20 pt-20 md:pb-28 md:pt-28">
-          <div className="grid items-center gap-16 lg:grid-cols-[1.05fr_1.15fr]">
-            <div className="space-y-8">
-              <FadeIn>
-                <div className="inline-flex items-center gap-2 rounded-full border border-brand/25 bg-brand/[0.06] px-3 py-1.5 text-[11px] font-medium uppercase tracking-[0.2em] text-brand-dark">
-                  The all-in-one platform for smart home companies
-                </div>
-              </FadeIn>
+        <section>
+          <div className="mx-auto max-w-7xl px-6 pb-20 pt-20 md:pb-28 md:pt-28">
+            <div className="grid items-center gap-16 lg:grid-cols-[1.05fr_1.15fr]">
+              <div className="space-y-8">
+                <FadeIn>
+                  <div className="inline-flex items-center gap-2 rounded-full border border-brand/25 bg-brand/[0.06] px-3 py-1.5 text-[11px] font-medium uppercase tracking-[0.2em] text-brand-dark">
+                    The all-in-one platform for smart home companies
+                  </div>
+                </FadeIn>
 
-              <FadeIn delay={80}>
-                <h1 className="max-w-xl text-balance font-display text-5xl font-semibold leading-[1.05] tracking-[-0.03em] text-ink md:text-6xl">
-                  Your whole business. <span className="text-gradient">One platform.</span>
-                </h1>
-              </FadeIn>
+                <FadeIn delay={80}>
+                  <h1 className="max-w-xl text-balance font-display text-5xl font-semibold leading-[1.05] tracking-[-0.03em] text-ink md:text-6xl">
+                    Your whole business. <span className="text-gradient">One platform.</span>
+                  </h1>
+                </FadeIn>
 
-              <FadeIn delay={170}>
-                <p className="max-w-lg text-balance text-base leading-7 text-ink/60 md:text-lg">
-                  One solution designed to scale all aspects of your smart home business.
-                </p>
-              </FadeIn>
+                <FadeIn delay={170}>
+                  <p className="max-w-lg text-balance text-base leading-7 text-ink/60 md:text-lg">
+                    One solution designed to scale all aspects of your smart home business.
+                  </p>
+                </FadeIn>
 
-              <FadeIn delay={220}>
-                <div className="flex flex-wrap gap-4">
-                  <Link
-                    href="/demo"
-                    className="rounded-xl bg-accent px-6 py-3.5 text-sm font-semibold text-ink shadow-[0_18px_35px_rgba(245,158,11,0.28)] transition hover:-translate-y-0.5 hover:brightness-105"
-                  >
-                    Book a demo
-                  </Link>
-                  <Link
-                    href="/platform"
-                    className="rounded-xl border border-line px-6 py-3.5 text-sm font-semibold text-ink/80 transition hover:border-ink/25 hover:text-ink"
-                  >
-                    Explore the platform
-                  </Link>
-                </div>
-              </FadeIn>
-
-              <FadeIn delay={260}>
-                <div className="flex flex-wrap gap-2 pt-2">
-                  {capabilities.map((c) => (
-                    <span
-                      key={c}
-                      className="rounded-full border border-line bg-paper-alt px-3 py-1.5 text-[11px] font-medium text-ink/60"
+                <FadeIn delay={220}>
+                  <div className="flex flex-wrap gap-4">
+                    <Link
+                      href="/demo"
+                      className="rounded-xl bg-accent px-6 py-3.5 text-sm font-semibold text-ink transition hover:-translate-y-0.5 hover:brightness-105"
                     >
-                      {c}
-                    </span>
-                  ))}
-                </div>
+                      Book a demo
+                    </Link>
+                    <Link
+                      href="/platform"
+                      className="rounded-xl border border-line px-6 py-3.5 text-sm font-semibold text-ink/80 transition hover:border-ink/25 hover:text-ink"
+                    >
+                      Explore the platform
+                    </Link>
+                  </div>
+                </FadeIn>
+
+                <FadeIn delay={260}>
+                  <div className="flex flex-wrap gap-2 pt-2">
+                    {capabilities.map((c) => (
+                      <span
+                        key={c}
+                        className="rounded-full border border-line bg-paper-alt px-3 py-1.5 text-[11px] font-medium text-ink/60"
+                      >
+                        {c}
+                      </span>
+                    ))}
+                  </div>
+                </FadeIn>
+              </div>
+
+              <FadeIn delay={160} className="relative mx-auto w-full max-w-2xl py-6">
+                <div className="pointer-events-none absolute inset-0 -z-10 rounded-[3rem] bg-[radial-gradient(circle,_rgba(96,165,250,0.16),_transparent_62%)] blur-3xl" />
+                <AssemblingLaptop
+                  blankSrc="/Laptop%20Mockups/191526-blank.png"
+                  screenSrc="/Laptop%20Mockups/191526-screen-crop.png"
+                  alt="EliteWorker dashboard on laptop"
+                  laptopWidth={2000}
+                  laptopHeight={2000}
+                  screenRect={heroScreenRect}
+                  className="mx-auto w-full max-w-160 drop-shadow-[0_35px_60px_rgba(0,0,0,0.28)]"
+                />
               </FadeIn>
             </div>
-
-            <FadeIn delay={160} className="relative mx-auto w-full max-w-[620px] py-6">
-              <div className="pointer-events-none absolute inset-0 -z-10 rounded-[3rem] bg-[radial-gradient(circle,_rgba(96,165,250,0.16),_transparent_62%)] blur-3xl" />
-
-              <Laptop className="mx-auto w-full max-w-[520px]">
-                <DesktopDashboardScreen />
-              </Laptop>
-
-              <Tablet
-                orientation="portrait"
-                className="animate-float absolute -right-2 top-2 hidden w-[150px] rotate-[9deg] sm:block"
-                style={{ ["--rot" as string]: "9deg" }}
-              >
-                <TabletFieldScreen />
-              </Tablet>
-
-              <Phone
-                className="animate-float-delayed absolute -bottom-8 -left-4 w-[110px] rotate-[-11deg]"
-                style={{ ["--rot" as string]: "-11deg" }}
-              >
-                <PhoneTechScreen />
-              </Phone>
-            </FadeIn>
           </div>
         </section>
 
@@ -150,10 +156,29 @@ export default function Home() {
               <FadeIn
                 key={t.title}
                 delay={i * 60}
-                className="rounded-[1.75rem] border border-line bg-paper p-8 shadow-[0_2px_10px_rgba(15,23,42,0.03)] transition hover:-translate-y-1 hover:border-brand-light/40 hover:shadow-[0_20px_40px_rgba(15,23,42,0.06)]"
+                className="overflow-hidden rounded-[1.75rem] border border-line bg-paper shadow-[0_2px_10px_rgba(15,23,42,0.03)] transition hover:-translate-y-1 hover:border-brand-light/40 hover:shadow-[0_20px_40px_rgba(15,23,42,0.06)]"
               >
-                <h3 className="text-lg font-semibold text-ink">{t.title}</h3>
-                <p className="mt-3 text-sm leading-6 text-ink/60">{t.body}</p>
+                <div className="flex h-48 items-center justify-center bg-paper-alt px-6 pt-6">
+                  {t.device === "laptop" && (
+                    <LaptopMockup src={t.image} alt={t.alt} className="w-full max-w-70" />
+                  )}
+                  {t.device === "ipad" && <IpadMockup src={t.image} alt={t.alt} className="w-full max-w-55" />}
+                  {t.device === "iphone" && (
+                    <IphoneMockup src={t.image} alt={t.alt} className="w-full max-w-27.5" />
+                  )}
+                </div>
+                <div className="p-8">
+                  <h3 className="text-lg font-semibold text-ink">{t.title}</h3>
+                  <p className="mt-3 text-sm leading-6 text-ink/60">{t.body}</p>
+                  <ul className="mt-4 space-y-2">
+                    {t.points.map((p) => (
+                      <li key={p} className="flex items-start gap-2.5 text-sm text-ink/75">
+                        <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-accent" />
+                        {p}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
               </FadeIn>
             ))}
           </div>
@@ -201,7 +226,7 @@ export default function Home() {
             <div className="mt-8 flex flex-wrap justify-center gap-4">
               <Link
                 href="/demo"
-                className="rounded-xl bg-accent px-7 py-3.5 text-sm font-semibold text-ink shadow-[0_18px_35px_rgba(245,158,11,0.28)] transition hover:-translate-y-0.5 hover:brightness-105"
+                className="rounded-xl bg-accent px-7 py-3.5 text-sm font-semibold text-ink transition hover:-translate-y-0.5 hover:brightness-105"
               >
                 Book a demo
               </Link>

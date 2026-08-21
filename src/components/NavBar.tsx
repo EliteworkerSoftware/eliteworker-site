@@ -42,7 +42,7 @@ export default function NavBar() {
         </nav>
         <Link
           href="/demo"
-          className="rounded-lg bg-accent px-4 py-2 text-sm font-semibold text-nav shadow-[0_10px_25px_rgba(245,158,11,0.3)] transition hover:-translate-y-0.5 hover:brightness-105"
+          className="rounded-lg bg-accent px-4 py-2 text-sm font-semibold text-nav transition hover:-translate-y-0.5 hover:brightness-105"
         >
           Book a demo
         </Link>

@@ -4,8 +4,7 @@ import NavBar from "@/components/NavBar";
 import Footer from "@/components/Footer";
 import PageIntro from "@/components/PageIntro";
 import FadeIn from "@/components/FadeIn";
-import { Laptop, Tablet, Phone } from "@/components/devices/DeviceFrames";
-import { DesktopDashboardScreen, TabletFieldScreen, PhoneTechScreen } from "@/components/devices/AppScreens";
+import { LaptopMockup, IpadMockup, IphoneMockup } from "@/components/devices/DeviceMockups";
 
 export const metadata: Metadata = {
   title: "Platform",
@@ -80,19 +79,25 @@ export default function PlatformPage() {
                   <div className="relative">
                     <div className="pointer-events-none absolute inset-0 -z-10 rounded-[3rem] bg-[radial-gradient(circle,_rgba(59,130,246,0.14),_transparent_65%)] blur-3xl" />
                     {s.device === "laptop" && (
-                      <Laptop className="w-full max-w-[440px]">
-                        <DesktopDashboardScreen />
-                      </Laptop>
+                      <LaptopMockup
+                        src="/Laptop%20Mockups/Screenshot%202026-08-20%20191552-front.png"
+                        alt="EliteWorker scheduling calendar on laptop"
+                        className="w-full max-w-140 drop-shadow-[0_35px_60px_rgba(0,0,0,0.3)]"
+                      />
                     )}
                     {s.device === "tablet" && (
-                      <Tablet orientation="portrait" className="w-[260px]">
-                        <TabletFieldScreen />
-                      </Tablet>
+                      <IpadMockup
+                        src="/Ipad%20Mockups/IMG_0528-landscape.png"
+                        alt="EliteWorker job stage checklists on iPad"
+                        className="w-105 drop-shadow-[0_35px_60px_rgba(0,0,0,0.3)]"
+                      />
                     )}
                     {s.device === "phone" && (
-                      <Phone className="w-[220px]">
-                        <PhoneTechScreen />
-                      </Phone>
+                      <IphoneMockup
+                        src="/Iphone%20Mockups/IMG_8655-portrait.png"
+                        alt="EliteWorker technician clock-in on iPhone"
+                        className="w-55 drop-shadow-[0_35px_60px_rgba(0,0,0,0.3)]"
+                      />
                     )}
                   </div>
                 </div>
@@ -123,7 +128,7 @@ export default function PlatformPage() {
             <div className="mt-8 flex flex-wrap justify-center gap-4">
               <Link
                 href="/demo"
-                className="rounded-xl bg-accent px-7 py-3.5 text-sm font-semibold text-ink shadow-[0_18px_35px_rgba(245,158,11,0.28)] transition hover:-translate-y-0.5 hover:brightness-105"
+                className="rounded-xl bg-accent px-7 py-3.5 text-sm font-semibold text-ink transition hover:-translate-y-0.5 hover:brightness-105"
               >
                 Book a demo
               </Link>
