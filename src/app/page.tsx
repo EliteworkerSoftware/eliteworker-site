@@ -442,11 +442,11 @@ export default function Home() {
         <section className={`relative isolate overflow-x-clip ${sectionPadding}`}>
           <BarChartMotif
             speed={0.25}
-            className="pointer-events-none absolute -right-8 top-[4%] -z-10 h-112 w-112 opacity-[0.09]"
+            className="pointer-events-none absolute -left-8 top-[4%] -z-10 h-112 w-112 opacity-[0.07]"
           />
           <HorizontalBarsMotif
             speed={-0.25}
-            className="pointer-events-none absolute -left-28 top-[48%] -z-10 h-136 w-136 opacity-[0.10]"
+            className="pointer-events-none absolute -left-28 top-[48%] -z-10 h-136 w-136 opacity-[0.06]"
           />
           <div className="mx-auto max-w-7xl px-6">
             <div className="space-y-28 md:space-y-36">

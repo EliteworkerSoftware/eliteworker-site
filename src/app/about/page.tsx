@@ -18,13 +18,13 @@ export default function AboutPage() {
       <NavBar />
 
       <main>
-        <section className="relative isolate flex h-[32rem] items-center justify-center overflow-hidden md:h-[44rem]">
+        <section className="relative isolate flex h-[24rem] items-center justify-center overflow-hidden md:h-[32rem]">
           <Image
             src="/Photos/Founder.png"
             alt="EliteWorker founder on a job site"
             fill
             priority
-            className="-z-20 object-cover object-[78%_85%]"
+            className="-z-20 object-cover object-[78%_78%]"
           />
           <div className="absolute inset-0 -z-10 bg-gradient-to-t from-nav via-nav/70 to-nav/40" />
           <div className="mx-auto max-w-4xl px-6 text-center">
@@ -37,6 +37,17 @@ export default function AboutPage() {
               </h1>
             </FadeIn>
           </div>
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth={2}
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            className="absolute bottom-6 h-6 w-6 animate-bounce text-white/70"
+          >
+            <path d="M6 9l6 6 6-6" />
+          </svg>
         </section>
 
         <section className="relative isolate overflow-x-clip border-t border-line bg-paper-alt">
