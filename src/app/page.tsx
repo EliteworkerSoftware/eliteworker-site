@@ -438,7 +438,7 @@ export default function Home() {
 
         {/* Journey */}
         <section className="relative bg-paper-alt">
-          <div className="mx-auto max-w-5xl px-6 pt-28 pb-16 text-center md:pt-36 md:pb-20">
+          <div className="mx-auto max-w-5xl px-6 pt-44 pb-16 text-center md:pt-36 md:pb-20">
             <p className="text-xs font-semibold uppercase tracking-[0.22em] text-ink/40">
               A single solution to run and scale your business every step of the way
             </p>
