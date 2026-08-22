@@ -18,15 +18,15 @@ export default function Footer() {
       <div className="h-px w-full bg-linear-to-r from-transparent via-brand/40 to-transparent" />
 
       <div className="mx-auto grid max-w-7xl gap-14 px-6 py-20 md:grid-cols-[1.4fr_1fr_1fr] md:py-24">
-        <div>
+        <div className="text-center md:text-left">
           <Image
             src="/Eliteworker%20Footer%20Logo.svg"
             alt="EliteWorker"
             width={660}
             height={101}
-            className="h-7 w-auto"
+            className="mx-auto h-7 w-auto md:mx-0"
           />
-          <p className="mt-4 max-w-sm text-base leading-7 text-ink/55">
+          <p className="mx-auto mt-4 max-w-sm text-base leading-7 text-ink/55 md:mx-0">
             The operations platform built for smart home integrators
           </p>
         </div>

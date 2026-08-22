@@ -304,6 +304,10 @@ export function MetricsSlides() {
   // Counts automatic advances only (manual clicks don't consume the budget).
   // Once it reaches slides.length, one full lap has completed and auto-play stops.
   const [autoStep, setAutoStep] = useState(0);
+  // Bumped on every fresh lap so FadeSwap remounts even when the reset lands
+  // back on the same slide index (e.g. active was already 0 before leaving view).
+  const [lapId, setLapId] = useState(0);
+  const wasInView = useRef(false);
 
   useEffect(() => {
     const el = ref.current;
@@ -313,6 +317,17 @@ export function MetricsSlides() {
     return () => observer.disconnect();
   }, []);
 
+  // Every time the section newly enters view (scrolled away and back counts),
+  // start a fresh lap through all three slides from the top.
+  useEffect(() => {
+    if (inView && !wasInView.current) {
+      setActive(0);
+      setAutoStep(0);
+      setLapId((n) => n + 1);
+    }
+    wasInView.current = inView;
+  }, [inView]);
+
   useEffect(() => {
     if (!inView || autoStep >= slides.length) return;
     const id = setTimeout(() => {
@@ -320,15 +335,12 @@ export function MetricsSlides() {
       setAutoStep((s) => s + 1);
     }, SLIDE_MS);
     return () => clearTimeout(id);
-    // Re-arms whenever the visible slide changes (auto or manual) or visibility toggles,
-    // so leaving the viewport pauses the countdown and returning resumes it rather than
-    // restarting the whole lap.
   }, [inView, autoStep, active]);
 
   return (
     <div ref={ref} className="flex w-full flex-col items-center">
       <div className="flex min-h-72 w-full items-center justify-center">
-        <FadeSwap key={active}>{slides[active].render()}</FadeSwap>
+        <FadeSwap key={`${lapId}-${active}`}>{slides[active].render()}</FadeSwap>
       </div>
       <div className="mt-8 flex gap-2">
         {slides.map((slide, i) => (
