@@ -88,7 +88,7 @@ export default function NavBar() {
         href="/beta"
         className="block bg-brand px-6 py-2 text-center text-xs font-semibold text-white transition hover:brightness-105 sm:text-sm"
       >
-        We are now accepting requests to join the Beta program and get early access to the EliteWorker platform and future discounts. <span className="underline underline-offset-2">Apply Here</span>
+        Join our beta program and get early access to the platform and latest developments. <span className="underline underline-offset-2">Apply Here</span>
       </Link>
     </header>
   );

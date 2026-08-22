@@ -359,11 +359,11 @@ export default function Home() {
         <section className={`relative isolate z-10 overflow-x-clip ${sectionPadding}`}>
           <HorizontalBarsMotif
             speed={0.28}
-            className="pointer-events-none absolute -left-24 top-[4%] -z-10 h-80 w-80 opacity-[0.07]"
+            className="pointer-events-none absolute -left-28 top-[2%] -z-10 h-[26rem] w-[26rem] opacity-[0.10]"
           />
           <BarChartMotif
             speed={-0.22}
-            className="pointer-events-none absolute -right-20 top-[38%] -z-10 h-72 w-72 opacity-[0.065]"
+            className="pointer-events-none absolute -right-14 top-[40%] -z-10 h-88 w-88 opacity-[0.09]"
           />
           <div className="mx-auto max-w-7xl px-6">
             <div className="grid items-center gap-16 lg:grid-cols-[1fr_1.35fr]">
@@ -446,13 +446,13 @@ export default function Home() {
 
         {/* Platform showcase */}
         <section className={`relative isolate overflow-x-clip ${sectionPadding}`}>
-          <HorizontalBarsMotif
-            speed={0.25}
-            className="pointer-events-none absolute -right-20 top-[6%] -z-10 h-72 w-72 opacity-[0.06]"
-          />
           <BarChartMotif
+            speed={0.25}
+            className="pointer-events-none absolute -right-8 top-[4%] -z-10 h-112 w-112 opacity-[0.09]"
+          />
+          <HorizontalBarsMotif
             speed={-0.25}
-            className="pointer-events-none absolute -left-24 top-[46%] -z-10 h-96 w-96 opacity-[0.065]"
+            className="pointer-events-none absolute -left-28 top-[48%] -z-10 h-136 w-136 opacity-[0.10]"
           />
           <div className="mx-auto max-w-7xl px-6">
             <div className="space-y-28 md:space-y-36">
@@ -490,11 +490,11 @@ export default function Home() {
         <section className="relative isolate overflow-x-clip px-6 py-24 md:py-32">
           <HorizontalBarsMotif
             speed={-0.16}
-            className="pointer-events-none absolute -left-20 bottom-[10%] -z-10 h-64 w-64 opacity-[0.06]"
+            className="pointer-events-none absolute -left-24 bottom-[6%] -z-10 h-84 w-84 opacity-[0.10]"
           />
           <BarChartMotif
             speed={0.22}
-            className="pointer-events-none absolute -right-20 top-[6%] -z-10 h-64 w-64 opacity-[0.065]"
+            className="pointer-events-none absolute -right-12 top-[4%] -z-10 h-84 w-84 opacity-[0.11]"
           />
           <FadeIn className="relative mx-auto max-w-7xl rounded-[2rem] border border-line bg-paper-alt px-8 py-14 text-center md:px-16 md:py-20">
             <h2 className="text-balance font-display text-5xl font-semibold leading-[0.95] tracking-[-0.04em] sm:text-6xl md:text-7xl">

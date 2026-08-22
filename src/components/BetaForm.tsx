@@ -109,7 +109,7 @@ export default function BetaForm() {
         className="grid gap-4 rounded-2xl border border-line bg-paper p-7 shadow-[0_2px_10px_rgba(15,23,42,0.03)]"
       >
         <p className="text-sm text-ink/60">
-          Enter your work email and we&rsquo;ll send you a verification code to get started.
+          Enter your email below and we&rsquo;ll send you a verification code to get started.
         </p>
         <input
           type="email"

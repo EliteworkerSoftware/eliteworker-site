@@ -61,7 +61,7 @@ export function ShowcaseItem({
               </li>
             ) : (
               <li key={p.label} className="flex items-start gap-2.5 py-1.5 text-sm text-ink/70">
-                <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-line" />
+                <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-accent" />
                 {p.label}
               </li>
             )
