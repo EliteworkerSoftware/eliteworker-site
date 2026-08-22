@@ -75,6 +75,19 @@ body {
   background-clip: text;
   -webkit-background-clip: text;
   color: transparent;
+  display: inline-block;
+  line-height: 1.15;
+  padding-bottom: 0.08em;
+}
+
+.text-gradient-navy {
+  background: linear-gradient(100deg, var(--ink) 0%, var(--brand-light) 50%, var(--ink) 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  display: inline-block;
+  line-height: 1.15;
+  padding-bottom: 0.08em;
 }
 
 /* Faint grid for light surfaces */

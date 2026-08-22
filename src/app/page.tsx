@@ -2,7 +2,8 @@ import Link from "next/link";
 import NavBar from "@/components/NavBar";
 import Footer from "@/components/Footer";
 import FadeIn from "@/components/FadeIn";
-import { ParallaxBlob } from "@/components/ParallaxBlob";
+import { BarChartMotif } from "@/components/BarChartMotif";
+import { HorizontalBarsMotif } from "@/components/HorizontalBarsMotif";
 import { LaptopMockup, IpadMockup, IphoneMockup } from "@/components/devices/DeviceMockups";
 import { ShowcaseItem } from "@/components/ShowcaseItem";
 import { CommandCenterShowcase } from "@/components/CommandCenterShowcase";
@@ -21,6 +22,7 @@ import {
 const commandCenter = {
   kicker: "COMMAND CENTER",
   title: "Your entire company, at a glance.",
+  highlight: "glance.",
   points: [
     {
       label: "Estimating",
@@ -267,6 +269,7 @@ const showcase = [
   {
     kicker: "Customer Portal",
     title: "No More \"Can You Send Me an Update?\"",
+    highlight: "Update?",
     points: [
       {
         label: "Review and accept proposals online, with a full history of past approvals",
@@ -302,6 +305,7 @@ const showcase = [
   {
     kicker: "Partner Portal",
     title: "Your Partners, Always in the Loop",
+    highlight: "Loop",
     points: [
       {
         label: "Track commission on every referred project, automatically calculated from real job data",
@@ -352,21 +356,23 @@ export default function Home() {
 
       <main>
         {/* Hero */}
-        <section className={`relative overflow-x-clip ${sectionPadding}`}>
-          <ParallaxBlob
-            speed={0.12}
-            className="pointer-events-none absolute -left-24 top-[-10%] -z-10 h-104 w-104 rounded-full bg-brand/10 blur-3xl"
+        <section className={`relative isolate z-10 overflow-x-clip ${sectionPadding}`}>
+          <HorizontalBarsMotif
+            speed={0.28}
+            className="pointer-events-none absolute -left-24 top-[4%] -z-10 h-80 w-80 opacity-[0.07]"
           />
-          <ParallaxBlob
-            speed={-0.08}
-            className="pointer-events-none absolute -right-32 top-[40%] -z-10 h-88 w-88 rounded-full bg-accent/10 blur-3xl"
+          <BarChartMotif
+            speed={-0.22}
+            className="pointer-events-none absolute -right-20 top-[38%] -z-10 h-72 w-72 opacity-[0.065]"
           />
           <div className="mx-auto max-w-7xl px-6">
             <div className="grid items-center gap-16 lg:grid-cols-[1fr_1.35fr]">
               <FadeIn>
                 <h1 className="font-display text-5xl font-semibold leading-[0.95] tracking-[-0.04em] text-ink whitespace-nowrap sm:text-6xl md:text-7xl">
                   <span className="block">Your business,</span>
-                  <span className="block">running itself.</span>
+                  <span className="block">
+                    running <span className="text-gradient">itself.</span>
+                  </span>
                 </h1>
                 <p className="mt-7 max-w-lg text-balance text-lg leading-8 text-ink/60 md:text-xl">
                   Every job, every customer, every worker — orchestrated automatically, all in one place.
@@ -374,13 +380,13 @@ export default function Home() {
                 <div className="mt-10 flex flex-wrap gap-4">
                   <Link
                     href="/demo"
-                    className="rounded-xl bg-accent px-7 py-4 text-sm font-semibold text-ink transition hover:-translate-y-0.5 hover:brightness-105 md:text-base"
+                    className="rounded-xl bg-accent px-6 py-3 text-sm font-semibold text-ink transition hover:-translate-y-0.5 hover:brightness-105 md:text-base"
                   >
                     Book a Demo
                   </Link>
                   <Link
                     href="/beta"
-                    className="rounded-xl border border-line px-7 py-4 text-sm font-semibold text-ink/80 transition hover:border-ink/25 hover:text-ink md:text-base"
+                    className="rounded-xl border border-line px-6 py-3 text-sm font-semibold text-ink/80 transition hover:border-ink/25 hover:text-ink md:text-base"
                   >
                     Join the Beta
                   </Link>
@@ -439,13 +445,22 @@ export default function Home() {
         </section>
 
         {/* Platform showcase */}
-        <section className={sectionPadding}>
+        <section className={`relative isolate overflow-x-clip ${sectionPadding}`}>
+          <HorizontalBarsMotif
+            speed={0.25}
+            className="pointer-events-none absolute -right-20 top-[6%] -z-10 h-72 w-72 opacity-[0.06]"
+          />
+          <BarChartMotif
+            speed={-0.25}
+            className="pointer-events-none absolute -left-24 top-[46%] -z-10 h-96 w-96 opacity-[0.065]"
+          />
           <div className="mx-auto max-w-7xl px-6">
             <div className="space-y-28 md:space-y-36">
               <FadeIn>
                 <CommandCenterShowcase
                   kicker={commandCenter.kicker}
                   title={commandCenter.title}
+                  highlight={commandCenter.highlight}
                   points={commandCenter.points}
                   reverse
                 />
@@ -456,6 +471,7 @@ export default function Home() {
                   <ShowcaseItem
                     kicker={s.kicker}
                     title={s.title}
+                    highlight={s.highlight}
                     points={s.points}
                     device={s.device}
                     reverse={i % 2 !== 0}
@@ -471,10 +487,18 @@ export default function Home() {
 
 
         {/* Final CTA */}
-        <section className="mx-auto max-w-7xl px-6 py-24 md:py-32">
-          <FadeIn className="rounded-[2rem] border border-line bg-paper-alt px-8 py-14 text-center md:px-16 md:py-20">
-            <h2 className="text-balance font-display text-3xl font-semibold tracking-[-0.03em] text-ink md:text-5xl">
-              Want to see it running on a real account?
+        <section className="relative isolate overflow-x-clip px-6 py-24 md:py-32">
+          <HorizontalBarsMotif
+            speed={-0.16}
+            className="pointer-events-none absolute -left-20 bottom-[10%] -z-10 h-64 w-64 opacity-[0.06]"
+          />
+          <BarChartMotif
+            speed={0.22}
+            className="pointer-events-none absolute -right-20 top-[6%] -z-10 h-64 w-64 opacity-[0.065]"
+          />
+          <FadeIn className="relative mx-auto max-w-7xl rounded-[2rem] border border-line bg-paper-alt px-8 py-14 text-center md:px-16 md:py-20">
+            <h2 className="text-balance font-display text-5xl font-semibold leading-[0.95] tracking-[-0.04em] sm:text-6xl md:text-7xl">
+              <span className="text-gradient-navy">Want to see it running on a real account?</span>
             </h2>
             <p className="mx-auto mt-4 max-w-lg text-base leading-7 text-ink/60">
               30 minutes, no slides — we&apos;ll walk through scheduling, dispatch, and job tracking live.
@@ -482,13 +506,13 @@ export default function Home() {
             <div className="mt-8 flex flex-wrap justify-center gap-4">
               <Link
                 href="/demo"
-                className="rounded-xl bg-accent px-7 py-3.5 text-sm font-semibold text-ink transition hover:-translate-y-0.5 hover:brightness-105"
+                className="rounded-xl bg-accent px-6 py-3 text-sm font-semibold text-ink transition hover:-translate-y-0.5 hover:brightness-105"
               >
                 Book a demo
               </Link>
               <Link
                 href="/how-it-works"
-                className="rounded-xl border border-line bg-paper px-7 py-3.5 text-sm font-semibold text-ink/80 transition hover:border-ink/25 hover:text-ink"
+                className="rounded-xl border border-line bg-paper px-6 py-3 text-sm font-semibold text-ink/80 transition hover:border-ink/25 hover:text-ink"
               >
                 See how it works
               </Link>

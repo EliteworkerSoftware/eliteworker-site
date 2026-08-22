@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 
 const productLinks = [
   { href: "/", label: "Platform" },
@@ -15,7 +16,13 @@ export default function Footer() {
 
       <div className="mx-auto grid max-w-7xl gap-14 px-6 py-20 md:grid-cols-[1.4fr_1fr_1fr] md:py-24">
         <div>
-          <p className="font-display text-2xl font-semibold tracking-[-0.02em] text-ink">EliteWorker</p>
+          <Image
+            src="/Eliteworker%20Footer%20Logo.svg"
+            alt="EliteWorker"
+            width={660}
+            height={101}
+            className="h-7 w-auto"
+          />
           <p className="mt-4 max-w-sm text-base leading-7 text-ink/55">
             The operations platform built for smart home integrators — scheduling, dispatch, and job tracking
             from prewire to final walkthrough.

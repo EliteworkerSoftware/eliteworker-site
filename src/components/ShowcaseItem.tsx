@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { LaptopMockup, IpadMockup, IphoneMockup } from "@/components/devices/DeviceMockups";
 import { GuidedTabDemo } from "@/components/GuidedTabDemo";
+import { highlightWord } from "@/lib/highlightWord";
 
 type Point = { label: string; image: string; alt: string };
 type Coord = { x: number; y: number };
@@ -11,6 +12,7 @@ type DemoStep = { src: string; alt: string; tabTarget: Coord; contentPan: readon
 export function ShowcaseItem({
   kicker,
   title,
+  highlight,
   points,
   device,
   reverse,
@@ -20,6 +22,7 @@ export function ShowcaseItem({
 }: {
   kicker: string;
   title: string;
+  highlight: string;
   points: readonly Point[];
   device: "laptop" | "tablet" | "phone";
   reverse: boolean;
@@ -33,8 +36,10 @@ export function ShowcaseItem({
   return (
     <div className="grid items-center gap-14 lg:grid-cols-2">
       <div className={reverse ? "lg:order-2" : ""}>
-        <p className="text-xs font-semibold uppercase tracking-[0.22em] text-brand">{kicker}</p>
-        <h2 className="mt-3 text-balance text-2xl font-semibold tracking-[-0.02em] text-ink md:text-3xl">{title}</h2>
+        <p className="inline-block rounded-full bg-brand-dark px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.22em] text-white">{kicker}</p>
+        <h2 className="mt-3 text-balance font-display text-5xl font-semibold leading-[0.95] tracking-[-0.04em] text-ink sm:text-6xl md:text-7xl">
+          {highlightWord(title, highlight)}
+        </h2>
         <ul className="mt-6 space-y-1">
           {points.map((p, i) =>
             interactive ? (

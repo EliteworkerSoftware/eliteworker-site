@@ -2,14 +2,16 @@
 
 import { useEffect, useRef } from "react";
 
-export function ParallaxBlob({
+// The exact "W" bar group from the logo mark (outer bars tall, middle
+// shorter), scaled up and faded, drifting at its own rate as the page scrolls.
+export function BarChartMotif({
   className = "",
   speed = 0.15,
 }: {
   className?: string;
   speed?: number;
 }) {
-  const ref = useRef<HTMLDivElement>(null);
+  const ref = useRef<SVGSVGElement>(null);
 
   useEffect(() => {
     const el = ref.current;
@@ -37,5 +39,11 @@ export function ParallaxBlob({
     };
   }, [speed]);
 
-  return <div ref={ref} className={className} style={{ willChange: "transform" }} />;
+  return (
+    <svg ref={ref} viewBox="0 0 72.65 70.58" fill="none" className={className} style={{ willChange: "transform" }}>
+      <rect x="0" y="0" width="18.68" height="70.58" rx="3.11" fill="var(--brand-dark)" />
+      <rect x="26.99" y="25.95" width="18.68" height="44.63" rx="3.11" fill="var(--brand)" />
+      <rect x="53.97" y="0" width="18.68" height="70.58" rx="3.11" fill="var(--brand-light)" />
+    </svg>
+  );
 }

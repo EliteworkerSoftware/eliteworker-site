@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { LaptopMockup, IpadMockup, IphoneMockup } from "@/components/devices/DeviceMockups";
+import { highlightWord } from "@/lib/highlightWord";
 
 type DeviceKey = "laptop" | "tablet" | "phone";
 type Variant = { src: string; alt: string };
@@ -16,11 +17,13 @@ const deviceContentHeight: Record<DeviceKey, number> = { laptop: 322, tablet: 30
 export function CommandCenterShowcase({
   kicker,
   title,
+  highlight,
   points,
   reverse,
 }: {
   kicker: string;
   title: string;
+  highlight: string;
   points: readonly Point[];
   reverse?: boolean;
 }) {
@@ -31,8 +34,10 @@ export function CommandCenterShowcase({
   return (
     <div className="grid items-start gap-14 lg:grid-cols-2">
       <div className={reverse ? "lg:order-2" : ""}>
-        <p className="text-xs font-semibold uppercase tracking-[0.22em] text-brand">{kicker}</p>
-        <h2 className="mt-3 text-balance text-2xl font-semibold tracking-[-0.02em] text-ink md:text-3xl">{title}</h2>
+        <p className="inline-block rounded-full bg-brand-dark px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.22em] text-white">{kicker}</p>
+        <h2 className="mt-3 text-balance font-display text-5xl font-semibold leading-[0.95] tracking-[-0.04em] text-ink sm:text-6xl md:text-7xl">
+          {highlightWord(title, highlight)}
+        </h2>
 
         <ul className="mt-6 grid grid-cols-3 gap-x-4 gap-y-1">
           {points.map((p, i) => (
