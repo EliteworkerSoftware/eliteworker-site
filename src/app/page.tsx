@@ -384,12 +384,6 @@ export default function Home() {
                   >
                     Book a Demo
                   </Link>
-                  <Link
-                    href="/beta"
-                    className="rounded-full border-2 border-brand-dark px-5 py-2.5 text-sm font-semibold text-brand-dark transition hover:bg-brand-dark hover:text-white md:text-base"
-                  >
-                    Join the Beta
-                  </Link>
                 </div>
               </FadeIn>
 

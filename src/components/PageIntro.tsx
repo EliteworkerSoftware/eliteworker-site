@@ -1,16 +1,20 @@
+import type { ReactNode } from "react";
 import FadeIn from "@/components/FadeIn";
 
 export default function PageIntro({
   kicker,
   title,
   subtitle,
+  children,
 }: {
   kicker: string;
   title: string;
   subtitle?: string;
+  children?: ReactNode;
 }) {
   return (
-    <section className="border-b border-line bg-paper-alt">
+    <section className="relative isolate overflow-x-clip border-b border-line bg-paper-alt">
+      {children}
       <div className="mx-auto max-w-4xl px-6 py-20 text-center md:py-28">
         <FadeIn>
           <p className="text-xs font-semibold uppercase tracking-[0.24em] text-brand">{kicker}</p>

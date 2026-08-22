@@ -27,8 +27,7 @@ export default function Footer() {
             className="h-7 w-auto"
           />
           <p className="mt-4 max-w-sm text-base leading-7 text-ink/55">
-            The operations platform built for smart home integrators — scheduling, dispatch, and job tracking
-            from prewire to final walkthrough.
+            The operations platform built for smart home integrators
           </p>
         </div>
 
