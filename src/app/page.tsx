@@ -388,7 +388,7 @@ export default function Home() {
                 <h1 className="font-display text-5xl font-semibold leading-[0.95] tracking-[-0.04em] text-ink whitespace-nowrap sm:text-6xl md:text-7xl">
                   <span className="block">Your business,</span>
                   <span className="block">
-                    running <span className="text-gradient">itself.</span>
+                    on <span className="text-gradient">Autopilot.</span>
                   </span>
                 </h1>
                 <p className="mt-7 max-w-lg text-balance text-lg leading-8 text-ink/60 md:text-xl">
