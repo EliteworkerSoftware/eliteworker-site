@@ -1,16 +1,19 @@
 import type { ReactNode } from "react";
 import FadeIn from "@/components/FadeIn";
+import { ScrollCue } from "@/components/ScrollCue";
 
 export default function PageIntro({
   kicker,
   title,
   subtitle,
   children,
+  scrollCue = false,
 }: {
   kicker: string;
   title: string;
   subtitle?: string;
   children?: ReactNode;
+  scrollCue?: boolean;
 }) {
   return (
     <section className="relative isolate overflow-x-clip border-b border-line bg-paper-alt">
@@ -28,6 +31,7 @@ export default function PageIntro({
           )}
         </FadeIn>
       </div>
+      {scrollCue && <ScrollCue />}
     </section>
   );
 }

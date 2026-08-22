@@ -244,25 +244,25 @@ const customerPortalDemoSteps = [
   {
     src: "/No%20Device%20Screenshots/Customer_overview.png",
     alt: "EliteWorker customer portal overview tab",
-    tabTarget: { x: 6, y: 24 },
+    tabTarget: { x: 6, y: 14.5 },
     contentPan: contentSweep,
   },
   {
     src: "/No%20Device%20Screenshots/customer_proposals.png",
     alt: "EliteWorker customer portal proposals tab",
-    tabTarget: { x: 6, y: 27.6 },
+    tabTarget: { x: 6, y: 18.5 },
     contentPan: contentSweep,
   },
   {
     src: "/No%20Device%20Screenshots/Customer_credits.png",
     alt: "EliteWorker customer portal credits tab",
-    tabTarget: { x: 6, y: 30.8 },
+    tabTarget: { x: 6, y: 22.1 },
     contentPan: contentSweep,
   },
   {
     src: "/No%20Device%20Screenshots/Customer_invoices.png",
     alt: "EliteWorker customer portal invoices tab",
-    tabTarget: { x: 6, y: 34.1 },
+    tabTarget: { x: 6, y: 25.9 },
     contentPan: contentSweep,
   },
 ] as const;

@@ -22,6 +22,7 @@ export default function ContactPage() {
           kicker="Get in touch"
           title="Let's see your jobs running without the guesswork."
           subtitle="We want to hear more about your business and see if we are a good fit for each other. Please use the form below to get in touch with us"
+          scrollCue
         />
 
         <section className="mx-auto max-w-6xl px-6 py-24 md:py-32">

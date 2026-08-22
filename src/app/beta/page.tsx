@@ -20,6 +20,7 @@ export default function BetaPage() {
           kicker="Early access"
           title="Help us build you the best tool for your business"
           subtitle="We didn't build EliteWorker to add another tool to your stack — we built it so you can spend less time in your business and more time growing it. Beta partners get early access and a direct line to shape what we build next: what's missing, what's slowing you down, and what would actually buy you back your time. Tell us about your business, and let's build the tool that helps you scale it."
+          scrollCue
         />
 
         <section className="py-16 md:py-24">

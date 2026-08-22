@@ -6,6 +6,7 @@ import Footer from "@/components/Footer";
 import FadeIn from "@/components/FadeIn";
 import { BarChartMotif } from "@/components/BarChartMotif";
 import { HorizontalBarsMotif } from "@/components/HorizontalBarsMotif";
+import { ScrollCue } from "@/components/ScrollCue";
 
 export const metadata: Metadata = {
   title: "About Us",
@@ -37,6 +38,7 @@ export default function AboutPage() {
               </h1>
             </FadeIn>
           </div>
+          <ScrollCue light />
         </section>
 
         <section className="relative isolate border-t border-line bg-paper-alt">
