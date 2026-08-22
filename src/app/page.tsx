@@ -26,7 +26,7 @@ const commandCenter = {
       label: "Estimating",
       images: {
         laptop: {
-          src: "/Laptop%20Mockups/Screenshot%202026-08-20%20191645-front.png",
+          src: "/Laptop%20Mockups/proposal.png",
           alt: "EliteWorker estimates list on laptop",
         },
         tablet: {
@@ -43,7 +43,7 @@ const commandCenter = {
       label: "Scheduling",
       images: {
         laptop: {
-          src: "/Laptop%20Mockups/Screenshot%202026-08-20%20191552-front.png",
+          src: "/Laptop%20Mockups/MySchedule.png",
           alt: "EliteWorker scheduling calendar on laptop",
         },
         tablet: {
@@ -60,7 +60,7 @@ const commandCenter = {
       label: "Project Management",
       images: {
         laptop: {
-          src: "/Laptop%20Mockups/Screenshot%202026-08-20%20191614-front.png",
+          src: "/Laptop%20Mockups/MyJobs.png",
           alt: "EliteWorker job board on laptop",
         },
         tablet: {
@@ -77,7 +77,7 @@ const commandCenter = {
       label: "Workorders",
       images: {
         laptop: {
-          src: "/Laptop%20Mockups/Screenshot%202026-08-20%20191740-front.png",
+          src: "/Laptop%20Mockups/workorderdropdown.png",
           alt: "EliteWorker workorder tasks on laptop",
         },
         tablet: {
@@ -94,7 +94,7 @@ const commandCenter = {
       label: "Billing",
       images: {
         laptop: {
-          src: "/Laptop%20Mockups/Screenshot%202026-08-20%20191705-front.png",
+          src: "/Laptop%20Mockups/Salespage.png",
           alt: "EliteWorker proposal and billing on laptop",
         },
         tablet: {
@@ -111,7 +111,7 @@ const commandCenter = {
       label: "Payroll",
       images: {
         laptop: {
-          src: "/Laptop%20Mockups/Screenshot%202026-08-20%20191538-front.png",
+          src: "/Laptop%20Mockups/clockinreminder.png",
           alt: "EliteWorker payroll on laptop",
         },
         tablet: {
@@ -128,7 +128,7 @@ const commandCenter = {
       label: "HR Management",
       images: {
         laptop: {
-          src: "/Laptop%20Mockups/Screenshot%202026-08-20%20191714-front.png",
+          src: "/Laptop%20Mockups/worker_login.png",
           alt: "EliteWorker HR management on laptop",
         },
         tablet: {
@@ -145,7 +145,7 @@ const commandCenter = {
       label: "Inventory",
       images: {
         laptop: {
-          src: "/Laptop%20Mockups/Screenshot%202026-08-20%20191755-front.png",
+          src: "/Laptop%20Mockups/products.png",
           alt: "EliteWorker inventory on laptop",
         },
         tablet: {
@@ -162,7 +162,7 @@ const commandCenter = {
       label: "Commission Tracking",
       images: {
         laptop: {
-          src: "/Laptop%20Mockups/Screenshot%202026-08-20%20191808-front.png",
+          src: "/Laptop%20Mockups/job.png",
           alt: "EliteWorker commission tracking on laptop",
         },
         tablet: {
@@ -179,7 +179,7 @@ const commandCenter = {
       label: "Password Management",
       images: {
         laptop: {
-          src: "/Laptop%20Mockups/Screenshot%202026-08-20%20191507-front.png",
+          src: "/Laptop%20Mockups/Calendar.png",
           alt: "EliteWorker password management on laptop",
         },
         tablet: {
@@ -196,7 +196,7 @@ const commandCenter = {
       label: "Automated Alerts",
       images: {
         laptop: {
-          src: "/Laptop%20Mockups/Screenshot%202026-08-20%20191645-front.png",
+          src: "/Laptop%20Mockups/proposal.png",
           alt: "EliteWorker automated alerts on laptop",
         },
         tablet: {
@@ -213,7 +213,7 @@ const commandCenter = {
       label: "Employee Metrics",
       images: {
         laptop: {
-          src: "/Laptop%20Mockups/Screenshot%202026-08-20%20191614-front.png",
+          src: "/Laptop%20Mockups/MyJobs.png",
           alt: "EliteWorker employee metrics on laptop",
         },
         tablet: {
@@ -390,7 +390,7 @@ export default function Home() {
               <div className="relative mx-auto -mb-40 w-full max-w-3xl">
                 <FadeIn delay={140} className="relative z-10">
                   <LaptopMockup
-                    src="/Laptop%20Mockups/Screenshot%202026-08-20%20191526-front.png"
+                    src="/Laptop%20Mockups/Dashboard.png"
                     alt="EliteWorker dashboard on laptop"
                     priority
                     className="mx-auto w-[92%]"
