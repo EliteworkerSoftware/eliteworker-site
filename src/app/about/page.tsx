@@ -42,7 +42,7 @@ export default function AboutPage() {
         <section className="relative isolate overflow-x-clip border-t border-line bg-paper-alt">
           <HorizontalBarsMotif
             speed={0.25}
-            className="pointer-events-none absolute -left-10 top-[8%] -z-10 h-68 w-68 opacity-[0.09] sm:-left-20 sm:h-136 sm:w-136"
+            className="pointer-events-none absolute -left-6 top-[8%] -z-10 h-44 w-44 opacity-[0.06] sm:-left-12 sm:h-84 sm:w-84 lg:-left-14 lg:h-96 lg:w-96 xl:-left-17 xl:h-116 xl:w-116"
           />
           <div className="mx-auto max-w-3xl px-6 py-24 md:py-32">
             <FadeIn className="space-y-6 text-balance text-center text-base leading-8 text-ink/70 md:text-lg">
@@ -75,7 +75,7 @@ export default function AboutPage() {
         <section className="relative isolate overflow-x-clip border-t border-line">
           <BarChartMotif
             speed={-0.18}
-            className="pointer-events-none absolute -right-7 bottom-[10%] -z-10 h-60 w-60 opacity-[0.10] sm:-right-14 sm:h-120 sm:w-120"
+            className="pointer-events-none absolute -right-6 bottom-[10%] -z-10 h-44 w-44 opacity-[0.06] sm:-right-12 sm:h-84 sm:w-84 lg:-right-14 lg:h-96 lg:w-96 xl:-right-17 xl:h-116 xl:w-116"
           />
           <div className="mx-auto max-w-7xl px-6 py-24 text-center md:py-32">
             <FadeIn>
