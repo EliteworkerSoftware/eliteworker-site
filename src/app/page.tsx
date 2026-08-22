@@ -442,7 +442,7 @@ export default function Home() {
             <p className="text-xs font-semibold uppercase tracking-[0.22em] text-ink/40">
               A single solution to run and scale your business every step of the way
             </p>
-            <FadeIn className="mt-10 flex flex-nowrap justify-center gap-6 overflow-x-auto px-2 scrollbar-none sm:gap-8">
+            <FadeIn className="mt-10 grid grid-cols-3 justify-items-center gap-x-6 gap-y-8 px-2 sm:flex sm:flex-nowrap sm:justify-center sm:gap-8 sm:overflow-x-auto sm:scrollbar-none">
               {journeySteps.map(({ label, Icon }) => (
                 <div key={label} className="flex w-16 shrink-0 flex-col items-center gap-3 sm:w-20">
                   <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full border border-line bg-paper sm:h-16 sm:w-16">
