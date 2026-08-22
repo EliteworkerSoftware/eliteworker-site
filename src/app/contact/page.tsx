@@ -10,7 +10,7 @@ export const metadata: Metadata = {
   description: "Get in touch with the EliteWorker team.",
 };
 
-const categories = ["AV", "Security", "Networking", "Shading", "Smart home", "Networking & IT"];
+const categories = ["Smart home", "AV", "Security", "Networking & IT"];
 
 export default function ContactPage() {
   return (

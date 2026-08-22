@@ -6,8 +6,9 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 
 const links = [
-  { href: "/how-it-works", label: "How it works" },
-  { href: "/contact", label: "Contact" },
+  { href: "/", label: "Home" },
+  { href: "/about", label: "About Us" },
+  { href: "/contact", label: "Contact Us" },
 ];
 
 export default function NavBar() {
@@ -44,7 +45,7 @@ export default function NavBar() {
         <div className="flex items-center gap-2">
           <Link
             href="/demo"
-            className="whitespace-nowrap rounded-lg bg-accent px-3 py-2 text-xs font-semibold text-nav transition hover:-translate-y-0.5 hover:brightness-105 sm:px-4 sm:text-sm"
+            className="whitespace-nowrap rounded-full bg-accent px-3 py-1.5 text-xs font-semibold text-white transition hover:-translate-y-0.5 hover:brightness-105 sm:px-4 sm:text-sm"
           >
             Book a demo
           </Link>
@@ -82,6 +83,13 @@ export default function NavBar() {
           </ul>
         </nav>
       )}
+
+      <Link
+        href="/beta"
+        className="block bg-brand px-6 py-2 text-center text-xs font-semibold text-white transition hover:brightness-105 sm:text-sm"
+      >
+        We are now accepting requests to join the Beta program and get early access to the EliteWorker platform and future discounts. <span className="underline underline-offset-2">Apply Here</span>
+      </Link>
     </header>
   );
 }

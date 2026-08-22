@@ -2,12 +2,15 @@ import Link from "next/link";
 import Image from "next/image";
 
 const productLinks = [
-  { href: "/", label: "Platform" },
-  { href: "/how-it-works", label: "How it works" },
+  { href: "/beta", label: "Join the Beta" },
   { href: "/demo", label: "Book a demo" },
 ];
 
-const companyLinks = [{ href: "/contact", label: "Contact" }];
+const companyLinks = [
+  { href: "/", label: "Home" },
+  { href: "/about", label: "About Us" },
+  { href: "/contact", label: "Contact Us" },
+];
 
 export default function Footer() {
   return (
@@ -57,7 +60,7 @@ export default function Footer() {
       </div>
 
       <div className="border-t border-line px-6 py-7 text-center text-sm text-ink/40">
-        © {new Date().getFullYear()} EliteWorker. Built by Elite Smart Home, LLC.
+        © {new Date().getFullYear()} EliteWorker. All rights reserved.
       </div>
     </footer>
   );

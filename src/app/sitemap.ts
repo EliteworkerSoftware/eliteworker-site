@@ -6,9 +6,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const lastModified = new Date();
   return [
     { url: siteUrl, lastModified, priority: 1 },
-    { url: `${siteUrl}/platform`, lastModified, priority: 0.9 },
-    { url: `${siteUrl}/how-it-works`, lastModified, priority: 0.8 },
+    { url: `${siteUrl}/about`, lastModified, priority: 0.6 },
     { url: `${siteUrl}/contact`, lastModified, priority: 0.7 },
+    { url: `${siteUrl}/beta`, lastModified, priority: 0.7 },
     { url: `${siteUrl}/demo`, lastModified, priority: 0.8 },
   ];
 }

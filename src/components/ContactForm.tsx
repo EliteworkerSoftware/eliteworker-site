@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Turnstile from "@/components/Turnstile";
 
 export default function ContactForm() {
   const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">("idle");
@@ -14,6 +15,7 @@ export default function ContactForm() {
       email: form.get("email"),
       company: form.get("company"),
       message: form.get("message"),
+      turnstileToken: form.get("cf-turnstile-response"),
     };
     try {
       const res = await fetch("/api/contact", {
@@ -67,10 +69,11 @@ export default function ContactForm() {
         placeholder="What are you looking to solve?"
         className="rounded-lg border border-line bg-paper px-4 py-3 text-sm text-ink placeholder:text-ink/35 focus:border-accent focus:outline-none"
       />
+      <Turnstile siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY} />
       <button
         type="submit"
         disabled={status === "sending"}
-        className="rounded-lg bg-accent px-6 py-3 text-sm font-semibold text-ink transition hover:brightness-105 disabled:opacity-60"
+        className="rounded-full bg-accent px-5 py-2.5 text-sm font-semibold text-ink transition hover:brightness-105 disabled:opacity-60"
       >
         {status === "sending" ? "Sending…" : "Send message"}
       </button>

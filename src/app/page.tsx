@@ -380,13 +380,13 @@ export default function Home() {
                 <div className="mt-10 flex flex-wrap gap-4">
                   <Link
                     href="/demo"
-                    className="rounded-xl bg-accent px-6 py-3 text-sm font-semibold text-ink transition hover:-translate-y-0.5 hover:brightness-105 md:text-base"
+                    className="rounded-full bg-accent px-5 py-2.5 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:brightness-105 md:text-base"
                   >
                     Book a Demo
                   </Link>
                   <Link
                     href="/beta"
-                    className="rounded-xl border border-line px-6 py-3 text-sm font-semibold text-ink/80 transition hover:border-ink/25 hover:text-ink md:text-base"
+                    className="rounded-full border-2 border-brand-dark px-5 py-2.5 text-sm font-semibold text-brand-dark transition hover:bg-brand-dark hover:text-white md:text-base"
                   >
                     Join the Beta
                   </Link>
@@ -501,20 +501,14 @@ export default function Home() {
               <span className="text-gradient-navy">Want to see it running on a real account?</span>
             </h2>
             <p className="mx-auto mt-4 max-w-lg text-base leading-7 text-ink/60">
-              30 minutes, no slides — we&apos;ll walk through scheduling, dispatch, and job tracking live.
+              30 minutes, no slides — we&apos;ll walk through scheduling, Job Management, and the entire flow live.
             </p>
             <div className="mt-8 flex flex-wrap justify-center gap-4">
               <Link
                 href="/demo"
-                className="rounded-xl bg-accent px-6 py-3 text-sm font-semibold text-ink transition hover:-translate-y-0.5 hover:brightness-105"
+                className="rounded-full bg-accent px-5 py-2.5 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:brightness-105"
               >
                 Book a demo
-              </Link>
-              <Link
-                href="/how-it-works"
-                className="rounded-xl border border-line bg-paper px-6 py-3 text-sm font-semibold text-ink/80 transition hover:border-ink/25 hover:text-ink"
-              >
-                See how it works
               </Link>
             </div>
           </FadeIn>

@@ -31,11 +31,11 @@ export function ScheduleIcon({ className }: IconProps) {
 export function WiringIcon({ className }: IconProps) {
   return (
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round" className={className}>
-      <path d="M6 3v4a3 3 0 0 0 3 3h6a3 3 0 0 0 3-3V3" />
-      <path d="M12 10v4" />
-      <path d="M12 14a4 4 0 0 0-4 4v3" />
-      <path d="M8 21h8" />
-      <path d="M6 3h0M18 3h0" />
+      <rect x="1.8" y="2.3" width="8.6" height="6.2" rx="2.8" />
+      <rect x="2.6" y="4.1" width="2.6" height="2.6" rx="1" />
+      <rect x="13.6" y="15.5" width="8.6" height="6.2" rx="2.8" />
+      <rect x="18.4" y="17.3" width="2.6" height="2.6" rx="1" />
+      <path d="M10.4 5.4C16 8 8 16 13.6 18.6" strokeWidth={1.6} />
     </svg>
   );
 }
@@ -43,10 +43,11 @@ export function WiringIcon({ className }: IconProps) {
 export function InstallationIcon({ className }: IconProps) {
   return (
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round" className={className}>
-      <path d="M14.7 6.3a3 3 0 0 0 4 4L21 8l-4-4-2.3 2.3Z" />
-      <path d="M14.5 9.5 5 19l-2 2 2-2 9.5-9.5" />
-      <path d="M9 5 5 9" />
-      <path d="M3 21l3-1 1-3" />
+      <rect x="2.5" y="7.5" width="10" height="5.5" rx="1.5" />
+      <path d="M5.5 13v5a1 1 0 0 1-1 1h-1a1 1 0 0 1-1-1v-5" />
+      <path d="M8 13v2.2" />
+      <path d="M12.5 8.7h2.4v3.6h-2.4Z" fill="currentColor" stroke="none" />
+      <path d="M16.7 10.5h5.3" strokeWidth={1.75} />
     </svg>
   );
 }
@@ -64,8 +65,8 @@ export function ProgrammingIcon({ className }: IconProps) {
 export function QualityCheckIcon({ className }: IconProps) {
   return (
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round" className={className}>
-      <path d="M12 3.5 18.5 6v5.2c0 4.3-2.8 7.7-6.5 9.3-3.7-1.6-6.5-5-6.5-9.3V6L12 3.5Z" />
-      <path d="M9 12.3l2.2 2.2 4-4.3" />
+      <rect x="4" y="4" width="16" height="16" rx="4" />
+      <path d="M8 12.5l2.5 2.5 5.5-6" strokeWidth={2} />
     </svg>
   );
 }

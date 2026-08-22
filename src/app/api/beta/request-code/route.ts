@@ -1,15 +1,17 @@
 import { NextRequest, NextResponse } from "next/server";
 import Mailgun from "mailgun.js";
 import formData from "form-data";
-import { getSupabaseAdmin } from "@/lib/supabase";
+import { createChallengeToken, generateCode } from "@/lib/emailVerification";
 import { verifyTurnstile } from "@/lib/turnstile";
+
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 export async function POST(req: NextRequest) {
   try {
-    const { name, email, company, message, turnstileToken } = await req.json();
+    const { email, turnstileToken } = await req.json();
 
-    if (!name || !email || !message) {
-      return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
+    if (!email || typeof email !== "string" || !EMAIL_RE.test(email)) {
+      return NextResponse.json({ error: "Enter a valid email address" }, { status: 400 });
     }
 
     const remoteIp = req.headers.get("x-forwarded-for");
@@ -18,17 +20,9 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Verification failed — please try again" }, { status: 400 });
     }
 
-    // 1. Save the lead to Supabase so nothing is lost even if email fails
-    const supabase = getSupabaseAdmin();
-    const { error: dbError } = await supabase
-      .from("eliteworker_leads")
-      .insert({ name, email, company, message });
+    const code = generateCode();
+    const token = createChallengeToken(email, code);
 
-    if (dbError) {
-      console.error("Supabase insert error:", dbError);
-    }
-
-    // 2. Notify your team by email via Mailgun
     const mailgun = new Mailgun(formData);
     const mg = mailgun.client({
       username: "api",
@@ -36,14 +30,14 @@ export async function POST(req: NextRequest) {
     });
     await mg.messages.create(process.env.MAILGUN_DOMAIN || "", {
       from: process.env.CONTACT_FROM_EMAIL || `EliteWorker Site <postmaster@${process.env.MAILGUN_DOMAIN}>`,
-      to: process.env.CONTACT_TO_EMAIL || "you@example.com",
-      subject: `New EliteWorker inquiry from ${name}`,
-      text: `Name: ${name}\nEmail: ${email}\nCompany: ${company || "—"}\n\n${message}`,
+      to: email,
+      subject: `Your EliteWorker verification code: ${code}`,
+      text: `Your verification code is ${code}. It expires in 10 minutes.\n\nIf you didn't request this, you can ignore this email.`,
     });
 
-    return NextResponse.json({ ok: true });
+    return NextResponse.json({ ok: true, token });
   } catch (err) {
-    console.error("Contact form error:", err);
+    console.error("Request code error:", err);
     return NextResponse.json({ error: "Something went wrong" }, { status: 500 });
   }
 }
