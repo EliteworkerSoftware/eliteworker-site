@@ -33,7 +33,7 @@ export default function AboutPage() {
                 About us
               </p>
               <h1 className="mt-4 text-balance font-display text-4xl font-semibold tracking-[-0.03em] text-white md:text-6xl">
-                About EliteWorker
+                Where it all started...
               </h1>
             </FadeIn>
           </div>

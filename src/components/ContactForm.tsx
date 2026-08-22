@@ -54,7 +54,7 @@ export default function ContactForm() {
         name="email"
         type="email"
         required
-        placeholder="Work email"
+        placeholder="Email"
         className="rounded-lg border border-line bg-paper px-4 py-3 text-sm text-ink placeholder:text-ink/35 focus:border-accent focus:outline-none"
       />
       <input
@@ -73,7 +73,7 @@ export default function ContactForm() {
       <button
         type="submit"
         disabled={status === "sending"}
-        className="rounded-full bg-accent px-5 py-2.5 text-sm font-semibold text-ink transition hover:brightness-105 disabled:opacity-60"
+        className="rounded-full bg-brand px-5 py-2.5 text-sm font-semibold text-white transition hover:brightness-105 disabled:opacity-60"
       >
         {status === "sending" ? "Sending…" : "Send message"}
       </button>

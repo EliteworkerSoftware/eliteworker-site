@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
+import { UsaFlagIcon } from "@/components/UsaFlagIcon";
 
 const productLinks = [
   { href: "/beta", label: "Join the Beta" },
@@ -55,6 +56,10 @@ export default function Footer() {
               </li>
             ))}
           </ul>
+          <p className="mt-5 flex items-center gap-2 text-xs text-ink/50">
+            <UsaFlagIcon className="h-3.5 w-5.5 shrink-0 rounded-xs" />
+            Proudly designed and developed in the USA
+          </p>
         </div>
       </div>
 
