@@ -385,8 +385,8 @@ export default function Home() {
           <div className="mx-auto max-w-7xl px-6">
             <div className="grid items-center gap-16 lg:grid-cols-[1fr_1.35fr]">
               <FadeIn>
-                <h1 className="font-display text-5xl font-semibold leading-[0.95] tracking-[-0.04em] text-ink whitespace-nowrap sm:text-6xl md:text-7xl">
-                  <span className="block">Your business,</span>
+                <h1 className="font-display text-6xl font-semibold leading-[0.95] tracking-[-0.04em] text-ink whitespace-nowrap sm:text-7xl md:text-8xl">
+                  <span className="block">Your Business,</span>
                   <span className="block">
                     on <span className="text-gradient">Autopilot.</span>
                   </span>
