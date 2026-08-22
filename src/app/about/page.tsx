@@ -37,17 +37,6 @@ export default function AboutPage() {
               </h1>
             </FadeIn>
           </div>
-          <svg
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth={2}
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            className="absolute bottom-6 h-6 w-6 animate-bounce text-white/70"
-          >
-            <path d="M6 9l6 6 6-6" />
-          </svg>
         </section>
 
         <section className="relative isolate overflow-x-clip border-t border-line bg-paper-alt">
@@ -59,7 +48,8 @@ export default function AboutPage() {
             <FadeIn className="space-y-6 text-balance text-center text-base leading-8 text-ink/70 md:text-lg">
               <p>
                 EliteWorker wasn&rsquo;t built in a boardroom. It was built on job sites — by our founder, a smart
-                home professional with over 30 years in the industry, who spent the last five-plus years using it,
+                home professional business owner/integrator with over 30 years in the industry, who spent the last
+                five-plus years using it,
                 breaking it, and rebuilding it inside his own companies until it actually worked the way a real
                 integration business runs. Every workflow, every job stage, every feature exists because it solved
                 a real problem for a real crew, on a real install.
