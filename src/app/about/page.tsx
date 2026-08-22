@@ -39,11 +39,13 @@ export default function AboutPage() {
           </div>
         </section>
 
-        <section className="relative isolate overflow-x-clip border-t border-line bg-paper-alt">
-          <HorizontalBarsMotif
-            speed={0.25}
-            className="pointer-events-none absolute -left-6 top-[8%] -z-10 h-44 w-44 opacity-[0.06] sm:-left-12 sm:h-84 sm:w-84 lg:-left-14 lg:h-96 lg:w-96 xl:-left-17 xl:h-116 xl:w-116"
-          />
+        <section className="relative isolate border-t border-line bg-paper-alt">
+          <div className="pointer-events-none absolute inset-0 -z-10 overflow-x-clip">
+            <HorizontalBarsMotif
+              speed={0.25}
+              className="absolute -left-6 top-[8%] h-44 w-44 opacity-[0.06] sm:-left-12 sm:h-84 sm:w-84 lg:-left-14 lg:h-96 lg:w-96 xl:-left-17 xl:h-116 xl:w-116"
+            />
+          </div>
           <div className="mx-auto max-w-3xl px-6 py-24 md:py-32">
             <FadeIn className="space-y-6 text-balance text-center text-base leading-8 text-ink/70 md:text-lg">
               <p>
@@ -72,11 +74,13 @@ export default function AboutPage() {
           </div>
         </section>
 
-        <section className="relative isolate overflow-x-clip border-t border-line">
-          <BarChartMotif
-            speed={-0.18}
-            className="pointer-events-none absolute -right-6 bottom-[10%] -z-10 h-44 w-44 opacity-[0.06] sm:-right-12 sm:h-84 sm:w-84 lg:-right-14 lg:h-96 lg:w-96 xl:-right-17 xl:h-116 xl:w-116"
-          />
+        <section className="relative isolate border-t border-line">
+          <div className="pointer-events-none absolute inset-0 -z-10 overflow-x-clip">
+            <BarChartMotif
+              speed={-0.18}
+              className="absolute -right-6 bottom-[10%] h-44 w-44 opacity-[0.06] sm:-right-12 sm:h-84 sm:w-84 lg:-right-14 lg:h-96 lg:w-96 xl:-right-17 xl:h-116 xl:w-116"
+            />
+          </div>
           <div className="mx-auto max-w-7xl px-6 py-24 text-center md:py-32">
             <FadeIn>
               <h2 className="text-balance font-display text-3xl font-semibold tracking-[-0.03em] text-ink md:text-5xl">

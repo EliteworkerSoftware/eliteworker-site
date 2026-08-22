@@ -373,15 +373,17 @@ export default function Home() {
 
       <main>
         {/* Hero */}
-        <section className={`relative isolate z-10 overflow-x-clip ${sectionPadding}`}>
-          <HorizontalBarsMotif
-            speed={0.28}
-            className="pointer-events-none absolute -left-6 top-[2%] -z-10 h-44 w-44 opacity-[0.06] sm:-left-12 sm:h-84 sm:w-84 lg:-left-14 lg:h-96 lg:w-96 xl:-left-17 xl:h-116 xl:w-116"
-          />
-          <BarChartMotif
-            speed={-0.22}
-            className="pointer-events-none absolute -right-6 top-[40%] -z-10 h-44 w-44 opacity-[0.06] sm:-right-12 sm:h-84 sm:w-84 lg:-right-14 lg:h-96 lg:w-96 xl:-right-17 xl:h-116 xl:w-116"
-          />
+        <section className={`relative isolate z-10 ${sectionPadding}`}>
+          <div className="pointer-events-none absolute inset-0 -z-10 overflow-x-clip">
+            <HorizontalBarsMotif
+              speed={0.28}
+              className="absolute -left-6 top-[2%] h-44 w-44 opacity-[0.06] sm:-left-12 sm:h-84 sm:w-84 lg:-left-14 lg:h-96 lg:w-96 xl:-left-17 xl:h-116 xl:w-116"
+            />
+            <BarChartMotif
+              speed={-0.22}
+              className="absolute -right-6 top-[40%] h-44 w-44 opacity-[0.06] sm:-right-12 sm:h-84 sm:w-84 lg:-right-14 lg:h-96 lg:w-96 xl:-right-17 xl:h-116 xl:w-116"
+            />
+          </div>
           <div className="mx-auto max-w-7xl px-6">
             <div className="grid items-center gap-16 lg:grid-cols-[1fr_1.35fr]">
               <FadeIn>
@@ -456,19 +458,21 @@ export default function Home() {
         </section>
 
         {/* Platform showcase */}
-        <section className={`relative isolate overflow-x-clip ${sectionPadding}`}>
-          <BarChartMotif
-            speed={0.25}
-            className="pointer-events-none absolute -left-6 top-[4%] -z-10 h-44 w-44 opacity-[0.06] sm:-left-12 sm:h-84 sm:w-84 lg:-left-14 lg:h-96 lg:w-96 xl:-left-17 xl:h-116 xl:w-116"
-          />
-          <HorizontalBarsMotif
-            speed={-0.25}
-            className="pointer-events-none absolute -left-6 top-[48%] -z-10 h-44 w-44 opacity-[0.06] sm:-left-12 sm:h-84 sm:w-84 lg:-left-14 lg:h-96 lg:w-96 xl:-left-17 xl:h-116 xl:w-116"
-          />
-          <BarChartMotif
-            speed={0.18}
-            className="pointer-events-none absolute -right-6 bottom-[4%] -z-10 h-44 w-44 opacity-[0.06] sm:-right-12 sm:h-84 sm:w-84 lg:-right-14 lg:h-96 lg:w-96 xl:-right-17 xl:h-116 xl:w-116"
-          />
+        <section className={`relative isolate ${sectionPadding}`}>
+          <div className="pointer-events-none absolute inset-0 -z-10 overflow-x-clip">
+            <BarChartMotif
+              speed={0.25}
+              className="absolute -left-6 top-[4%] h-44 w-44 opacity-[0.06] sm:-left-12 sm:h-84 sm:w-84 lg:-left-14 lg:h-96 lg:w-96 xl:-left-17 xl:h-116 xl:w-116"
+            />
+            <HorizontalBarsMotif
+              speed={-0.25}
+              className="absolute -left-6 top-[48%] h-44 w-44 opacity-[0.06] sm:-left-12 sm:h-84 sm:w-84 lg:-left-14 lg:h-96 lg:w-96 xl:-left-17 xl:h-116 xl:w-116"
+            />
+            <BarChartMotif
+              speed={0.18}
+              className="absolute -right-6 bottom-[4%] h-44 w-44 opacity-[0.06] sm:-right-12 sm:h-84 sm:w-84 lg:-right-14 lg:h-96 lg:w-96 xl:-right-17 xl:h-116 xl:w-116"
+            />
+          </div>
           <div className="mx-auto max-w-7xl px-6">
             <div className="space-y-28 md:space-y-36">
               <FadeIn>
@@ -529,11 +533,13 @@ export default function Home() {
 
 
         {/* Final CTA */}
-        <section className="relative isolate overflow-x-clip px-6 py-24 md:py-32">
-          <BarChartMotif
-            speed={0.22}
-            className="pointer-events-none absolute -left-6 bottom-[8%] -z-10 h-44 w-44 opacity-[0.06] sm:-left-12 sm:h-84 sm:w-84 lg:-left-14 lg:h-96 lg:w-96 xl:-left-17 xl:h-116 xl:w-116"
-          />
+        <section className="relative isolate px-6 py-24 md:py-32">
+          <div className="pointer-events-none absolute inset-0 -z-10 overflow-x-clip">
+            <BarChartMotif
+              speed={0.22}
+              className="absolute -left-6 bottom-[8%] h-44 w-44 opacity-[0.06] sm:-left-12 sm:h-84 sm:w-84 lg:-left-14 lg:h-96 lg:w-96 xl:-left-17 xl:h-116 xl:w-116"
+            />
+          </div>
           <FadeIn className="relative mx-auto max-w-7xl rounded-[2rem] border border-line bg-paper-alt px-8 py-14 text-center md:px-16 md:py-20">
             <h2 className="text-balance font-display text-5xl font-semibold leading-[0.95] tracking-[-0.04em] sm:text-6xl md:text-7xl">
               <span className="text-gradient-navy">Want to see it running on a real account?</span>
