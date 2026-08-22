@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
 import Image from "next/image";
-import Link from "next/link";
 import NavBar from "@/components/NavBar";
 import Footer from "@/components/Footer";
 import FadeIn from "@/components/FadeIn";
 import { BarChartMotif } from "@/components/BarChartMotif";
 import { HorizontalBarsMotif } from "@/components/HorizontalBarsMotif";
 import { ScrollCue } from "@/components/ScrollCue";
+import { PillButton } from "@/components/PillButton";
 
 export const metadata: Metadata = {
   title: "About Us",
@@ -89,18 +89,12 @@ export default function AboutPage() {
                 Want to see it running on a real account?
               </h2>
               <div className="mt-8 flex flex-wrap justify-center gap-4">
-                <Link
-                  href="/demo"
-                  className="rounded-full bg-accent px-5 py-2.5 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:brightness-105"
-                >
+                <PillButton href="/demo" size="md">
                   Book a demo
-                </Link>
-                <Link
-                  href="/beta"
-                  className="rounded-full border-2 border-brand-dark px-5 py-2.5 text-sm font-semibold text-brand-dark transition hover:bg-brand-dark hover:text-white"
-                >
+                </PillButton>
+                <PillButton href="/beta" size="md" variant="secondary">
                   Join the Beta
-                </Link>
+                </PillButton>
               </div>
             </FadeIn>
           </div>

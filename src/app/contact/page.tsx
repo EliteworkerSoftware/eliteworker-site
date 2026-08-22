@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import NavBar from "@/components/NavBar";
 import Footer from "@/components/Footer";
 import PageIntro from "@/components/PageIntro";
 import ContactForm from "@/components/ContactForm";
 import FadeIn from "@/components/FadeIn";
 import { UsaFlagIcon } from "@/components/UsaFlagIcon";
+import { PillButton } from "@/components/PillButton";
 
 export const metadata: Metadata = {
   title: "Contact",
@@ -34,12 +34,9 @@ export default function ContactPage() {
                   Skip the form and book 30 minutes directly — we&apos;ll show you EliteWorker running on a real
                   account.
                 </p>
-                <Link
-                  href="/demo"
-                  className="mt-5 inline-block rounded-full bg-accent px-5 py-2.5 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:brightness-105"
-                >
+                <PillButton href="/demo" size="md" className="mt-5 inline-block">
                   Book a demo
-                </Link>
+                </PillButton>
               </div>
 
               <div>

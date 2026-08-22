@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
+import { PillButton } from "@/components/PillButton";
 
 const links = [
   { href: "/", label: "Home" },
@@ -43,12 +44,9 @@ export default function NavBar() {
           })}
         </nav>
         <div className="flex items-center gap-2">
-          <Link
-            href="/demo"
-            className="whitespace-nowrap rounded-full bg-accent px-3 py-1.5 text-xs font-semibold text-white transition hover:-translate-y-0.5 hover:brightness-105 sm:px-4 sm:text-sm"
-          >
+          <PillButton href="/demo" size="sm">
             Book a demo
-          </Link>
+          </PillButton>
           <button
             type="button"
             onClick={() => setOpen((v) => !v)}

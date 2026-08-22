@@ -1,4 +1,3 @@
-import Link from "next/link";
 import NavBar from "@/components/NavBar";
 import Footer from "@/components/Footer";
 import FadeIn from "@/components/FadeIn";
@@ -8,6 +7,8 @@ import { LaptopMockup, IpadMockup, IphoneMockup } from "@/components/devices/Dev
 import { ShowcaseItem } from "@/components/ShowcaseItem";
 import { CommandCenterShowcase } from "@/components/CommandCenterShowcase";
 import { MetricsSlides } from "@/components/MetricsSlides";
+import { PillButton } from "@/components/PillButton";
+import { CenterUnderText } from "@/components/CenterUnderText";
 import { highlightWord } from "@/lib/highlightWord";
 import {
   SaleIcon,
@@ -387,23 +388,20 @@ export default function Home() {
           <div className="mx-auto max-w-7xl px-6">
             <div className="grid items-center gap-16 lg:grid-cols-[1fr_1.35fr]">
               <FadeIn>
-                <h1 className="font-display text-6xl font-semibold leading-[0.95] tracking-[-0.04em] text-ink whitespace-nowrap sm:text-7xl md:text-8xl">
+                <h1 className="font-display text-6xl font-semibold leading-[0.95] tracking-[-0.04em] text-ink min-[390px]:whitespace-nowrap sm:text-7xl md:text-8xl">
                   <span className="block">Your Business,</span>
                   <span className="block">
                     on <span className="text-gradient">Autopilot.</span>
                   </span>
                 </h1>
-                <p className="mt-7 max-w-lg text-balance text-lg leading-8 text-ink/60 md:text-xl">
-                  Every job, every customer, every worker — orchestrated automatically, all in one place.
-                </p>
-                <div className="mt-10 flex flex-wrap gap-4">
-                  <Link
-                    href="/demo"
-                    className="rounded-full bg-accent px-5 py-2.5 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:brightness-105 md:text-base"
-                  >
-                    Book a Demo
-                  </Link>
-                </div>
+                <CenterUnderText
+                  text="Every job, every customer, every worker — orchestrated automatically, all in one place."
+                  textClassName="mt-7 max-w-lg text-balance text-lg leading-8 text-ink/60 md:text-xl"
+                >
+                  <PillButton href="/demo" size="lg">
+                    Book a demo
+                  </PillButton>
+                </CenterUnderText>
               </FadeIn>
 
               <div className="relative mx-auto -mb-40 w-full max-w-3xl">
@@ -548,12 +546,9 @@ export default function Home() {
               30 minutes, no slides — we&apos;ll walk through scheduling, Job Management, and the entire flow live.
             </p>
             <div className="mt-8 flex flex-wrap justify-center gap-4">
-              <Link
-                href="/demo"
-                className="rounded-full bg-accent px-5 py-2.5 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:brightness-105"
-              >
+              <PillButton href="/demo" size="md">
                 Book a demo
-              </Link>
+              </PillButton>
             </div>
           </FadeIn>
         </section>
