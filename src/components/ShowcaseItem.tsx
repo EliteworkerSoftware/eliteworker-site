@@ -34,7 +34,7 @@ export function ShowcaseItem({
   const current = points[active] ?? points[0];
 
   return (
-    <div className="grid items-center gap-14 lg:grid-cols-2">
+    <div className={`grid items-center gap-14 ${bare ? "lg:grid-cols-[0.9fr_1.1fr]" : "lg:grid-cols-2"}`}>
       <div className={reverse ? "lg:order-2" : ""}>
         <p className="inline-block rounded-full bg-brand-dark px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.22em] text-white">{kicker}</p>
         <h2 className="mt-3 text-balance font-display text-5xl font-semibold leading-[0.95] tracking-[-0.04em] text-ink sm:text-6xl md:text-7xl">
@@ -72,7 +72,7 @@ export function ShowcaseItem({
       <div className={`flex justify-center ${reverse ? "lg:order-1" : ""}`}>
         <div className="relative">
           {bare && demoSteps ? (
-            <GuidedTabDemo steps={demoSteps} width={1919} height={1079} className="w-full max-w-3xl" />
+            <GuidedTabDemo steps={demoSteps} width={1919} height={959} className="w-full max-w-3xl" />
           ) : (
             <>
               {device === "laptop" && (

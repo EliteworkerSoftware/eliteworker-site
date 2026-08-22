@@ -7,6 +7,8 @@ import { HorizontalBarsMotif } from "@/components/HorizontalBarsMotif";
 import { LaptopMockup, IpadMockup, IphoneMockup } from "@/components/devices/DeviceMockups";
 import { ShowcaseItem } from "@/components/ShowcaseItem";
 import { CommandCenterShowcase } from "@/components/CommandCenterShowcase";
+import { MetricsSlides } from "@/components/MetricsSlides";
+import { highlightWord } from "@/lib/highlightWord";
 import {
   SaleIcon,
   OrderIcon,
@@ -335,6 +337,21 @@ const showcase = [
   },
 ] as const;
 
+const metrics = {
+  kicker: "Metrics",
+  title: "Know exactly what happened, on every job.",
+  highlight: "job.",
+  subtitle:
+    "Every hour, every task, every technician — tracked automatically, so you never have to ask “what actually got done today?”",
+  points: [
+    "Track exactly how long each employee was onsite, down to the minute",
+    "See which tasks were completed, by which employee, on which day",
+    "Compare hours sold vs. hours actually used, on every job",
+    "Full task-level history — no guessing what happened last week",
+    "Timesheets and job activity, tied together automatically — no separate systems to reconcile",
+  ],
+} as const;
+
 const journeySteps = [
   { label: "Sale", Icon: SaleIcon },
   { label: "Bill", Icon: BillingIcon },
@@ -475,6 +492,33 @@ export default function Home() {
                   />
                 </FadeIn>
               ))}
+
+              <FadeIn>
+                <div className="text-center">
+                  <p className="inline-block rounded-full bg-brand-dark px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.22em] text-white">
+                    {metrics.kicker}
+                  </p>
+                  <h2 className="mt-3 text-balance font-display text-5xl font-semibold leading-[0.95] tracking-[-0.04em] text-ink sm:text-6xl md:text-7xl">
+                    {highlightWord(metrics.title, metrics.highlight)}
+                  </h2>
+                  <p className="mx-auto mt-4 max-w-2xl text-balance text-base leading-7 text-ink/60">
+                    {metrics.subtitle}
+                  </p>
+                </div>
+
+                <div className="mt-12 flex justify-center">
+                  <MetricsSlides />
+                </div>
+
+                <ul className="mx-auto mt-12 grid max-w-5xl gap-x-10 gap-y-4 sm:grid-cols-2 lg:grid-cols-3">
+                  {metrics.points.map((point) => (
+                    <li key={point} className="flex items-start gap-2.5 text-sm text-ink/70">
+                      <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-accent" />
+                      {point}
+                    </li>
+                  ))}
+                </ul>
+              </FadeIn>
             </div>
           </div>
         </section>

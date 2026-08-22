@@ -137,7 +137,7 @@ export function GuidedTabDemo({
   const ty = 50 - frame.focus.y;
 
   return (
-    <div ref={ref} className={`relative overflow-hidden rounded-2xl border border-line ${className}`}>
+    <div ref={ref} className={`relative overflow-hidden border border-line ${className}`}>
       <div
         className="transition-transform"
         style={{
