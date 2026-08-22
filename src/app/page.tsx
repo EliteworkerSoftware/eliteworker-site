@@ -376,11 +376,11 @@ export default function Home() {
         <section className={`relative isolate z-10 overflow-x-clip ${sectionPadding}`}>
           <HorizontalBarsMotif
             speed={0.28}
-            className="pointer-events-none absolute -left-28 top-[2%] -z-10 h-[26rem] w-[26rem] opacity-[0.10]"
+            className="pointer-events-none absolute -left-14 top-[2%] -z-10 h-52 w-52 opacity-[0.10] sm:-left-28 sm:h-[26rem] sm:w-[26rem]"
           />
           <BarChartMotif
             speed={-0.22}
-            className="pointer-events-none absolute -right-14 top-[40%] -z-10 h-88 w-88 opacity-[0.09]"
+            className="pointer-events-none absolute -right-8 top-[40%] -z-10 h-44 w-44 opacity-[0.09] sm:-right-14 sm:h-88 sm:w-88"
           />
           <div className="mx-auto max-w-7xl px-6">
             <div className="grid items-center gap-16 lg:grid-cols-[1fr_1.35fr]">
@@ -414,7 +414,7 @@ export default function Home() {
                   />
                 </FadeIn>
 
-                <FadeIn delay={220} className="absolute -right-2 top-2 z-20 hidden w-[44%] sm:block">
+                <FadeIn delay={220} className="absolute -right-2 top-2 z-20 w-[44%]">
                   <IpadMockup
                     src="/Ipad%20Mockups/IMG_0528-landscape.png"
                     alt="EliteWorker job stage checklists on iPad"
@@ -459,11 +459,11 @@ export default function Home() {
         <section className={`relative isolate overflow-x-clip ${sectionPadding}`}>
           <BarChartMotif
             speed={0.25}
-            className="pointer-events-none absolute -left-8 top-[4%] -z-10 h-112 w-112 opacity-[0.07]"
+            className="pointer-events-none absolute -left-4 top-[4%] -z-10 h-56 w-56 opacity-[0.07] sm:-left-8 sm:h-112 sm:w-112"
           />
           <HorizontalBarsMotif
             speed={-0.25}
-            className="pointer-events-none absolute -left-28 top-[48%] -z-10 h-136 w-136 opacity-[0.06]"
+            className="pointer-events-none absolute -left-14 top-[48%] -z-10 h-68 w-68 opacity-[0.06] sm:-left-28 sm:h-136 sm:w-136"
           />
           <div className="mx-auto max-w-7xl px-6">
             <div className="space-y-28 md:space-y-36">
@@ -528,11 +528,11 @@ export default function Home() {
         <section className="relative isolate overflow-x-clip px-6 py-24 md:py-32">
           <HorizontalBarsMotif
             speed={-0.16}
-            className="pointer-events-none absolute -left-24 bottom-[6%] -z-10 h-84 w-84 opacity-[0.10]"
+            className="pointer-events-none absolute -left-12 bottom-[6%] -z-10 h-44 w-44 opacity-[0.10] sm:-left-24 sm:h-84 sm:w-84"
           />
           <BarChartMotif
             speed={0.22}
-            className="pointer-events-none absolute -right-12 top-[4%] -z-10 h-84 w-84 opacity-[0.11]"
+            className="pointer-events-none absolute -right-6 top-[4%] -z-10 h-44 w-44 opacity-[0.11] sm:-right-12 sm:h-84 sm:w-84"
           />
           <FadeIn className="relative mx-auto max-w-7xl rounded-[2rem] border border-line bg-paper-alt px-8 py-14 text-center md:px-16 md:py-20">
             <h2 className="text-balance font-display text-5xl font-semibold leading-[0.95] tracking-[-0.04em] sm:text-6xl md:text-7xl">
