@@ -25,7 +25,7 @@ export default function ContactPage() {
         />
 
         <section className="mx-auto max-w-6xl px-6 py-24 md:py-32">
-          <div className="grid gap-14 md:grid-cols-[0.9fr_1.1fr]">
+          <div className="grid items-center gap-14 md:grid-cols-[0.9fr_1.1fr]">
             <FadeIn className="space-y-8">
               <div>
                 <p className="text-xs font-semibold uppercase tracking-[0.22em] text-brand">Prefer a live walkthrough?</p>
@@ -44,6 +44,8 @@ export default function ContactPage() {
               <div>
                 <p className="text-xs font-semibold uppercase tracking-[0.22em] text-brand">Mailing address</p>
                 <p className="mt-3 max-w-sm text-sm leading-7 text-ink/60">
+                  EliteWorker, LLC
+                  <br />
                   PO Box 1025
                   <br />
                   Marlton, NJ 08053
