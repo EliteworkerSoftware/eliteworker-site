@@ -13,7 +13,13 @@ const FONT_STACK = "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helve
 export function EmailLayout({ preview, children }: { preview: string; children: ReactNode }) {
   return (
     <Html>
-      <Head />
+      <Head>
+        {/* Some webmail clients (IONOS included) auto-detect long digit
+            sequences as phone numbers and style/underline them as links —
+            this is what causes stray lines through things like a verification
+            code. Turn that off explicitly. */}
+        <meta name="format-detection" content="telephone=no, date=no, address=no, email=no" />
+      </Head>
       <Preview>{preview}</Preview>
       <body style={{ margin: 0, padding: 0, backgroundColor: COLORS.paper, fontFamily: FONT_STACK }}>
         <table
@@ -52,8 +58,8 @@ export function EmailLayout({ preview, children }: { preview: string; children: 
                           </tbody>
                         </table>
 
-                        <Section style={{ backgroundColor: COLORS.nav, padding: "24px 32px" }}>
-                          <Img src={LOGO_WHITE_URL} width="150" height="23" alt="EliteWorker" />
+                        <Section style={{ backgroundColor: COLORS.nav, padding: "44px 32px" }}>
+                          <Img src={LOGO_WHITE_URL} width="170" height="26" alt="EliteWorker" />
                         </Section>
 
                         <Section style={{ padding: "40px 32px" }}>{children}</Section>
