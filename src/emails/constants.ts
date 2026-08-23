@@ -3,6 +3,10 @@
 export const SITE_URL = "https://www.eliteworker.com";
 export const LOGO_WHITE_URL = `${SITE_URL}/email-logo-white.png`;
 export const LOGO_DARK_URL = `${SITE_URL}/email-logo.png`;
+// A solid all-white silhouette (bar mark included) for use on the colored
+// gradient header — the multi-color bar mark loses contrast against a blue
+// gradient, so this variant keeps the whole mark legible everywhere.
+export const LOGO_WHITE_SOLID_URL = `${SITE_URL}/email-logo-white-solid.png`;
 
 export const COLORS = {
   brand: "#3b82f6",
