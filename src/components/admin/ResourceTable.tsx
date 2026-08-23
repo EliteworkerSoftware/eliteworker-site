@@ -1,9 +1,9 @@
 "use client";
 
 import { Fragment, useMemo, useState, type ReactNode } from "react";
-import { ChevronDown, ChevronRight, Trash2, MailOpen, Mail } from "lucide-react";
+import { ChevronDown, ChevronRight, Filter, Trash2, MailOpen, Mail } from "lucide-react";
 import { STATUS_OPTIONS, type TriageTable, type AnyStatus } from "@/lib/adminTriage";
-import { StatusBadge, statusLabel, statusIcon, statusAccent } from "./StatusBadge";
+import { StatusBadge, statusLabel } from "./StatusBadge";
 
 export type Column<T> = { key: string; label: string; render: (row: T) => ReactNode; className?: string };
 
@@ -152,41 +152,28 @@ export function ResourceTable<T extends BaseRow>({
     );
   }
 
-  // A tab strip, not a row of pill buttons — a bottom-border indicator on
-  // whichever tab is active, tab labels otherwise plain (muted when
-  // inactive), rather than every option looking like its own button. Wraps
-  // to a second line on narrow screens instead of scrolling horizontally —
-  // five tabs' worth of labels don't fit a phone width in one row, and a
-  // hidden-until-you-swipe row of tabs is easy to miss entirely.
+  // A single filter button — a tab strip either scrolled off-screen or
+  // wrapped into a cramped second line on a phone. A native select opens the
+  // OS's own picker on mobile (no custom dropdown/backdrop to build or get
+  // wrong) and still looks and behaves like a normal button on desktop.
   const filterBar = (
-    <div className="mb-4 flex flex-wrap gap-x-4 gap-y-2 border-b border-line">
-      <button
-        type="button"
-        onClick={() => setFilter("all")}
-        className={`border-b-2 pb-2 text-sm font-semibold whitespace-nowrap transition ${
-          filter === "all" ? "border-ink text-ink" : "border-transparent text-ink/45 hover:text-ink/70"
-        }`}
-      >
-        All <span className="hidden text-ink/40 sm:inline">({rows.length})</span>
-      </button>
-      {statusOptions.map((status) => {
-        const Icon = statusIcon(status);
-        const active = filter === status;
-        return (
-          <button
-            key={status}
-            type="button"
-            onClick={() => setFilter(status)}
-            className={`flex items-center gap-1.5 border-b-2 pb-2 text-sm font-semibold whitespace-nowrap transition ${
-              active ? statusAccent(status) : "border-transparent text-ink/45 hover:text-ink/70"
-            }`}
-          >
-            <Icon size={14} />
-            {statusLabel(status)}
-            <span className="hidden text-ink/40 sm:inline">({counts[status] || 0})</span>
-          </button>
-        );
-      })}
+    <div className="mb-4">
+      <div className="relative inline-block">
+        <Filter size={14} className="pointer-events-none absolute top-1/2 left-3.5 -translate-y-1/2 text-ink/40" />
+        <select
+          value={filter}
+          onChange={(e) => setFilter(e.target.value as AnyStatus | "all")}
+          className="appearance-none rounded-full border border-line bg-paper py-2 pr-9 pl-9 text-sm font-semibold text-ink outline-none focus:border-brand"
+        >
+          <option value="all">All ({rows.length})</option>
+          {statusOptions.map((status) => (
+            <option key={status} value={status}>
+              {statusLabel(status)} ({counts[status] || 0})
+            </option>
+          ))}
+        </select>
+        <ChevronDown size={15} className="pointer-events-none absolute top-1/2 right-3 -translate-y-1/2 text-ink/40" />
+      </div>
     </div>
   );
 
