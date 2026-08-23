@@ -26,15 +26,21 @@ export function Sidebar({ role }: { role: AdminRole }) {
   return (
     <nav className="flex shrink-0 flex-col border-admin-nav-line bg-admin-nav px-3 py-3 md:w-60 md:border-r md:px-4 md:py-6">
       <div className="px-2 pb-3 md:pb-6">
-        <Image
-          src="/Eliteworker%20Footer%20Logo.svg"
-          alt="EliteWorker"
-          width={660}
-          height={101}
-          className="h-5 w-auto md:h-6"
-          priority
-        />
-        <p className="mt-1.5 text-[10px] font-semibold tracking-widest text-ink/45 uppercase">Administration</p>
+        {/* inline-block shrink-wraps to the logo's own width (its widest
+            child), so text-center lines the caption up with the logo
+            specifically — centering on the full sidebar width instead would
+            just re-left-align the logo, which isn't what's wanted here. */}
+        <div className="inline-block text-center">
+          <Image
+            src="/Eliteworker%20Footer%20Logo.svg"
+            alt="EliteWorker"
+            width={660}
+            height={101}
+            className="h-5 w-auto md:h-6"
+            priority
+          />
+          <p className="mt-1.5 text-[10px] font-semibold tracking-widest text-ink/45 uppercase">Administration</p>
+        </div>
       </div>
       <div className={`grid gap-1 md:flex md:flex-col ${role === "owner" ? "grid-cols-5" : "grid-cols-4"}`}>
         {NAV_ITEMS.map((item) => {

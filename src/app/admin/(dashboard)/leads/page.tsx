@@ -1,6 +1,6 @@
 import { getCurrentAdmin } from "@/lib/currentAdmin";
 import { getSupabaseAdmin } from "@/lib/supabase";
-import { fetchRepliesByIds } from "@/lib/adminReply";
+import { fetchRepliesGroupedByTable } from "@/lib/adminReply";
 import { Topbar } from "@/components/admin/Topbar";
 import { LeadsTable, type Lead } from "./LeadsTable";
 
@@ -9,16 +9,15 @@ export default async function LeadsPage() {
   if (!admin) return null;
 
   const supabase = getSupabaseAdmin();
-  const { data, error } = await supabase
-    .from("eliteworker_leads")
-    .select("*")
-    .order("created_at", { ascending: false });
+  // Both queries are independent — run them together instead of one after
+  // the other, since each round-trip only adds latency to a page that
+  // already has to wait on the admin auth check first.
+  const [{ data, error }, repliesByLead] = await Promise.all([
+    supabase.from("eliteworker_leads").select("*").order("created_at", { ascending: false }),
+    fetchRepliesGroupedByTable("eliteworker_leads"),
+  ]);
 
   const leads = (data as Omit<Lead, "replies">[]) || [];
-  const repliesByLead = await fetchRepliesByIds(
-    "eliteworker_leads",
-    leads.map((lead) => lead.id)
-  );
   const rows: Lead[] = leads.map((lead) => ({ ...lead, replies: repliesByLead[lead.id] || [] }));
 
   return (

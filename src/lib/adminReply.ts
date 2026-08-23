@@ -21,14 +21,19 @@ const RECIPIENT_COLUMNS: Record<TriageTable, { name: string; email: string }> = 
   eliteworker_demo_bookings: { name: "attendee_name", email: "attendee_email" },
 };
 
-export async function fetchRepliesByIds(table: TriageTable, ids: string[]): Promise<Record<string, Reply[]>> {
-  if (ids.length === 0) return {};
+// Deliberately doesn't take a list of row ids to filter by — that would
+// require the page to await the main rows query first, then this one,
+// turning one page load into two sequential round-trips. Fetching by table
+// alone lets the page run this in Promise.all alongside the main query
+// instead, and a handful of orphaned replies for a since-deleted row (there's
+// no FK/cascade across the three source tables) cost nothing since they
+// simply won't match any row when grouped.
+export async function fetchRepliesGroupedByTable(table: TriageTable): Promise<Record<string, Reply[]>> {
   const supabase = getSupabaseAdmin();
   const { data } = await supabase
     .from("eliteworker_replies")
     .select("*")
     .eq("source_table", table)
-    .in("source_id", ids)
     .order("created_at", { ascending: true });
 
   const grouped: Record<string, Reply[]> = {};

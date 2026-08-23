@@ -1,6 +1,6 @@
 import { getCurrentAdmin } from "@/lib/currentAdmin";
 import { getSupabaseAdmin } from "@/lib/supabase";
-import { fetchRepliesByIds } from "@/lib/adminReply";
+import { fetchRepliesGroupedByTable } from "@/lib/adminReply";
 import { Topbar } from "@/components/admin/Topbar";
 import { BetaSignupsTable, type BetaSignup } from "./BetaSignupsTable";
 
@@ -9,16 +9,12 @@ export default async function BetaPage() {
   if (!admin) return null;
 
   const supabase = getSupabaseAdmin();
-  const { data, error } = await supabase
-    .from("eliteworker_beta_signups")
-    .select("*")
-    .order("created_at", { ascending: false });
+  const [{ data, error }, repliesById] = await Promise.all([
+    supabase.from("eliteworker_beta_signups").select("*").order("created_at", { ascending: false }),
+    fetchRepliesGroupedByTable("eliteworker_beta_signups"),
+  ]);
 
   const signups = (data as Omit<BetaSignup, "replies">[]) || [];
-  const repliesById = await fetchRepliesByIds(
-    "eliteworker_beta_signups",
-    signups.map((signup) => signup.id)
-  );
   const rows: BetaSignup[] = signups.map((signup) => ({ ...signup, replies: repliesById[signup.id] || [] }));
 
   return (

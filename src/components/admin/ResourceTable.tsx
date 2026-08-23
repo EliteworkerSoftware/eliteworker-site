@@ -204,8 +204,16 @@ export function ResourceTable<T extends BaseRow>({
                 row.is_read ? "border-l-transparent" : styles.border
               }`}
             >
-              <button type="button" onClick={() => toggleExpand(row)} className="flex w-full items-start gap-3 px-4 py-3 text-left">
-                <div className="min-w-0 flex-1 space-y-1.5">
+              <button type="button" onClick={() => toggleExpand(row)} className="flex w-full flex-col gap-2 px-4 py-3 text-left">
+                {/* Status gets the full row to itself — putting it in a
+                    shrink-0 column next to the data (as before) squeezed the
+                    label:value rows into less width, forcing values to
+                    truncate harder than they needed to. */}
+                <div className="flex items-center justify-between gap-3">
+                  <StatusBadge status={row.pipeline_status} />
+                  {expanded ? <ChevronDown size={16} className="text-ink/40" /> : <ChevronRight size={16} className="text-ink/40" />}
+                </div>
+                <div className="min-w-0 space-y-1.5">
                   {columns.map((col) => (
                     <div key={col.key} className="flex items-baseline justify-between gap-3">
                       <span className="shrink-0 text-[10px] font-semibold tracking-wide text-ink/40 uppercase">{col.label}</span>
@@ -214,10 +222,6 @@ export function ResourceTable<T extends BaseRow>({
                       </span>
                     </div>
                   ))}
-                </div>
-                <div className="flex shrink-0 flex-col items-end gap-2 pt-0.5">
-                  <StatusBadge status={row.pipeline_status} />
-                  {expanded ? <ChevronDown size={16} className="text-ink/40" /> : <ChevronRight size={16} className="text-ink/40" />}
                 </div>
               </button>
               {expanded && (

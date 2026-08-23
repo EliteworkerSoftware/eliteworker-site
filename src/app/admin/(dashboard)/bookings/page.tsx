@@ -1,6 +1,6 @@
 import { getCurrentAdmin } from "@/lib/currentAdmin";
 import { getSupabaseAdmin } from "@/lib/supabase";
-import { fetchRepliesByIds } from "@/lib/adminReply";
+import { fetchRepliesGroupedByTable } from "@/lib/adminReply";
 import { Topbar } from "@/components/admin/Topbar";
 import { DemoBookingsTable, type DemoBooking } from "./DemoBookingsTable";
 
@@ -9,16 +9,12 @@ export default async function BookingsPage() {
   if (!admin) return null;
 
   const supabase = getSupabaseAdmin();
-  const { data, error } = await supabase
-    .from("eliteworker_demo_bookings")
-    .select("*")
-    .order("start_time", { ascending: false });
+  const [{ data, error }, repliesById] = await Promise.all([
+    supabase.from("eliteworker_demo_bookings").select("*").order("start_time", { ascending: false }),
+    fetchRepliesGroupedByTable("eliteworker_demo_bookings"),
+  ]);
 
   const bookings = (data as Omit<DemoBooking, "replies">[]) || [];
-  const repliesById = await fetchRepliesByIds(
-    "eliteworker_demo_bookings",
-    bookings.map((booking) => booking.id)
-  );
   const rows: DemoBooking[] = bookings.map((booking) => ({ ...booking, replies: repliesById[booking.id] || [] }));
 
   return (
