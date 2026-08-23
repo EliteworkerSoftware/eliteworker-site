@@ -103,6 +103,9 @@ export async function POST(req: NextRequest) {
       subject: "We got your EliteWorker beta application",
       html: confirmHtml,
       text: confirmText,
+      // "from" is a noreply address, but the copy invites a reply — route
+      // any actual replies to the inbox a human reads.
+      "h:Reply-To": process.env.CONTACT_TO_EMAIL || "",
     });
 
     // 4. Also text you — easy to miss an email, hard to miss a text
