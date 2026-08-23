@@ -97,7 +97,8 @@ export default function BetaForm() {
   if (stage === "sent") {
     return (
       <p className="rounded-2xl border border-brand-light/40 bg-brand/6 p-6 text-sm text-ink">
-        You&rsquo;re on the list — we&rsquo;ll follow up within 48 hours. Check your inbox for a confirmation email.
+        You&rsquo;re on the list — we&rsquo;re actively reviewing your application and will be in touch soon. Check
+        your inbox for a confirmation email.
       </p>
     );
   }
