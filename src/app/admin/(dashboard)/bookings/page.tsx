@@ -1,5 +1,6 @@
 import { getCurrentAdmin } from "@/lib/currentAdmin";
 import { getSupabaseAdmin } from "@/lib/supabase";
+import { fetchRepliesByIds } from "@/lib/adminReply";
 import { Topbar } from "@/components/admin/Topbar";
 import { DemoBookingsTable, type DemoBooking } from "./DemoBookingsTable";
 
@@ -13,12 +14,19 @@ export default async function BookingsPage() {
     .select("*")
     .order("start_time", { ascending: false });
 
+  const bookings = (data as Omit<DemoBooking, "replies">[]) || [];
+  const repliesById = await fetchRepliesByIds(
+    "eliteworker_demo_bookings",
+    bookings.map((booking) => booking.id)
+  );
+  const rows: DemoBooking[] = bookings.map((booking) => ({ ...booking, replies: repliesById[booking.id] || [] }));
+
   return (
     <div>
       <Topbar admin={admin} title="Demo bookings" />
       <div className="p-5 sm:p-8">
         {error && <p className="mb-4 text-sm text-red-500">Failed to load: {error.message}</p>}
-        <DemoBookingsTable initialRows={(data as DemoBooking[]) || []} canDelete={admin.role === "owner"} />
+        <DemoBookingsTable initialRows={rows} canDelete={admin.role === "owner"} />
       </div>
     </div>
   );

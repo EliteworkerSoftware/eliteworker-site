@@ -14,11 +14,11 @@
   --teal-dark: #0f766e;
   --nav: #05080e;
   --nav-line: #1c2636;
-  /* Deep navy, distinct from --nav's near-black, used only for the admin
-     dashboard sidebar — a visual tell that you're in /admin, not on the
-     public site (which keeps using --nav for its header). */
-  --admin-nav: #0f1b3d;
-  --admin-nav-line: #24345f;
+  /* Light blue, distinct from --nav's near-black, used only for the admin
+     dashboard chrome (sidebar + login screen) — a visual tell that you're
+     in /admin, not on the public site (which keeps using --nav). */
+  --admin-nav: #dbeafe;
+  --admin-nav-line: #93c5fd;
 }
 
 @theme inline {

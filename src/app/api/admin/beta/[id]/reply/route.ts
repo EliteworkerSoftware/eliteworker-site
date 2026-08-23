@@ -12,7 +12,7 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
     return NextResponse.json({ error: "Reply message is required" }, { status: 400 });
   }
 
-  const result = await sendAdminReply({ table: "eliteworker_leads", id, admin, message });
+  const result = await sendAdminReply({ table: "eliteworker_beta_signups", id, admin, message });
   if ("error" in result) return NextResponse.json({ error: result.error }, { status: result.status });
   return NextResponse.json({ ok: true, reply: result.data });
 }

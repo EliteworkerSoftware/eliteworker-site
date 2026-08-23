@@ -1,6 +1,7 @@
 "use client";
 
 import { ResourceTable, type Column } from "@/components/admin/ResourceTable";
+import { ReplyPanel, type ReplyRecord } from "@/components/admin/ReplyPanel";
 import type { PipelineStatus } from "@/lib/adminTriage";
 
 export type BetaSignup = {
@@ -17,6 +18,7 @@ export type BetaSignup = {
   notes: string | null;
   is_read: boolean;
   pipeline_status: PipelineStatus;
+  replies: ReplyRecord[];
 };
 
 function formatDate(value: string) {
@@ -61,6 +63,14 @@ export function BetaSignupsTable({ initialRows, canDelete }: { initialRows: Beta
           <div className="sm:col-span-2">
             <p className="text-xs font-semibold uppercase tracking-wide text-ink/50">Notes</p>
             <p className="mt-1 leading-relaxed">{row.notes || "—"}</p>
+          </div>
+          <div className="sm:col-span-2">
+            <ReplyPanel
+              replyApi={`/api/admin/beta/${row.id}/reply`}
+              recipientName={row.contact_name}
+              recipientEmail={row.contact_email}
+              initialReplies={row.replies}
+            />
           </div>
         </div>
       )}

@@ -1,10 +1,10 @@
 import Mailgun from "mailgun.js";
 import formData from "form-data";
 import { render } from "@react-email/render";
-import { LeadReplyEmail } from "@/emails/LeadReplyEmail";
+import { AdminReplyEmail } from "@/emails/AdminReplyEmail";
 
-export async function sendLeadReplyEmail({ to, name, message }: { to: string; name: string; message: string }) {
-  const emailElement = LeadReplyEmail({ name, message });
+export async function sendReplyEmail({ to, name, message }: { to: string; name: string; message: string }) {
+  const emailElement = AdminReplyEmail({ name, message });
   const [html, text] = await Promise.all([render(emailElement), render(emailElement, { plainText: true })]);
 
   const mailgun = new Mailgun(formData);
@@ -15,8 +15,8 @@ export async function sendLeadReplyEmail({ to, name, message }: { to: string; na
     subject: "Re: Your message to EliteWorker",
     html,
     text,
-    // So a reply-to-this-email from the lead lands in the team inbox rather
-    // than whatever noreply-style address CONTACT_FROM_EMAIL is set to.
+    // So a reply-to-this-email from the recipient lands in the team inbox
+    // rather than whatever noreply-style address CONTACT_FROM_EMAIL is set to.
     "h:Reply-To": process.env.CONTACT_TO_EMAIL || process.env.CONTACT_FROM_EMAIL || "",
   });
 }

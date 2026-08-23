@@ -2,7 +2,7 @@ import { Heading, Text } from "@react-email/components";
 import { EmailLayout, FONT_STACK } from "./components/EmailLayout";
 import { COLORS } from "./constants";
 
-export function LeadReplyEmail({ name, message }: { name: string; message: string }) {
+export function AdminReplyEmail({ name, message }: { name: string; message: string }) {
   const firstName = name.trim().split(/\s+/)[0] || name;
 
   return (
@@ -61,4 +61,4 @@ export function LeadReplyEmail({ name, message }: { name: string; message: strin
   );
 }
 
-export default LeadReplyEmail;
+export default AdminReplyEmail;

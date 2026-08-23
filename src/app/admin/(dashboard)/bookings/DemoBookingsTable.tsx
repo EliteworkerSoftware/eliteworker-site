@@ -1,6 +1,7 @@
 "use client";
 
 import { ResourceTable, type Column } from "@/components/admin/ResourceTable";
+import { ReplyPanel, type ReplyRecord } from "@/components/admin/ReplyPanel";
 import type { PipelineStatus } from "@/lib/adminTriage";
 
 export type DemoBooking = {
@@ -15,6 +16,7 @@ export type DemoBooking = {
   status: string;
   is_read: boolean;
   pipeline_status: PipelineStatus;
+  replies: ReplyRecord[];
 };
 
 function formatDate(value: string) {
@@ -56,6 +58,14 @@ export function DemoBookingsTable({ initialRows, canDelete }: { initialRows: Dem
           <div>
             <p className="text-xs font-semibold uppercase tracking-wide text-ink/50">Booking UID</p>
             <p className="mt-1 break-all font-mono text-xs">{row.booking_uid}</p>
+          </div>
+          <div className="sm:col-span-2">
+            <ReplyPanel
+              replyApi={`/api/admin/bookings/${row.id}/reply`}
+              recipientName={row.attendee_name || "there"}
+              recipientEmail={row.attendee_email}
+              initialReplies={row.replies}
+            />
           </div>
         </div>
       )}
