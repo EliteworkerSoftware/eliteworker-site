@@ -46,8 +46,10 @@ export function Sidebar({ role }: { role: AdminRole }) {
         <Wordmark logoClassName="h-5 w-auto" />
       </div>
 
+      {/* The bottom tab bar stays black (--nav) rather than the admin blue —
+          keeps it visually distinct from the rest of the admin chrome. */}
       <nav
-        className="fixed inset-x-0 bottom-0 z-40 border-t border-admin-nav-line bg-admin-nav px-1 pt-1 md:hidden"
+        className="fixed inset-x-0 bottom-0 z-40 border-t border-nav-line bg-nav px-1 pt-1 md:hidden"
         style={{ paddingBottom: "max(0.25rem, env(safe-area-inset-bottom))" }}
       >
         <div className={`grid gap-1 ${role === "owner" ? "grid-cols-5" : "grid-cols-4"}`}>

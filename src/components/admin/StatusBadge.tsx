@@ -14,8 +14,8 @@ const STATUS_STYLES: Record<AnyStatus, { label: string; icon: LucideIcon; classN
   booked_demo: { label: "Booked for Demo", icon: CalendarCheck, className: "bg-violet-600 text-white" },
   approved: { label: "Approved", icon: CheckCircle2, className: "bg-emerald-600 text-white" },
   declined: { label: "Declined", icon: XCircle, className: "bg-red-600 text-white" },
-  confirm_1: { label: "Confirm 1", icon: MailCheck, className: "bg-blue-600 text-white" },
-  confirm_2: { label: "Confirm 2", icon: CheckCircle2, className: "bg-amber-600 text-white" },
+  confirm_1: { label: "Confirm 1", icon: MailCheck, className: "bg-cyan-600 text-white" },
+  confirm_2: { label: "Confirm 2", icon: CheckCircle2, className: "bg-indigo-600 text-white" },
   converted: { label: "Converted", icon: Trophy, className: "bg-emerald-600 text-white" },
   archived: { label: "Archived", icon: Archive, className: "bg-slate-600 text-white" },
 };
