@@ -7,11 +7,18 @@ import { LayoutDashboard, Inbox, ClipboardList, CalendarCheck, Users } from "luc
 import type { AdminRole } from "@/lib/currentAdmin";
 
 const NAV_ITEMS = [
-  { href: "/admin", label: "Overview", icon: LayoutDashboard, tint: "text-ink/60" },
-  { href: "/admin/leads", label: "Leads", icon: Inbox, tint: "text-brand" },
-  { href: "/admin/beta", label: "Beta Applications", icon: ClipboardList, tint: "text-accent" },
-  { href: "/admin/bookings", label: "Demo Bookings", icon: CalendarCheck, tint: "text-teal" },
+  { href: "/admin", label: "Overview", shortLabel: "Overview", icon: LayoutDashboard, tint: "text-ink/60" },
+  { href: "/admin/leads", label: "Leads", shortLabel: "Leads", icon: Inbox, tint: "text-brand" },
+  { href: "/admin/beta", label: "Beta Applications", shortLabel: "Beta", icon: ClipboardList, tint: "text-accent" },
+  { href: "/admin/bookings", label: "Demo Bookings", shortLabel: "Bookings", icon: CalendarCheck, tint: "text-teal" },
 ] as const;
+
+// Below md, each item shows as an icon-over-short-label tab in an evenly
+// divided grid — no label ever overflows or forces a scrollbar, unlike a
+// horizontally-scrolling row of full-width, full-label items. At md+ this
+// reverts to the normal icon + full-label sidebar list.
+const ITEM_CLASSES =
+  "flex flex-col items-center justify-center gap-1 rounded-xl px-1 py-2 text-center text-[10px] font-medium whitespace-nowrap transition md:flex-row md:justify-start md:gap-3 md:px-3 md:py-2.5 md:text-left md:text-sm";
 
 export function Sidebar({ role }: { role: AdminRole }) {
   const pathname = usePathname();
@@ -29,7 +36,7 @@ export function Sidebar({ role }: { role: AdminRole }) {
         />
         <p className="mt-1.5 text-[10px] font-semibold tracking-widest text-ink/45 uppercase">Administration</p>
       </div>
-      <div className="flex gap-1 overflow-x-auto md:flex-col md:overflow-visible">
+      <div className={`grid gap-1 md:flex md:flex-col ${role === "owner" ? "grid-cols-5" : "grid-cols-4"}`}>
         {NAV_ITEMS.map((item) => {
           const active = item.href === "/admin" ? pathname === "/admin" : pathname.startsWith(item.href);
           const Icon = item.icon;
@@ -37,24 +44,24 @@ export function Sidebar({ role }: { role: AdminRole }) {
             <Link
               key={item.href}
               href={item.href}
-              className={`flex shrink-0 items-center gap-2 rounded-xl px-3 py-2.5 text-sm font-medium whitespace-nowrap transition md:gap-3 ${
-                active ? "bg-white text-ink shadow-sm" : "text-ink/55 hover:bg-white/60 hover:text-ink/85"
-              }`}
+              className={`${ITEM_CLASSES} ${active ? "bg-white text-ink shadow-sm" : "text-ink/55 hover:bg-white/60 hover:text-ink/85"}`}
             >
-              <Icon size={17} className={active ? item.tint : ""} />
-              {item.label}
+              <Icon size={18} className={active ? item.tint : ""} />
+              <span className="md:hidden">{item.shortLabel}</span>
+              <span className="hidden md:inline">{item.label}</span>
             </Link>
           );
         })}
         {role === "owner" && (
           <Link
             href="/admin/users"
-            className={`flex shrink-0 items-center gap-2 rounded-xl px-3 py-2.5 text-sm font-medium whitespace-nowrap transition md:mt-4 md:gap-3 md:border-t md:border-admin-nav-line md:pt-4 md:pb-2.5 ${
-              pathname.startsWith("/admin/users") ? "text-ink" : "text-ink/55 hover:text-ink/85"
+            className={`${ITEM_CLASSES} md:mt-4 md:border-t md:border-admin-nav-line md:pt-4 md:pb-2.5 ${
+              pathname.startsWith("/admin/users") ? "bg-white text-ink shadow-sm md:bg-transparent md:text-ink md:shadow-none" : "text-ink/55 hover:bg-white/60 hover:text-ink/85 md:hover:bg-transparent"
             }`}
           >
-            <Users size={17} />
-            Admin Users
+            <Users size={18} />
+            <span className="md:hidden">Admins</span>
+            <span className="hidden md:inline">Admin Users</span>
           </Link>
         )}
       </div>

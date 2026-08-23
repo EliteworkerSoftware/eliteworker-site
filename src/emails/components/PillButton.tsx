@@ -29,6 +29,10 @@ export function PillButton({
         padding: "12px 28px",
         borderRadius: 999,
         display: "inline-block",
+        // Without this, a narrow mobile viewport can force the button's own
+        // label to wrap mid-word (e.g. "Reschedul" / "e" on two lines) —
+        // the button should shrink the available space, never the text.
+        whiteSpace: "nowrap",
       }}
     >
       {children}

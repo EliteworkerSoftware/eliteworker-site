@@ -56,25 +56,21 @@ export function DemoReminderEmail({
       <FieldList fields={[{ label: "When", value: when }, { label: "Event", value: eventTitle || "Demo" }]} />
 
       <Spacer height={28} />
-      {/* Two-cell table, not two inline buttons — the reliable cross-client
-          way to place block-level buttons side by side with a real gap
-          (padding lives on the <td>, per the IONOS <table> padding bug). */}
-      <table role="presentation" cellPadding={0} cellSpacing={0} style={{ borderCollapse: "collapse", margin: "0 auto" }}>
-        <tbody>
-          <tr>
-            <td style={{ paddingRight: 10 }}>
-              <PillButton href={confirmUrl}>Confirm I&rsquo;ll be there</PillButton>
-            </td>
-            <td>
-              <PillButton href={rescheduleUrl} variant="secondary">
-                Reschedule
-              </PillButton>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+      {/* Two inline-block boxes, not a table row — a table cell can only
+          shrink (squeezing/wrapping the button's own text) when the two
+          buttons don't fit side by side on a narrow phone. inline-block
+          instead wraps the whole second button down to its own line,
+          keeping each button's label intact either way. */}
+      <div style={{ display: "inline-block", verticalAlign: "top", margin: "0 5px 10px" }}>
+        <PillButton href={confirmUrl}>Confirm I&rsquo;ll be there</PillButton>
+      </div>
+      <div style={{ display: "inline-block", verticalAlign: "top", margin: "0 5px 10px" }}>
+        <PillButton href={rescheduleUrl} variant="secondary">
+          Reschedule
+        </PillButton>
+      </div>
 
-      <Spacer height={28} />
+      <Spacer height={18} />
       <Text style={{ margin: 0, fontFamily: FONT_STACK, fontSize: 13, lineHeight: "22px", color: COLORS.inkMuted }}>
         Need something else entirely? Just reply to this email and we&rsquo;ll sort it out.
       </Text>

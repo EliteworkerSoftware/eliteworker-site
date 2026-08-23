@@ -111,35 +111,132 @@ export function ResourceTable<T extends BaseRow>({
   }, [rows]);
   const visibleRows = filter === "all" ? rows : rows.filter((r) => r.pipeline_status === filter);
 
+  // Shared between the desktop table's expanded row and the mobile card's
+  // expanded section — the status select + read toggle + delete button.
+  function renderActions(row: T) {
+    return (
+      <div className="flex flex-wrap items-center gap-3" onClick={(e) => e.stopPropagation()}>
+        <select
+          value={row.pipeline_status}
+          onChange={(e) => patch(row.id, { pipeline_status: e.target.value as AnyStatus })}
+          className={`rounded-lg border border-line bg-paper px-3 py-1.5 text-xs font-medium text-ink outline-none ${styles.ring}`}
+        >
+          {statusOptions.map((status) => (
+            <option key={status} value={status}>
+              {statusLabel(status)}
+            </option>
+          ))}
+        </select>
+
+        <button
+          type="button"
+          onClick={() => patch(row.id, { is_read: !row.is_read })}
+          className="inline-flex items-center gap-1.5 rounded-full border border-line px-3 py-1.5 text-xs font-semibold text-ink/70 transition hover:border-ink/25 hover:text-ink"
+        >
+          {row.is_read ? <Mail size={13} /> : <MailOpen size={13} />}
+          {row.is_read ? "Mark unread" : "Mark read"}
+        </button>
+
+        {canDelete && (
+          <button
+            type="button"
+            disabled={busyId === row.id}
+            onClick={() => handleDelete(row.id)}
+            className="ml-auto inline-flex items-center gap-1.5 rounded-full border border-red-200 px-3 py-1.5 text-xs font-semibold text-red-500 transition hover:border-red-300 hover:bg-red-50 disabled:opacity-50"
+          >
+            <Trash2 size={13} />
+            {busyId === row.id ? "Deleting…" : "Delete"}
+          </button>
+        )}
+      </div>
+    );
+  }
+
+  const filterBar = (
+    <div className="mb-4 flex flex-wrap gap-2">
+      <button
+        type="button"
+        onClick={() => setFilter("all")}
+        className={`rounded-full border px-3 py-1.5 text-xs font-semibold transition ${
+          filter === "all" ? "border-ink bg-ink text-white" : "border-line text-ink/60 hover:border-ink/30"
+        }`}
+      >
+        All ({rows.length})
+      </button>
+      {statusOptions.map((status) => (
+        <button
+          key={status}
+          type="button"
+          onClick={() => setFilter(status)}
+          className={`rounded-full transition ${filter === status ? "ring-2 ring-ink/70 ring-offset-1" : "opacity-70 hover:opacity-100"}`}
+        >
+          <StatusBadge status={status} />
+          <span className="sr-only"> ({counts[status] || 0})</span>
+        </button>
+      ))}
+    </div>
+  );
+
+  if (rows.length === 0) {
+    return (
+      <div>
+        {filterBar}
+        <div className="rounded-2xl border border-line bg-paper px-4 py-8 text-center text-ink/40">{emptyLabel}</div>
+      </div>
+    );
+  }
+
   return (
     <div>
       {error && <p className="mb-3 text-sm text-red-500">{error}</p>}
+      {filterBar}
 
-      <div className="mb-4 flex flex-wrap gap-2">
-        <button
-          type="button"
-          onClick={() => setFilter("all")}
-          className={`rounded-full border px-3 py-1.5 text-xs font-semibold transition ${
-            filter === "all" ? "border-ink bg-ink text-white" : "border-line text-ink/60 hover:border-ink/30"
-          }`}
-        >
-          All ({rows.length})
-        </button>
-        {statusOptions.map((status) => (
-          <button
-            key={status}
-            type="button"
-            onClick={() => setFilter(status)}
-            className={`transition ${filter === status ? "ring-2 ring-ink/70 ring-offset-1" : "opacity-70 hover:opacity-100"} rounded-full`}
-          >
-            <StatusBadge status={status} />
-            <span className="sr-only"> ({counts[status] || 0})</span>
-          </button>
-        ))}
+      {/* Mobile/tablet: a stacked card per row — every column reads as a
+          label:value pair instead of needing a wide table with horizontal
+          scroll. */}
+      <div className="space-y-3 md:hidden">
+        {visibleRows.map((row) => {
+          const expanded = expandedId === row.id;
+          return (
+            <div
+              key={row.id}
+              className={`overflow-hidden rounded-2xl border border-l-4 border-line bg-paper ${
+                row.is_read ? "border-l-transparent" : styles.border
+              }`}
+            >
+              <button type="button" onClick={() => toggleExpand(row)} className="flex w-full items-start gap-3 px-4 py-3 text-left">
+                <div className="min-w-0 flex-1 space-y-1.5">
+                  {columns.map((col) => (
+                    <div key={col.key} className="flex items-baseline justify-between gap-3">
+                      <span className="shrink-0 text-[10px] font-semibold tracking-wide text-ink/40 uppercase">{col.label}</span>
+                      <span className={`truncate text-sm ${row.is_read ? "text-ink/70" : "font-semibold text-ink"}`}>
+                        {col.render(row)}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+                <div className="flex shrink-0 flex-col items-end gap-2 pt-0.5">
+                  <StatusBadge status={row.pipeline_status} />
+                  {expanded ? <ChevronDown size={16} className="text-ink/40" /> : <ChevronRight size={16} className="text-ink/40" />}
+                </div>
+              </button>
+              {expanded && (
+                <div className="border-t border-line bg-paper-alt px-4 py-5">
+                  <div className="mb-4">{renderExpanded(row, { setLocalStatus: (status) => setLocalStatus(row.id, status) })}</div>
+                  {renderActions(row)}
+                </div>
+              )}
+            </div>
+          );
+        })}
+        {visibleRows.length === 0 && (
+          <div className="rounded-2xl border border-line bg-paper px-4 py-8 text-center text-ink/40">Nothing matches this filter.</div>
+        )}
       </div>
 
-      <div className="overflow-x-auto rounded-2xl border border-line bg-paper">
-        <table className="w-full min-w-187.5 text-left text-sm">
+      {/* Desktop: the full table. */}
+      <div className="hidden overflow-x-auto rounded-2xl border border-line bg-paper md:block">
+        <table className="w-full text-left text-sm">
           <thead>
             <tr className="border-b border-line text-xs font-semibold uppercase tracking-wide text-ink/50">
               <th className="w-8 px-4 py-3"></th>
@@ -183,43 +280,7 @@ export function ResourceTable<T extends BaseRow>({
                         <div className="mb-4">
                           {renderExpanded(row, { setLocalStatus: (status) => setLocalStatus(row.id, status) })}
                         </div>
-                        <div
-                          className="flex flex-wrap items-center gap-3"
-                          onClick={(e) => e.stopPropagation()}
-                        >
-                          <select
-                            value={row.pipeline_status}
-                            onChange={(e) => patch(row.id, { pipeline_status: e.target.value as AnyStatus })}
-                            className={`rounded-lg border border-line bg-paper px-3 py-1.5 text-xs font-medium text-ink outline-none ${styles.ring}`}
-                          >
-                            {statusOptions.map((status) => (
-                              <option key={status} value={status}>
-                                {statusLabel(status)}
-                              </option>
-                            ))}
-                          </select>
-
-                          <button
-                            type="button"
-                            onClick={() => patch(row.id, { is_read: !row.is_read })}
-                            className="inline-flex items-center gap-1.5 rounded-full border border-line px-3 py-1.5 text-xs font-semibold text-ink/70 transition hover:border-ink/25 hover:text-ink"
-                          >
-                            {row.is_read ? <Mail size={13} /> : <MailOpen size={13} />}
-                            {row.is_read ? "Mark unread" : "Mark read"}
-                          </button>
-
-                          {canDelete && (
-                            <button
-                              type="button"
-                              disabled={busyId === row.id}
-                              onClick={() => handleDelete(row.id)}
-                              className="ml-auto inline-flex items-center gap-1.5 rounded-full border border-red-200 px-3 py-1.5 text-xs font-semibold text-red-500 transition hover:border-red-300 hover:bg-red-50 disabled:opacity-50"
-                            >
-                              <Trash2 size={13} />
-                              {busyId === row.id ? "Deleting…" : "Delete"}
-                            </button>
-                          )}
-                        </div>
+                        {renderActions(row)}
                       </td>
                     </tr>
                   )}
@@ -229,7 +290,7 @@ export function ResourceTable<T extends BaseRow>({
             {visibleRows.length === 0 && (
               <tr>
                 <td colSpan={columns.length + 2} className="px-4 py-8 text-center text-ink/40">
-                  {rows.length === 0 ? emptyLabel : "Nothing matches this filter."}
+                  Nothing matches this filter.
                 </td>
               </tr>
             )}

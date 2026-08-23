@@ -163,7 +163,90 @@ export default function AdminUsersManager({
         </div>
       )}
 
-      <div className="overflow-x-auto rounded-2xl border border-line bg-paper">
+      {/* Mobile/tablet: one card per admin instead of a wide table. */}
+      <div className="space-y-3 md:hidden">
+        {users.map((u) => (
+          <div key={u.id} className="rounded-2xl border border-line bg-paper p-4">
+            <div className="flex items-start justify-between gap-3">
+              <div className="min-w-0">
+                {editingId === u.id ? (
+                  <div className="flex flex-wrap items-center gap-1.5">
+                    <input
+                      autoFocus
+                      value={editFirst}
+                      onChange={(e) => setEditFirst(e.target.value)}
+                      placeholder="First"
+                      className="w-20 rounded-md border border-line bg-paper px-2 py-1 text-sm text-ink focus:border-accent focus:outline-none"
+                    />
+                    <input
+                      value={editLast}
+                      onChange={(e) => setEditLast(e.target.value)}
+                      placeholder="Last"
+                      className="w-20 rounded-md border border-line bg-paper px-2 py-1 text-sm text-ink focus:border-accent focus:outline-none"
+                    />
+                    <button
+                      type="button"
+                      disabled={savingEdit}
+                      onClick={() => saveEdit(u.id)}
+                      className="rounded-md p-1 text-emerald-600 hover:bg-emerald-50 disabled:opacity-50"
+                      aria-label="Save name"
+                    >
+                      <Check size={15} />
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setEditingId(null)}
+                      className="rounded-md p-1 text-ink/40 hover:bg-paper-alt hover:text-ink"
+                      aria-label="Cancel"
+                    >
+                      <X size={15} />
+                    </button>
+                  </div>
+                ) : (
+                  <div className="flex items-center gap-1.5">
+                    <span className="font-medium text-ink">{u.full_name || "—"}</span>
+                    {u.id === currentUserId && <span className="text-xs text-ink/40">(you)</span>}
+                    <button
+                      type="button"
+                      onClick={() => startEdit(u)}
+                      className="rounded-md p-1 text-ink/30 hover:bg-paper-alt hover:text-ink/70"
+                      aria-label="Edit name"
+                    >
+                      <Pencil size={13} />
+                    </button>
+                  </div>
+                )}
+                <p className="mt-0.5 truncate text-sm text-ink/70">{u.email}</p>
+              </div>
+              <span className="shrink-0 rounded-full bg-paper-alt px-2 py-1 text-xs font-medium text-ink/70 capitalize">{u.role}</span>
+            </div>
+            <p className="mt-2 text-xs text-ink/40">Added {formatDate(u.created_at)}</p>
+            <div className="mt-3 flex items-center gap-4 border-t border-line pt-3">
+              <button
+                type="button"
+                disabled={resendingId === u.id}
+                onClick={() => handleResend(u)}
+                className="inline-flex items-center gap-1 text-xs font-semibold text-brand hover:text-brand-dark disabled:opacity-50"
+              >
+                <RotateCw size={12} className={resendingId === u.id ? "animate-spin" : ""} />
+                Resend
+              </button>
+              {u.id !== currentUserId && (
+                <button
+                  type="button"
+                  onClick={() => handleRemove(u.id)}
+                  className="text-xs font-semibold text-red-500 hover:text-red-600"
+                >
+                  Remove
+                </button>
+              )}
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Desktop: the full table. */}
+      <div className="hidden overflow-x-auto rounded-2xl border border-line bg-paper md:block">
         <table className="w-full min-w-140 text-left text-sm">
           <thead>
             <tr className="border-b border-line text-xs font-semibold uppercase tracking-wide text-ink/50">
