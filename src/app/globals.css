@@ -14,11 +14,14 @@
   --teal-dark: #0f766e;
   --nav: #05080e;
   --nav-line: #1c2636;
-  /* Light blue, distinct from --nav's near-black, used only for the admin
-     dashboard chrome (sidebar + login screen) — a visual tell that you're
-     in /admin, not on the public site (which keeps using --nav). */
-  --admin-nav: #dbeafe;
-  --admin-nav-line: #93c5fd;
+  /* Bold, saturated blue (the site's own --brand-dark) — distinct from
+     --nav's near-black, used only for the admin dashboard chrome (sidebar +
+     login screen) as a visual tell that you're in /admin. A pastel/light
+     tint here read as washed-out next to the main site's bold gradient/
+     brand-color look, so this stays in the same saturated family as the
+     public site's accents instead of going light. */
+  --admin-nav: #1e40af;
+  --admin-nav-line: #3958c4;
 }
 
 @theme inline {
