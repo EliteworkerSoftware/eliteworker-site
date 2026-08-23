@@ -83,11 +83,9 @@ export async function POST(req: NextRequest) {
       username: "api",
       key: process.env.MAILGUN_API_KEY || "",
     });
-    const notifyToDebug = process.env.CONTACT_TO_EMAIL || "you@example.com";
-    const contactKeysDebug = Object.keys(process.env).filter((k) => k.includes("CONTACT"));
     await mg.messages.create(process.env.MAILGUN_DOMAIN || "", {
       from: process.env.CONTACT_FROM_EMAIL || `EliteWorker Site <postmaster@${process.env.MAILGUN_DOMAIN}>`,
-      to: notifyToDebug,
+      to: process.env.CONTACT_TO_EMAIL || "you@example.com",
       subject: `New EliteWorker beta signup from ${companyName}`,
       html: notifyHtml,
       text: notifyText,
@@ -99,31 +97,21 @@ export async function POST(req: NextRequest) {
       render(confirmElement),
       render(confirmElement, { plainText: true }),
     ]);
-    const replyToDebug = (process.env.CONTACT_TO_EMAIL || "").trim();
-    const confirmSendResult = await mg.messages.create(process.env.MAILGUN_DOMAIN || "", {
+    await mg.messages.create(process.env.MAILGUN_DOMAIN || "", {
       from: process.env.CONTACT_FROM_EMAIL || `EliteWorker Site <postmaster@${process.env.MAILGUN_DOMAIN}>`,
       to: contactEmail,
       subject: "We got your EliteWorker beta application",
       html: confirmHtml,
       text: confirmText,
-      "h:Reply-To": replyToDebug,
+      // "from" is a noreply address, but the copy invites a reply — route
+      // any actual replies to the inbox a human reads.
+      "h:Reply-To": (process.env.CONTACT_TO_EMAIL || "").trim(),
     });
-    console.log("DEBUG confirmSendResult", JSON.stringify(confirmSendResult));
-    console.log("DEBUG replyToDebug", JSON.stringify(replyToDebug), replyToDebug.length);
 
     // 4. Also text you — easy to miss an email, hard to miss a text
     await sendAlertSms(`New beta signup: ${companyName} (${contactName}). Check /admin for details.`);
 
-    return NextResponse.json({
-      ok: true,
-      debug: {
-        replyToDebug,
-        replyToDebugLength: replyToDebug.length,
-        confirmSendResult,
-        notifyToDebug,
-        contactKeysDebug,
-      },
-    });
+    return NextResponse.json({ ok: true });
   } catch (err) {
     console.error("Beta signup error:", err);
     return NextResponse.json({ error: "Something went wrong" }, { status: 500 });
