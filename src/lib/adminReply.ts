@@ -1,6 +1,6 @@
 import { getSupabaseAdmin } from "./supabase";
 import { sendReplyEmail } from "./sendReplyEmail";
-import type { TriageTable } from "./adminTriage";
+import type { TriageTable, AnyStatus } from "./adminTriage";
 import type { AdminUser } from "./currentAdmin";
 
 export type Reply = {
@@ -38,6 +38,22 @@ export async function fetchRepliesByIds(table: TriageTable, ids: string[]): Prom
   return grouped;
 }
 
+// Table-specific side effects of sending a reply, beyond the email + reply
+// row every table gets. Leads auto-advance from "new" to "contacted" — you
+// just contacted them, so the status should say so without an extra click.
+async function applyReplySideEffects(table: TriageTable, id: string): Promise<AnyStatus | undefined> {
+  if (table !== "eliteworker_leads") return undefined;
+  const supabase = getSupabaseAdmin();
+  const { data } = await supabase
+    .from(table)
+    .update({ pipeline_status: "contacted" })
+    .eq("id", id)
+    .eq("pipeline_status", "new")
+    .select("pipeline_status")
+    .maybeSingle();
+  return (data?.pipeline_status as AnyStatus) || undefined;
+}
+
 export async function sendAdminReply({
   table,
   id,
@@ -48,7 +64,7 @@ export async function sendAdminReply({
   id: string;
   admin: AdminUser;
   message: string;
-}): Promise<{ data: Reply } | { error: string; status: number }> {
+}): Promise<{ data: Reply; newStatus?: AnyStatus } | { error: string; status: number }> {
   const supabase = getSupabaseAdmin();
   const columns = RECIPIENT_COLUMNS[table];
   const { data: row, error: rowError } = await supabase
@@ -83,5 +99,7 @@ export async function sendAdminReply({
     .single();
 
   if (insertError) return { error: insertError.message, status: 500 };
-  return { data: reply as Reply };
+
+  const newStatus = await applyReplySideEffects(table, id);
+  return { data: reply as Reply, newStatus };
 }

@@ -1,11 +1,16 @@
 "use client";
 
-import { Fragment, useState, type ReactNode } from "react";
+import { Fragment, useMemo, useState, type ReactNode } from "react";
 import { ChevronDown, ChevronRight, Trash2, MailOpen, Mail } from "lucide-react";
-import { PIPELINE_STATUSES, type PipelineStatus } from "@/lib/adminTriage";
-import { StatusBadge } from "./StatusBadge";
+import { STATUS_OPTIONS, type TriageTable, type AnyStatus } from "@/lib/adminTriage";
+import { StatusBadge, statusLabel } from "./StatusBadge";
 
 export type Column<T> = { key: string; label: string; render: (row: T) => ReactNode; className?: string };
+
+// Passed into renderExpanded so a resource-specific panel (e.g. the reply
+// box) can reflect a status change the server already made as a side effect
+// (e.g. a lead reply auto-marking "contacted") without a second PATCH round-trip.
+export type ExpandedHelpers = { setLocalStatus: (status: AnyStatus) => void };
 
 type Accent = "brand" | "accent" | "teal";
 
@@ -17,7 +22,7 @@ const ACCENT_STYLES: Record<Accent, { border: string; ring: string }> = {
   teal: { border: "border-l-teal", ring: "focus:border-teal" },
 };
 
-type BaseRow = { id: string; is_read: boolean; pipeline_status: PipelineStatus };
+type BaseRow = { id: string; is_read: boolean; pipeline_status: AnyStatus };
 
 async function parseJsonSafe(res: Response): Promise<{ error?: string; [key: string]: unknown }> {
   try {
@@ -30,6 +35,7 @@ async function parseJsonSafe(res: Response): Promise<{ error?: string; [key: str
 export function ResourceTable<T extends BaseRow>({
   initialRows,
   apiBase,
+  statusTable,
   columns,
   renderExpanded,
   accent,
@@ -38,8 +44,9 @@ export function ResourceTable<T extends BaseRow>({
 }: {
   initialRows: T[];
   apiBase: string;
+  statusTable: TriageTable;
   columns: Column<T>[];
-  renderExpanded: (row: T) => ReactNode;
+  renderExpanded: (row: T, helpers: ExpandedHelpers) => ReactNode;
   accent: Accent;
   canDelete: boolean;
   emptyLabel: string;
@@ -48,7 +55,9 @@ export function ResourceTable<T extends BaseRow>({
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const [busyId, setBusyId] = useState<string | null>(null);
   const [error, setError] = useState("");
+  const [filter, setFilter] = useState<AnyStatus | "all">("all");
   const styles = ACCENT_STYLES[accent];
+  const statusOptions = STATUS_OPTIONS[statusTable];
 
   async function patch(id: string, body: Partial<Pick<BaseRow, "is_read" | "pipeline_status">>) {
     setError("");
@@ -64,6 +73,10 @@ export function ResourceTable<T extends BaseRow>({
     } catch (err) {
       setError(err instanceof Error ? err.message : "Update failed");
     }
+  }
+
+  function setLocalStatus(id: string, status: AnyStatus) {
+    setRows((prev) => prev.map((r) => (r.id === id ? { ...r, pipeline_status: status } : r)));
   }
 
   function toggleExpand(row: T) {
@@ -91,9 +104,40 @@ export function ResourceTable<T extends BaseRow>({
     }
   }
 
+  const counts = useMemo(() => {
+    const c: Partial<Record<AnyStatus, number>> = {};
+    for (const row of rows) c[row.pipeline_status] = (c[row.pipeline_status] || 0) + 1;
+    return c;
+  }, [rows]);
+  const visibleRows = filter === "all" ? rows : rows.filter((r) => r.pipeline_status === filter);
+
   return (
     <div>
       {error && <p className="mb-3 text-sm text-red-500">{error}</p>}
+
+      <div className="mb-4 flex flex-wrap gap-2">
+        <button
+          type="button"
+          onClick={() => setFilter("all")}
+          className={`rounded-full border px-3 py-1.5 text-xs font-semibold transition ${
+            filter === "all" ? "border-ink bg-ink text-white" : "border-line text-ink/60 hover:border-ink/30"
+          }`}
+        >
+          All ({rows.length})
+        </button>
+        {statusOptions.map((status) => (
+          <button
+            key={status}
+            type="button"
+            onClick={() => setFilter(status)}
+            className={`transition ${filter === status ? "ring-2 ring-ink/70 ring-offset-1" : "opacity-70 hover:opacity-100"} rounded-full`}
+          >
+            <StatusBadge status={status} />
+            <span className="sr-only"> ({counts[status] || 0})</span>
+          </button>
+        ))}
+      </div>
+
       <div className="overflow-x-auto rounded-2xl border border-line bg-paper">
         <table className="w-full min-w-187.5 text-left text-sm">
           <thead>
@@ -104,11 +148,11 @@ export function ResourceTable<T extends BaseRow>({
                   {col.label}
                 </th>
               ))}
-              <th className="px-4 py-3">Pipeline</th>
+              <th className="px-4 py-3">Status</th>
             </tr>
           </thead>
           <tbody>
-            {rows.map((row) => {
+            {visibleRows.map((row) => {
               const expanded = expandedId === row.id;
               return (
                 <Fragment key={row.id}>
@@ -136,19 +180,21 @@ export function ResourceTable<T extends BaseRow>({
                   {expanded && (
                     <tr className="border-b border-line bg-paper-alt last:border-b-0">
                       <td colSpan={columns.length + 2} className="px-4 py-5">
-                        <div className="mb-4">{renderExpanded(row)}</div>
+                        <div className="mb-4">
+                          {renderExpanded(row, { setLocalStatus: (status) => setLocalStatus(row.id, status) })}
+                        </div>
                         <div
                           className="flex flex-wrap items-center gap-3"
                           onClick={(e) => e.stopPropagation()}
                         >
                           <select
                             value={row.pipeline_status}
-                            onChange={(e) => patch(row.id, { pipeline_status: e.target.value as PipelineStatus })}
+                            onChange={(e) => patch(row.id, { pipeline_status: e.target.value as AnyStatus })}
                             className={`rounded-lg border border-line bg-paper px-3 py-1.5 text-xs font-medium text-ink outline-none ${styles.ring}`}
                           >
-                            {PIPELINE_STATUSES.map((status) => (
+                            {statusOptions.map((status) => (
                               <option key={status} value={status}>
-                                {status.charAt(0).toUpperCase() + status.slice(1)}
+                                {statusLabel(status)}
                               </option>
                             ))}
                           </select>
@@ -180,10 +226,10 @@ export function ResourceTable<T extends BaseRow>({
                 </Fragment>
               );
             })}
-            {rows.length === 0 && (
+            {visibleRows.length === 0 && (
               <tr>
                 <td colSpan={columns.length + 2} className="px-4 py-8 text-center text-ink/40">
-                  {emptyLabel}
+                  {rows.length === 0 ? emptyLabel : "Nothing matches this filter."}
                 </td>
               </tr>
             )}

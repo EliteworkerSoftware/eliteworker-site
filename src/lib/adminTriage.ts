@@ -1,9 +1,18 @@
 import { getSupabaseAdmin } from "@/lib/supabase";
 
-export const PIPELINE_STATUSES = ["new", "contacted", "converted", "archived"] as const;
-export type PipelineStatus = (typeof PIPELINE_STATUSES)[number];
+// Each resource has its own status vocabulary — a lead's journey isn't a
+// beta applicant's or a demo booking's — so the allowed values (and their
+// order, which drives filter/select ordering) live per table here instead
+// of one shared enum.
+export const STATUS_OPTIONS = {
+  eliteworker_leads: ["new", "contacted", "booked_demo", "archived"],
+  eliteworker_beta_signups: ["new", "approved", "declined", "archived"],
+  eliteworker_demo_bookings: ["confirm_1", "confirm_2", "converted", "archived"],
+} as const;
 
-export type TriageTable = "eliteworker_leads" | "eliteworker_beta_signups" | "eliteworker_demo_bookings";
+export type TriageTable = keyof typeof STATUS_OPTIONS;
+export type StatusOf<T extends TriageTable> = (typeof STATUS_OPTIONS)[T][number];
+export type AnyStatus = StatusOf<TriageTable>;
 
 type TriageResult<T> = { data: T } | { error: string; status: number };
 
@@ -13,15 +22,21 @@ type TriageResult<T> = { data: T } | { error: string; status: number };
 export async function patchTriageFields(
   table: TriageTable,
   id: string,
-  body: { is_read?: unknown; pipeline_status?: unknown }
+  body: { is_read?: unknown; pipeline_status?: unknown; decline_reason?: unknown }
 ): Promise<TriageResult<Record<string, unknown>>> {
   const patch: Record<string, unknown> = {};
   if (typeof body.is_read === "boolean") patch.is_read = body.is_read;
   if (typeof body.pipeline_status === "string") {
-    if (!PIPELINE_STATUSES.includes(body.pipeline_status as PipelineStatus)) {
-      return { error: "Invalid pipeline_status", status: 400 };
+    const allowed: readonly string[] = STATUS_OPTIONS[table];
+    if (!allowed.includes(body.pipeline_status)) {
+      return { error: "Invalid status", status: 400 };
     }
     patch.pipeline_status = body.pipeline_status;
+  }
+  // Only beta applications carry a decline reason — the column only exists
+  // on that table, so this only ever applies there in practice.
+  if (table === "eliteworker_beta_signups" && (typeof body.decline_reason === "string" || body.decline_reason === null)) {
+    patch.decline_reason = body.decline_reason;
   }
   if (Object.keys(patch).length === 0) {
     return { error: "No valid fields to update", status: 400 };

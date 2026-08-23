@@ -2,7 +2,7 @@
 
 import { ResourceTable, type Column } from "@/components/admin/ResourceTable";
 import { ReplyPanel, type ReplyRecord } from "@/components/admin/ReplyPanel";
-import type { PipelineStatus } from "@/lib/adminTriage";
+import type { AnyStatus } from "@/lib/adminTriage";
 
 export type DemoBooking = {
   id: string;
@@ -15,7 +15,8 @@ export type DemoBooking = {
   event_title: string | null;
   status: string;
   is_read: boolean;
-  pipeline_status: PipelineStatus;
+  pipeline_status: AnyStatus;
+  reminder_sent_at: string | null;
   replies: ReplyRecord[];
 };
 
@@ -45,6 +46,7 @@ export function DemoBookingsTable({ initialRows, canDelete }: { initialRows: Dem
     <ResourceTable
       initialRows={initialRows}
       apiBase="/api/admin/bookings"
+      statusTable="eliteworker_demo_bookings"
       columns={columns}
       accent="teal"
       canDelete={canDelete}
@@ -58,6 +60,10 @@ export function DemoBookingsTable({ initialRows, canDelete }: { initialRows: Dem
           <div>
             <p className="text-xs font-semibold uppercase tracking-wide text-ink/50">Booking UID</p>
             <p className="mt-1 break-all font-mono text-xs">{row.booking_uid}</p>
+          </div>
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-wide text-ink/50">Reminder email</p>
+            <p className="mt-1">{row.reminder_sent_at ? `Sent ${formatDate(row.reminder_sent_at)}` : "Not sent yet"}</p>
           </div>
           <div className="sm:col-span-2">
             <ReplyPanel

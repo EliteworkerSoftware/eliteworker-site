@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import type { AnyStatus } from "@/lib/adminTriage";
 
 export type ReplyRecord = {
   id: string;
@@ -29,11 +30,16 @@ export function ReplyPanel({
   recipientName,
   recipientEmail,
   initialReplies,
+  onStatusChange,
 }: {
   replyApi: string;
   recipientName: string;
   recipientEmail: string | null;
   initialReplies: ReplyRecord[];
+  // Some resources auto-advance status as a side effect of sending a reply
+  // (e.g. a lead flips to "contacted") — this lets the expanded row's status
+  // control reflect that immediately instead of waiting for a page refresh.
+  onStatusChange?: (status: AnyStatus) => void;
 }) {
   const [replies, setReplies] = useState(initialReplies);
   const [message, setMessage] = useState("");
@@ -54,6 +60,7 @@ export function ReplyPanel({
       if (!res.ok) throw new Error(data.error || "Failed to send reply");
       setReplies((prev) => [...prev, data.reply as ReplyRecord]);
       setMessage("");
+      if (data.newStatus) onStatusChange?.(data.newStatus as AnyStatus);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to send reply");
     } finally {

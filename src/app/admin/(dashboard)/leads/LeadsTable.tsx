@@ -2,7 +2,7 @@
 
 import { ResourceTable, type Column } from "@/components/admin/ResourceTable";
 import { ReplyPanel, type ReplyRecord } from "@/components/admin/ReplyPanel";
-import type { PipelineStatus } from "@/lib/adminTriage";
+import type { AnyStatus } from "@/lib/adminTriage";
 
 export type Lead = {
   id: string;
@@ -12,7 +12,7 @@ export type Lead = {
   company: string | null;
   message: string;
   is_read: boolean;
-  pipeline_status: PipelineStatus;
+  pipeline_status: AnyStatus;
   replies: ReplyRecord[];
 };
 
@@ -32,11 +32,12 @@ export function LeadsTable({ initialRows, canDelete }: { initialRows: Lead[]; ca
     <ResourceTable
       initialRows={initialRows}
       apiBase="/api/admin/leads"
+      statusTable="eliteworker_leads"
       columns={columns}
       accent="brand"
       canDelete={canDelete}
       emptyLabel="No contact leads yet."
-      renderExpanded={(row) => (
+      renderExpanded={(row, { setLocalStatus }) => (
         <div>
           <div className="max-w-2xl">
             <p className="text-xs font-semibold uppercase tracking-wide text-ink/50">Message</p>
@@ -47,6 +48,7 @@ export function LeadsTable({ initialRows, canDelete }: { initialRows: Lead[]; ca
             recipientName={row.name}
             recipientEmail={row.email}
             initialReplies={row.replies}
+            onStatusChange={setLocalStatus}
           />
         </div>
       )}

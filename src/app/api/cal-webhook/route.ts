@@ -63,19 +63,28 @@ export async function POST(req: NextRequest) {
   const attendee = booking.attendees?.[0];
 
   // 1. Save/update the booking so it shows in /admin, even if the email below fails.
+  // pipeline_status is only set on true new bookings — omitting it on
+  // cancel/reschedule pings leaves whatever admin-tracked status (e.g.
+  // "confirm_2") the row already has untouched.
   const supabase = getSupabaseAdmin();
-  const { error: dbError } = await supabase.from("eliteworker_demo_bookings").upsert(
-    {
-      booking_uid: booking.uid,
-      attendee_name: attendee?.name ?? null,
-      attendee_email: attendee?.email ?? null,
-      start_time: booking.startTime ?? null,
-      end_time: booking.endTime ?? null,
-      event_title: booking.title ?? null,
-      status,
-    },
-    { onConflict: "booking_uid" }
-  );
+  const upsertData: Record<string, unknown> = {
+    booking_uid: booking.uid,
+    attendee_name: attendee?.name ?? null,
+    attendee_email: attendee?.email ?? null,
+    start_time: booking.startTime ?? null,
+    end_time: booking.endTime ?? null,
+    event_title: booking.title ?? null,
+    status,
+  };
+  if (event.triggerEvent === "BOOKING_CREATED") {
+    // Cal.com sends its own confirmation email to the attendee the moment
+    // this webhook fires — "Confirm 1" tracks that first, automatic
+    // confirmation. "Confirm 2" comes later from our own day-before reminder.
+    upsertData.pipeline_status = "confirm_1";
+  }
+  const { error: dbError } = await supabase
+    .from("eliteworker_demo_bookings")
+    .upsert(upsertData, { onConflict: "booking_uid" });
   if (dbError) {
     console.error("Supabase upsert error:", dbError);
   }

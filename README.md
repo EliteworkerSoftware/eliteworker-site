@@ -128,6 +128,45 @@ create index eliteworker_replies_source_idx on eliteworker_replies (source_table
 drop table if exists eliteworker_lead_replies;
 ```
 
+Each section now has its own status list instead of one shared one (Leads:
+New/Contacted/Booked for Demo/Archived, Beta: New/Approved/Declined/Archived,
+Bookings: Confirm 1/Confirm 2/Converted/Archived), and demo booking reminders
+are now automatic. This needs one more migration — in the Supabase SQL editor, run:
+
+```sql
+-- New columns the per-section statuses use
+alter table eliteworker_beta_signups add column if not exists decline_reason text;
+alter table eliteworker_demo_bookings add column if not exists reminder_sent_at timestamptz;
+alter table eliteworker_demo_bookings alter column pipeline_status set default 'confirm_1';
+
+-- Status values are now validated in the app (per section) rather than by a
+-- single shared database constraint — drop the old constraint if you have one
+-- (safe to run even if it doesn't exist or is named differently):
+alter table eliteworker_leads drop constraint if exists eliteworker_leads_pipeline_status_check;
+alter table eliteworker_beta_signups drop constraint if exists eliteworker_beta_signups_pipeline_status_check;
+alter table eliteworker_demo_bookings drop constraint if exists eliteworker_demo_bookings_pipeline_status_check;
+
+-- Remap any existing rows off the old shared status values onto the closest
+-- new one for that section — spot-check a few rows after running this:
+update eliteworker_leads set pipeline_status = 'booked_demo' where pipeline_status = 'converted';
+update eliteworker_beta_signups set pipeline_status = 'new' where pipeline_status = 'contacted';
+update eliteworker_beta_signups set pipeline_status = 'approved' where pipeline_status = 'converted';
+update eliteworker_demo_bookings set pipeline_status = 'confirm_1' where pipeline_status in ('new', 'contacted');
+```
+
+**Demo booking reminders are now automated.** When someone books a demo,
+Cal.com immediately emails them its own confirmation — the dashboard marks
+that as **Confirm 1**. About a day before the booking, a scheduled job emails
+them again asking them to confirm they'll still be there; clicking the button
+in that email marks it **Confirm 2**. This needs two things:
+
+1. In `.env.local` (and in Vercel's Environment Variables once deployed), set
+   `CRON_SECRET` to any long random string.
+2. The schedule itself lives in `vercel.json` (already set up to run daily at
+   14:00 UTC) — Vercel picks it up automatically on your next deploy, no
+   dashboard setup needed. Locally, `next dev` never fires it — that's expected;
+   reminders only send from the deployed site.
+
 ## 7. Push to GitHub
 
 ```

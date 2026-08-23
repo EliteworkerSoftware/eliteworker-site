@@ -14,5 +14,5 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
 
   const result = await sendAdminReply({ table: "eliteworker_demo_bookings", id, admin, message });
   if ("error" in result) return NextResponse.json({ error: result.error }, { status: result.status });
-  return NextResponse.json({ ok: true, reply: result.data });
+  return NextResponse.json({ ok: true, reply: result.data, newStatus: result.newStatus });
 }
