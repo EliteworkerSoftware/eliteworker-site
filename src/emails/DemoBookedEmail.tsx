@@ -1,7 +1,8 @@
-import { Heading, Section, Text } from "@react-email/components";
+import { Heading, Text } from "@react-email/components";
 import { EmailLayout, FONT_STACK } from "./components/EmailLayout";
 import { FieldList } from "./components/FieldList";
 import { PillButton } from "./components/PillButton";
+import { Spacer } from "./components/Spacer";
 import { COLORS, SITE_URL } from "./constants";
 
 export function DemoBookedEmail({
@@ -52,9 +53,8 @@ export function DemoBookedEmail({
         ]}
       />
 
-      <Section style={{ marginTop: 32 }}>
-        <PillButton href={`${SITE_URL}/admin`}>View in dashboard</PillButton>
-      </Section>
+      <Spacer height={32} />
+      <PillButton href={`${SITE_URL}/admin`}>View in dashboard</PillButton>
     </EmailLayout>
   );
 }

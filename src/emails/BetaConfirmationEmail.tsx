@@ -39,7 +39,8 @@ export function BetaConfirmationEmail({
 
       <Text style={{ margin: "0 0 16px", fontFamily: FONT_STACK, fontSize: 16, lineHeight: "26px", color: COLORS.ink }}>
         We got your beta application on behalf of <strong>{companyName}</strong>. We personally review every
-        application — no automated gatekeeping — and will follow up within 48 hours with next steps.
+        application — no automated gatekeeping — and we&rsquo;re actively reviewing yours now. We&rsquo;ll be in
+        touch soon with next steps.
       </Text>
       <Text style={{ margin: 0, fontFamily: FONT_STACK, fontSize: 16, lineHeight: "26px", color: COLORS.ink }}>
         In the meantime, if anything changes on your end or you think of details worth adding, just reply to this

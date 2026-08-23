@@ -1,7 +1,8 @@
-import { Heading, Section, Text } from "@react-email/components";
+import { Heading, Text } from "@react-email/components";
 import { EmailLayout, FONT_STACK } from "./components/EmailLayout";
 import { FieldList } from "./components/FieldList";
 import { PillButton } from "./components/PillButton";
+import { Spacer } from "./components/Spacer";
 import { COLORS, SITE_URL } from "./constants";
 
 export function BetaSignupEmail({
@@ -66,7 +67,8 @@ export function BetaSignupEmail({
       />
 
       {notes && (
-        <Section style={{ marginTop: 20 }}>
+        <>
+          <Spacer height={20} />
           <Text
             style={{
               margin: "0 0 8px",
@@ -83,12 +85,11 @@ export function BetaSignupEmail({
           <Text style={{ margin: 0, fontFamily: FONT_STACK, fontSize: 15, lineHeight: "24px", color: COLORS.ink }}>
             {notes}
           </Text>
-        </Section>
+        </>
       )}
 
-      <Section style={{ marginTop: 32 }}>
-        <PillButton href={`${SITE_URL}/admin`}>View in dashboard</PillButton>
-      </Section>
+      <Spacer height={32} />
+      <PillButton href={`${SITE_URL}/admin`}>View in dashboard</PillButton>
     </EmailLayout>
   );
 }

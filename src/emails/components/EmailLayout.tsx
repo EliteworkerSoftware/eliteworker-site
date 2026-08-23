@@ -1,4 +1,4 @@
-import { Head, Html, Img, Preview, Section } from "@react-email/components";
+import { Head, Html, Img, Preview } from "@react-email/components";
 import type { ReactNode } from "react";
 import { COLORS, LOGO_WHITE_URL } from "../constants";
 
@@ -60,9 +60,7 @@ export function EmailLayout({ preview, children }: { preview: string; children: 
                 >
                   <tbody>
                     <tr>
-                      <td>
-                        <Section style={{ padding: "48px 40px", textAlign: "center" }}>{children}</Section>
-                      </td>
+                      <td style={{ padding: "48px 40px", textAlign: "center" }}>{children}</td>
                     </tr>
                   </tbody>
                 </table>

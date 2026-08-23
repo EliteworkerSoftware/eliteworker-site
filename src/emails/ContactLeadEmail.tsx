@@ -1,7 +1,8 @@
-import { Heading, Section, Text } from "@react-email/components";
+import { Heading, Text } from "@react-email/components";
 import { EmailLayout, FONT_STACK } from "./components/EmailLayout";
 import { FieldList } from "./components/FieldList";
 import { PillButton } from "./components/PillButton";
+import { Spacer } from "./components/Spacer";
 import { COLORS, SITE_URL } from "./constants";
 
 export function ContactLeadEmail({
@@ -51,28 +52,26 @@ export function ContactLeadEmail({
         ]}
       />
 
-      <Section style={{ marginTop: 20 }}>
-        <Text
-          style={{
-            margin: "0 0 8px",
-            fontFamily: FONT_STACK,
-            fontSize: 12,
-            fontWeight: 600,
-            textTransform: "uppercase",
-            letterSpacing: "0.06em",
-            color: COLORS.inkMuted,
-          }}
-        >
-          Message
-        </Text>
-        <Text style={{ margin: 0, fontFamily: FONT_STACK, fontSize: 15, lineHeight: "24px", color: COLORS.ink }}>
-          {message}
-        </Text>
-      </Section>
+      <Spacer height={20} />
+      <Text
+        style={{
+          margin: "0 0 8px",
+          fontFamily: FONT_STACK,
+          fontSize: 12,
+          fontWeight: 600,
+          textTransform: "uppercase",
+          letterSpacing: "0.06em",
+          color: COLORS.inkMuted,
+        }}
+      >
+        Message
+      </Text>
+      <Text style={{ margin: 0, fontFamily: FONT_STACK, fontSize: 15, lineHeight: "24px", color: COLORS.ink }}>
+        {message}
+      </Text>
 
-      <Section style={{ marginTop: 32 }}>
-        <PillButton href={`${SITE_URL}/admin`}>View in dashboard</PillButton>
-      </Section>
+      <Spacer height={32} />
+      <PillButton href={`${SITE_URL}/admin`}>View in dashboard</PillButton>
     </EmailLayout>
   );
 }
