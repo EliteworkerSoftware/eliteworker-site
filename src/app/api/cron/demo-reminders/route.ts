@@ -26,7 +26,7 @@ export async function GET(req: NextRequest) {
 
   const { data: bookings, error } = await supabase
     .from("eliteworker_demo_bookings")
-    .select("id, attendee_name, attendee_email, start_time, event_title")
+    .select("id, booking_uid, attendee_name, attendee_email, start_time, event_title")
     .eq("pipeline_status", "confirm_1")
     .is("reminder_sent_at", null)
     .gte("start_time", windowStart)
@@ -39,6 +39,10 @@ export async function GET(req: NextRequest) {
     if (!booking.attendee_email) continue;
     try {
       const confirmUrl = `${SITE_URL}/api/demo-confirm?token=${createConfirmToken(booking.id)}`;
+      // Cal.com's own reschedule flow: it looks up the original booking from
+      // rescheduleUid and preloads the attendee's name/email/answers itself,
+      // so there's nothing else to pass.
+      const rescheduleUrl = `https://cal.com/${process.env.NEXT_PUBLIC_CAL_LINK}?rescheduleUid=${encodeURIComponent(booking.booking_uid)}`;
       const when = booking.start_time
         ? new Date(booking.start_time).toLocaleString("en-US", { dateStyle: "full", timeStyle: "short" })
         : "soon";
@@ -48,6 +52,7 @@ export async function GET(req: NextRequest) {
         when,
         eventTitle: booking.event_title,
         confirmUrl,
+        rescheduleUrl,
       });
       await supabase
         .from("eliteworker_demo_bookings")

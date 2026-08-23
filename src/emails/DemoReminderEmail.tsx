@@ -10,11 +10,13 @@ export function DemoReminderEmail({
   when,
   eventTitle,
   confirmUrl,
+  rescheduleUrl,
 }: {
   name: string;
   when: string;
   eventTitle?: string | null;
   confirmUrl: string;
+  rescheduleUrl: string;
 }) {
   const firstName = name.trim().split(/\s+/)[0] || name;
 
@@ -47,17 +49,34 @@ export function DemoReminderEmail({
       </Heading>
 
       <Text style={{ margin: "0 0 24px", fontFamily: FONT_STACK, fontSize: 16, lineHeight: "26px", color: COLORS.ink }}>
-        Just confirming you&rsquo;re still good for your EliteWorker demo tomorrow. One click and you&rsquo;re all set.
+        Just confirming you&rsquo;re still good for your EliteWorker demo tomorrow — or grab a different time if
+        something came up.
       </Text>
 
       <FieldList fields={[{ label: "When", value: when }, { label: "Event", value: eventTitle || "Demo" }]} />
 
       <Spacer height={28} />
-      <PillButton href={confirmUrl}>Confirm I&rsquo;ll be there</PillButton>
+      {/* Two-cell table, not two inline buttons — the reliable cross-client
+          way to place block-level buttons side by side with a real gap
+          (padding lives on the <td>, per the IONOS <table> padding bug). */}
+      <table role="presentation" cellPadding={0} cellSpacing={0} style={{ borderCollapse: "collapse", margin: "0 auto" }}>
+        <tbody>
+          <tr>
+            <td style={{ paddingRight: 10 }}>
+              <PillButton href={confirmUrl}>Confirm I&rsquo;ll be there</PillButton>
+            </td>
+            <td>
+              <PillButton href={rescheduleUrl} variant="secondary">
+                Reschedule
+              </PillButton>
+            </td>
+          </tr>
+        </tbody>
+      </table>
 
       <Spacer height={28} />
       <Text style={{ margin: 0, fontFamily: FONT_STACK, fontSize: 13, lineHeight: "22px", color: COLORS.inkMuted }}>
-        Need to reschedule instead? Just reply to this email and we&rsquo;ll sort out a new time.
+        Need something else entirely? Just reply to this email and we&rsquo;ll sort it out.
       </Text>
     </EmailLayout>
   );
