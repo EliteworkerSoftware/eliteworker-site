@@ -1,12 +1,20 @@
 "use client";
 
 import { useState } from "react";
-import { RotateCw } from "lucide-react";
+import { RotateCw, Pencil, Check, X } from "lucide-react";
 
 type AdminRow = { id: string; email: string; full_name: string | null; role: "owner" | "viewer"; created_at: string };
 
 function formatDate(value: string) {
   return new Date(value).toLocaleDateString("en-US", { dateStyle: "medium" });
+}
+
+// Best-effort split for pre-filling the edit form from a stored "First Last"
+// string — first token is the first name, everything else is the last name.
+function splitName(fullName: string | null): { first: string; last: string } {
+  const parts = (fullName || "").trim().split(/\s+/).filter(Boolean);
+  if (parts.length === 0) return { first: "", last: "" };
+  return { first: parts[0], last: parts.slice(1).join(" ") };
 }
 
 // A failed request doesn't always come back as JSON (a dev-server compile
@@ -28,13 +36,19 @@ export default function AdminUsersManager({
   currentUserId: string;
 }) {
   const [users, setUsers] = useState(initialUsers);
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
-  const [fullName, setFullName] = useState("");
   const [role, setRole] = useState<"owner" | "viewer">("viewer");
   const [busy, setBusy] = useState(false);
   const [resendingId, setResendingId] = useState<string | null>(null);
   const [error, setError] = useState("");
   const [revealed, setRevealed] = useState<{ label: string; password: string; emailSent: boolean } | null>(null);
+
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [editFirst, setEditFirst] = useState("");
+  const [editLast, setEditLast] = useState("");
+  const [savingEdit, setSavingEdit] = useState(false);
 
   async function refresh() {
     const res = await fetch("/api/admin/users");
@@ -52,13 +66,14 @@ export default function AdminUsersManager({
       const res = await fetch("/api/admin/users", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, fullName, role }),
+        body: JSON.stringify({ email, fullName: `${firstName} ${lastName}`.trim(), role }),
       });
       const data = await parseJsonSafe(res);
       if (!res.ok) throw new Error(data.error || "Failed to add admin");
       setRevealed({ label: email, password: data.tempPassword as string, emailSent: data.emailSent as boolean });
       setEmail("");
-      setFullName("");
+      setFirstName("");
+      setLastName("");
       setRole("viewer");
       await refresh();
     } catch (err) {
@@ -96,6 +111,34 @@ export default function AdminUsersManager({
     }
   }
 
+  function startEdit(user: AdminRow) {
+    const { first, last } = splitName(user.full_name);
+    setEditingId(user.id);
+    setEditFirst(first);
+    setEditLast(last);
+    setError("");
+  }
+
+  async function saveEdit(id: string) {
+    setSavingEdit(true);
+    setError("");
+    try {
+      const res = await fetch(`/api/admin/users/${id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ fullName: `${editFirst} ${editLast}`.trim() }),
+      });
+      const data = await parseJsonSafe(res);
+      if (!res.ok) throw new Error(data.error || "Failed to update name");
+      setEditingId(null);
+      await refresh();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Failed to update name");
+    } finally {
+      setSavingEdit(false);
+    }
+  }
+
   return (
     <div>
       {revealed && (
@@ -121,7 +164,7 @@ export default function AdminUsersManager({
       )}
 
       <div className="overflow-x-auto rounded-2xl border border-line bg-paper">
-        <table className="w-full min-w-125 text-left text-sm">
+        <table className="w-full min-w-140 text-left text-sm">
           <thead>
             <tr className="border-b border-line text-xs font-semibold uppercase tracking-wide text-ink/50">
               <th className="px-4 py-3">Name</th>
@@ -135,8 +178,53 @@ export default function AdminUsersManager({
             {users.map((u) => (
               <tr key={u.id} className="border-b border-line last:border-0">
                 <td className="px-4 py-3 font-medium text-ink">
-                  {u.full_name || "—"}
-                  {u.id === currentUserId && <span className="ml-2 text-xs text-ink/40">(you)</span>}
+                  {editingId === u.id ? (
+                    <div className="flex items-center gap-1.5">
+                      <input
+                        autoFocus
+                        value={editFirst}
+                        onChange={(e) => setEditFirst(e.target.value)}
+                        placeholder="First"
+                        className="w-20 rounded-md border border-line bg-paper px-2 py-1 text-sm text-ink focus:border-accent focus:outline-none"
+                      />
+                      <input
+                        value={editLast}
+                        onChange={(e) => setEditLast(e.target.value)}
+                        placeholder="Last"
+                        className="w-20 rounded-md border border-line bg-paper px-2 py-1 text-sm text-ink focus:border-accent focus:outline-none"
+                      />
+                      <button
+                        type="button"
+                        disabled={savingEdit}
+                        onClick={() => saveEdit(u.id)}
+                        className="rounded-md p-1 text-emerald-600 hover:bg-emerald-50 disabled:opacity-50"
+                        aria-label="Save name"
+                      >
+                        <Check size={15} />
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setEditingId(null)}
+                        className="rounded-md p-1 text-ink/40 hover:bg-paper-alt hover:text-ink"
+                        aria-label="Cancel"
+                      >
+                        <X size={15} />
+                      </button>
+                    </div>
+                  ) : (
+                    <div className="flex items-center gap-1.5">
+                      <span>{u.full_name || "—"}</span>
+                      {u.id === currentUserId && <span className="text-xs text-ink/40">(you)</span>}
+                      <button
+                        type="button"
+                        onClick={() => startEdit(u)}
+                        className="rounded-md p-1 text-ink/30 hover:bg-paper-alt hover:text-ink/70"
+                        aria-label="Edit name"
+                      >
+                        <Pencil size={13} />
+                      </button>
+                    </div>
+                  )}
                 </td>
                 <td className="px-4 py-3 text-ink/80">{u.email}</td>
                 <td className="px-4 py-3 text-ink/80 capitalize">{u.role}</td>
@@ -173,13 +261,23 @@ export default function AdminUsersManager({
         onSubmit={handleAdd}
         className="mt-4 flex flex-wrap items-end gap-3 rounded-2xl border border-line bg-paper p-5"
       >
-        <div className="flex-1 min-w-45">
-          <label className="text-xs font-medium text-ink/60">Full name</label>
+        <div className="min-w-30">
+          <label className="text-xs font-medium text-ink/60">First name</label>
           <input
             type="text"
             required
-            value={fullName}
-            onChange={(e) => setFullName(e.target.value)}
+            value={firstName}
+            onChange={(e) => setFirstName(e.target.value)}
+            className="mt-1 w-full rounded-lg border border-line bg-paper px-3 py-2 text-sm text-ink focus:border-accent focus:outline-none"
+          />
+        </div>
+        <div className="min-w-30">
+          <label className="text-xs font-medium text-ink/60">Last name</label>
+          <input
+            type="text"
+            required
+            value={lastName}
+            onChange={(e) => setLastName(e.target.value)}
             className="mt-1 w-full rounded-lg border border-line bg-paper px-3 py-2 text-sm text-ink focus:border-accent focus:outline-none"
           />
         </div>

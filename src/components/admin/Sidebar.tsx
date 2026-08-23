@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { LayoutDashboard, Inbox, ClipboardList, CalendarCheck, Users } from "lucide-react";
@@ -16,8 +17,17 @@ export function Sidebar({ role }: { role: AdminRole }) {
   const pathname = usePathname();
 
   return (
-    <nav className="flex shrink-0 flex-col border-nav-line bg-nav px-3 py-3 md:h-full md:w-60 md:border-r md:px-4 md:py-6">
-      <div className="hidden px-2 pb-6 text-sm font-semibold tracking-wide text-white/90 md:block">EliteWorker admin</div>
+    <nav className="flex shrink-0 flex-col border-nav-line bg-nav px-3 py-3 md:w-60 md:border-r md:px-4 md:py-6">
+      <div className="px-2 pb-3 md:pb-6">
+        <Image
+          src="/Eliteworker%20Header%20Logo.svg"
+          alt="EliteWorker"
+          width={660}
+          height={101}
+          className="h-5 w-auto md:h-6"
+          priority
+        />
+      </div>
       <div className="flex gap-1 overflow-x-auto md:flex-col md:overflow-visible">
         {NAV_ITEMS.map((item) => {
           const active = item.href === "/admin" ? pathname === "/admin" : pathname.startsWith(item.href);

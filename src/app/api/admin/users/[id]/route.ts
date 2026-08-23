@@ -2,6 +2,28 @@ import { NextRequest, NextResponse } from "next/server";
 import { getCurrentAdmin } from "@/lib/currentAdmin";
 import { getSupabaseAdmin } from "@/lib/supabase";
 
+export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+  const admin = await getCurrentAdmin();
+  if (!admin || admin.role !== "owner") {
+    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+  }
+
+  const { id } = await params;
+  const { fullName } = await req.json();
+  if (!fullName || typeof fullName !== "string" || !fullName.trim()) {
+    return NextResponse.json({ error: "Full name is required" }, { status: 400 });
+  }
+
+  const supabase = getSupabaseAdmin();
+  const { error } = await supabase
+    .from("eliteworker_admin_users")
+    .update({ full_name: fullName.trim() })
+    .eq("id", id);
+
+  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+  return NextResponse.json({ ok: true });
+}
+
 export async function DELETE(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   const admin = await getCurrentAdmin();
   if (!admin || admin.role !== "owner") {

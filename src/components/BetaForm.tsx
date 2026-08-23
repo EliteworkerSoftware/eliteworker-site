@@ -67,9 +67,10 @@ export default function BetaForm() {
     setBusy(true);
     setError("");
     const form = new FormData(e.currentTarget);
+    const contactName = `${form.get("firstName")} ${form.get("lastName")}`.trim();
     const payload = {
       companyName: form.get("companyName"),
-      contactName: form.get("contactName"),
+      contactName,
       contactEmail: email,
       phone: form.get("phone"),
       address: form.get("address"),
@@ -176,11 +177,14 @@ export default function BetaForm() {
       <input name="companyName" required placeholder="Company name" className={fieldClass} />
 
       <div className="grid gap-4 sm:grid-cols-2">
-        <input name="contactName" required placeholder="Company contact" className={fieldClass} />
-        <input name="phone" type="tel" required placeholder="Phone number" className={fieldClass} />
+        <input name="firstName" required placeholder="First name" className={fieldClass} />
+        <input name="lastName" required placeholder="Last name" className={fieldClass} />
       </div>
 
-      <input name="address" required placeholder="Company address" className={fieldClass} />
+      <div className="grid gap-4 sm:grid-cols-2">
+        <input name="phone" type="tel" required placeholder="Phone number" className={fieldClass} />
+        <input name="address" required placeholder="Company address" className={fieldClass} />
+      </div>
 
       <div className="grid gap-4 sm:grid-cols-2">
         <select name="employees" required defaultValue="" className={fieldClass}>
