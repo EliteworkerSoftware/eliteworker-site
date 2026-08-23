@@ -14,7 +14,7 @@ const jetbrainsMono = JetBrains_Mono({
   weight: ["400", "500"],
 });
 
-const siteUrl = "https://eliteworker.io"; // TODO: swap for the real domain
+const siteUrl = "https://eliteworker.com";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),

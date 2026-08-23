@@ -1,6 +1,6 @@
 import type { MetadataRoute } from "next";
 
-const siteUrl = "https://eliteworker.io"; // TODO: swap for the real domain
+const siteUrl = "https://eliteworker.com";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const lastModified = new Date();

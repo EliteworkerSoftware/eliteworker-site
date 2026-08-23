@@ -29,6 +29,18 @@ type Lead = {
   message: string;
 };
 
+type DemoBooking = {
+  id: string;
+  created_at: string;
+  booking_uid: string;
+  attendee_name: string | null;
+  attendee_email: string | null;
+  start_time: string | null;
+  end_time: string | null;
+  event_title: string | null;
+  status: string;
+};
+
 function formatDate(value: string) {
   return new Date(value).toLocaleString("en-US", {
     dateStyle: "medium",
@@ -46,9 +58,14 @@ export default async function AdminPage() {
   const queries = [
     supabase.from("eliteworker_beta_signups").select("*").order("created_at", { ascending: false }),
     supabase.from("eliteworker_leads").select("*").order("created_at", { ascending: false }),
+    supabase.from("eliteworker_demo_bookings").select("*").order("start_time", { ascending: false }),
   ] as const;
 
-  const [{ data: betaSignups, error: betaError }, { data: leads, error: leadsError }] = await Promise.all(queries);
+  const [
+    { data: betaSignups, error: betaError },
+    { data: leads, error: leadsError },
+    { data: demoBookings, error: bookingsError },
+  ] = await Promise.all(queries);
 
   let adminUsers: { id: string; email: string; role: "owner" | "viewer"; created_at: string }[] = [];
   if (admin.role === "owner") {
@@ -73,6 +90,44 @@ export default async function AdminPage() {
         </div>
 
         <section className="mt-10">
+          <h2 className="text-lg font-semibold text-ink">Demo bookings {demoBookings ? `(${demoBookings.length})` : ""}</h2>
+          {bookingsError && <p className="mt-2 text-sm text-red-500">Failed to load: {bookingsError.message}</p>}
+          <div className="mt-4 overflow-x-auto rounded-2xl border border-line bg-paper">
+            <table className="w-full min-w-187.5 text-left text-sm">
+              <thead>
+                <tr className="border-b border-line text-xs font-semibold uppercase tracking-wide text-ink/50">
+                  <th className="px-4 py-3">When</th>
+                  <th className="px-4 py-3">Attendee</th>
+                  <th className="px-4 py-3">Email</th>
+                  <th className="px-4 py-3">Event</th>
+                  <th className="px-4 py-3">Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                {(demoBookings as DemoBooking[] | null)?.map((row) => (
+                  <tr key={row.id} className="border-b border-line last:border-0 align-top">
+                    <td className="px-4 py-3 whitespace-nowrap text-ink/60">
+                      {row.start_time ? formatDate(row.start_time) : "—"}
+                    </td>
+                    <td className="px-4 py-3 font-medium text-ink">{row.attendee_name || "—"}</td>
+                    <td className="px-4 py-3 text-ink/80">{row.attendee_email || "—"}</td>
+                    <td className="px-4 py-3 text-ink/60">{row.event_title || "—"}</td>
+                    <td className="px-4 py-3 text-ink/60 capitalize">{row.status}</td>
+                  </tr>
+                ))}
+                {demoBookings?.length === 0 && (
+                  <tr>
+                    <td colSpan={5} className="px-4 py-6 text-center text-ink/40">
+                      No demo bookings yet.
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section className="mt-12">
           <h2 className="text-lg font-semibold text-ink">Beta signups {betaSignups ? `(${betaSignups.length})` : ""}</h2>
           {betaError && <p className="mt-2 text-sm text-red-500">Failed to load: {betaError.message}</p>}
           <div className="mt-4 overflow-x-auto rounded-2xl border border-line bg-paper">
