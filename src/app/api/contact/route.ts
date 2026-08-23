@@ -1,8 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
 import Mailgun from "mailgun.js";
 import formData from "form-data";
+import { render } from "@react-email/render";
 import { getSupabaseAdmin } from "@/lib/supabase";
 import { verifyTurnstile } from "@/lib/turnstile";
+import { sendAlertSms } from "@/lib/sms";
+import { ContactLeadEmail } from "@/emails/ContactLeadEmail";
 
 export async function POST(req: NextRequest) {
   try {
@@ -29,6 +32,12 @@ export async function POST(req: NextRequest) {
     }
 
     // 2. Notify your team by email via Mailgun
+    const emailElement = ContactLeadEmail({ name, email, company, message });
+    const [html, text] = await Promise.all([
+      render(emailElement),
+      render(emailElement, { plainText: true }),
+    ]);
+
     const mailgun = new Mailgun(formData);
     const mg = mailgun.client({
       username: "api",
@@ -38,8 +47,12 @@ export async function POST(req: NextRequest) {
       from: process.env.CONTACT_FROM_EMAIL || `EliteWorker Site <postmaster@${process.env.MAILGUN_DOMAIN}>`,
       to: process.env.CONTACT_TO_EMAIL || "you@example.com",
       subject: `New EliteWorker inquiry from ${name}`,
-      text: `Name: ${name}\nEmail: ${email}\nCompany: ${company || "—"}\n\n${message}`,
+      html,
+      text,
     });
+
+    // 3. Also text you — easy to miss an email, hard to miss a text
+    await sendAlertSms(`New contact form lead: ${name} (${email}). Check /admin for details.`);
 
     return NextResponse.json({ ok: true });
   } catch (err) {

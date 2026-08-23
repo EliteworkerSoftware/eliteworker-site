@@ -1,8 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
 import Mailgun from "mailgun.js";
 import formData from "form-data";
+import { render } from "@react-email/render";
 import { getSupabaseAdmin } from "@/lib/supabase";
 import { verifyVerifiedToken } from "@/lib/emailVerification";
+import { sendAlertSms } from "@/lib/sms";
+import { BetaSignupEmail } from "@/emails/BetaSignupEmail";
+import { BetaConfirmationEmail } from "@/emails/BetaConfirmationEmail";
 
 export async function POST(req: NextRequest) {
   try {
@@ -58,6 +62,22 @@ export async function POST(req: NextRequest) {
     }
 
     // 2. Notify your team by email via Mailgun
+    const notifyElement = BetaSignupEmail({
+      companyName,
+      contactName,
+      contactEmail,
+      phone,
+      address,
+      employees,
+      annualRevenue,
+      brands,
+      notes,
+    });
+    const [notifyHtml, notifyText] = await Promise.all([
+      render(notifyElement),
+      render(notifyElement, { plainText: true }),
+    ]);
+
     const mailgun = new Mailgun(formData);
     const mg = mailgun.client({
       username: "api",
@@ -67,27 +87,26 @@ export async function POST(req: NextRequest) {
       from: process.env.CONTACT_FROM_EMAIL || `EliteWorker Site <postmaster@${process.env.MAILGUN_DOMAIN}>`,
       to: process.env.CONTACT_TO_EMAIL || "you@example.com",
       subject: `New EliteWorker beta signup from ${companyName}`,
-      text: [
-        `Company: ${companyName}`,
-        `Contact: ${contactName}`,
-        `Contact email: ${contactEmail}`,
-        `Phone: ${phone}`,
-        `Address: ${address}`,
-        `Employees: ${employees || "—"}`,
-        `Annual revenue: ${annualRevenue || "—"}`,
-        `Brands carried: ${brands || "—"}`,
-        "",
-        notes || "",
-      ].join("\n"),
+      html: notifyHtml,
+      text: notifyText,
     });
 
     // 3. Confirm receipt with the applicant
+    const confirmElement = BetaConfirmationEmail({ contactName, companyName });
+    const [confirmHtml, confirmText] = await Promise.all([
+      render(confirmElement),
+      render(confirmElement, { plainText: true }),
+    ]);
     await mg.messages.create(process.env.MAILGUN_DOMAIN || "", {
       from: process.env.CONTACT_FROM_EMAIL || `EliteWorker Site <postmaster@${process.env.MAILGUN_DOMAIN}>`,
       to: contactEmail,
       subject: "We got your EliteWorker beta application",
-      text: `Hi ${contactName},\n\nThanks for applying to the EliteWorker beta program on behalf of ${companyName}. We personally review every application and will follow up within 48 hours to let you know next steps.\n\n— The EliteWorker team`,
+      html: confirmHtml,
+      text: confirmText,
     });
+
+    // 4. Also text you — easy to miss an email, hard to miss a text
+    await sendAlertSms(`New beta signup: ${companyName} (${contactName}). Check /admin for details.`);
 
     return NextResponse.json({ ok: true });
   } catch (err) {

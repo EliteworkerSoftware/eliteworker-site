@@ -1,8 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import Mailgun from "mailgun.js";
 import formData from "form-data";
+import { render } from "@react-email/render";
 import { createChallengeToken, generateCode } from "@/lib/emailVerification";
 import { verifyTurnstile } from "@/lib/turnstile";
+import { VerificationCodeEmail } from "@/emails/VerificationCodeEmail";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -23,6 +25,12 @@ export async function POST(req: NextRequest) {
     const code = generateCode();
     const token = createChallengeToken(email, code);
 
+    const emailElement = VerificationCodeEmail({ code });
+    const [html, text] = await Promise.all([
+      render(emailElement),
+      render(emailElement, { plainText: true }),
+    ]);
+
     const mailgun = new Mailgun(formData);
     const mg = mailgun.client({
       username: "api",
@@ -32,7 +40,8 @@ export async function POST(req: NextRequest) {
       from: process.env.CONTACT_FROM_EMAIL || `EliteWorker Site <postmaster@${process.env.MAILGUN_DOMAIN}>`,
       to: email,
       subject: `Your EliteWorker verification code: ${code}`,
-      text: `Your verification code is ${code}. It expires in 10 minutes.\n\nIf you didn't request this, you can ignore this email.`,
+      html,
+      text,
     });
 
     return NextResponse.json({ ok: true, token });

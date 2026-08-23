@@ -2,7 +2,10 @@ import { NextRequest, NextResponse } from "next/server";
 import { createHmac, timingSafeEqual } from "crypto";
 import Mailgun from "mailgun.js";
 import formData from "form-data";
+import { render } from "@react-email/render";
 import { getSupabaseAdmin } from "@/lib/supabase";
+import { sendAlertSms } from "@/lib/sms";
+import { DemoBookedEmail } from "@/emails/DemoBookedEmail";
 
 // Cal.com signs the raw request body with the webhook secret you set when
 // creating the webhook in its dashboard — verify it here so this public URL
@@ -79,18 +82,36 @@ export async function POST(req: NextRequest) {
 
   // 2. Notify only on new bookings, not every cancel/reschedule ping.
   if (event.triggerEvent === "BOOKING_CREATED") {
+    const when = booking.startTime
+      ? new Date(booking.startTime).toLocaleString("en-US", { dateStyle: "medium", timeStyle: "short" })
+      : "unknown time";
+
     try {
+      const emailElement = DemoBookedEmail({
+        attendeeName: attendee?.name || attendee?.email || "Someone",
+        attendeeEmail: attendee?.email || "no email given",
+        when,
+        eventTitle: booking.title,
+      });
+      const [html, text] = await Promise.all([
+        render(emailElement),
+        render(emailElement, { plainText: true }),
+      ]);
+
       const mailgun = new Mailgun(formData);
       const mg = mailgun.client({ username: "api", key: process.env.MAILGUN_API_KEY || "" });
       await mg.messages.create(process.env.MAILGUN_DOMAIN || "", {
         from: process.env.CONTACT_FROM_EMAIL || `EliteWorker Site <postmaster@${process.env.MAILGUN_DOMAIN}>`,
         to: process.env.CONTACT_TO_EMAIL || "you@example.com",
         subject: `New demo booked: ${attendee?.name || attendee?.email || "someone"}`,
-        text: `${attendee?.name || "Someone"} (${attendee?.email || "no email given"}) booked a demo.\n\nWhen: ${booking.startTime} – ${booking.endTime}\nEvent: ${booking.title || "—"}`,
+        html,
+        text,
       });
     } catch (err) {
       console.error("Mailgun send error:", err);
     }
+
+    await sendAlertSms(`New demo booked: ${attendee?.name || attendee?.email || "someone"} — ${when}.`);
   }
 
   return NextResponse.json({ ok: true });
