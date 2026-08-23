@@ -54,9 +54,9 @@ export default function AboutPage() {
                 EliteWorker wasn&rsquo;t built in a boardroom. It was built on job sites — by our founder, a smart
                 home professional business owner/integrator with over 30 years in the industry, who spent the last
                 five-plus years using it,
-                breaking it, and rebuilding it inside his own companies until it actually worked the way a real
-                integration business runs. Every workflow, every job stage, every feature exists because it solved
-                a real problem for a real crew, on a real install.
+                breaking it, and rebuilding it inside his own companies until it started scaling his businesses
+                without him directly involved at each and every area step. Every workflow, every job stage, every
+                feature exists because it solved a real problem for a real crew, on a real install.
               </p>
               <p>
                 Most software in this space was built by people who&rsquo;ve never had to call a client on a Friday

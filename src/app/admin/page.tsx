@@ -1,8 +1,8 @@
-import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import { ADMIN_COOKIE_NAME, isValidSessionCookieValue } from "@/lib/adminAuth";
+import { getCurrentAdmin } from "@/lib/currentAdmin";
 import { getSupabaseAdmin } from "@/lib/supabase";
 import AdminLogoutButton from "@/components/AdminLogoutButton";
+import AdminUsersManager from "@/components/AdminUsersManager";
 
 export const dynamic = "force-dynamic";
 
@@ -37,24 +37,38 @@ function formatDate(value: string) {
 }
 
 export default async function AdminPage() {
-  const cookieStore = await cookies();
-  const session = cookieStore.get(ADMIN_COOKIE_NAME)?.value;
-
-  if (!isValidSessionCookieValue(session)) {
+  const admin = await getCurrentAdmin();
+  if (!admin) {
     redirect("/admin/login");
   }
 
   const supabase = getSupabaseAdmin();
-  const [{ data: betaSignups, error: betaError }, { data: leads, error: leadsError }] = await Promise.all([
+  const queries = [
     supabase.from("eliteworker_beta_signups").select("*").order("created_at", { ascending: false }),
     supabase.from("eliteworker_leads").select("*").order("created_at", { ascending: false }),
-  ]);
+  ] as const;
+
+  const [{ data: betaSignups, error: betaError }, { data: leads, error: leadsError }] = await Promise.all(queries);
+
+  let adminUsers: { id: string; email: string; role: "owner" | "viewer"; created_at: string }[] = [];
+  if (admin.role === "owner") {
+    const { data } = await supabase
+      .from("eliteworker_admin_users")
+      .select("id, email, role, created_at")
+      .order("created_at", { ascending: true });
+    adminUsers = data ?? [];
+  }
 
   return (
     <div className="min-h-screen bg-paper-alt">
       <div className="mx-auto max-w-6xl px-6 py-12">
         <div className="flex items-center justify-between">
-          <h1 className="text-2xl font-semibold text-ink">EliteWorker admin</h1>
+          <div>
+            <h1 className="text-2xl font-semibold text-ink">EliteWorker admin</h1>
+            <p className="mt-1 text-sm text-ink/50">
+              Signed in as {admin.email} · <span className="capitalize">{admin.role}</span>
+            </p>
+          </div>
           <AdminLogoutButton />
         </div>
 
@@ -139,6 +153,8 @@ export default async function AdminPage() {
             </table>
           </div>
         </section>
+
+        {admin.role === "owner" && <AdminUsersManager initialUsers={adminUsers} currentUserId={admin.id} />}
       </div>
     </div>
   );

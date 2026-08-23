@@ -63,7 +63,49 @@ it's never uploaded to GitHub).
 2. Create an event type called something like "eliteworker-demo"
 3. Set `NEXT_PUBLIC_CAL_LINK` in `.env.local` to `your-username/eliteworker-demo`
 
-## 6. Push to GitHub
+## 6. Admin dashboard (`/admin`) — view submissions, manage admin users
+
+The dashboard at `/admin` shows every contact form lead and beta signup, and
+lets Owner-role accounts add or remove other admins. It uses its own accounts
+table, separate from Supabase Auth — in the Supabase SQL editor, run:
+
+```sql
+create table eliteworker_admin_users (
+  id uuid primary key default gen_random_uuid(),
+  created_at timestamptz default now(),
+  email text not null unique,
+  password_hash text not null,
+  role text not null check (role in ('owner', 'viewer'))
+);
+
+alter table eliteworker_admin_users enable row level security;
+```
+
+(RLS with no policies is intentional — the app only ever queries this table
+with the Supabase service role key, which bypasses RLS, so this just makes
+sure the table is unreachable through Supabase's public API under any
+circumstance, since it holds password hashes.)
+
+Set `ADMIN_SESSION_SECRET` in `.env.local` to any long random string (used to
+sign login sessions — `openssl rand -hex 32` or ask Claude Code to generate one).
+
+There's no signup page by design — the very first Owner account has to be
+seeded directly, since the in-app "add admin" UI needs an existing Owner to
+use it:
+
+```
+node scripts/create-admin.mjs you@eliteworker.com "temporary-password" owner
+```
+
+After that, sign in at `/admin/login` and add further admins (Owner or
+Viewer role) from the dashboard itself. Keep that script around — it's also
+the way back in if every Owner account is ever lost (just run it again with
+an existing email to reset that account's password, or a new email to add one).
+
+**Owner** can view submissions and manage admin accounts. **Viewer** can only
+view submissions.
+
+## 7. Push to GitHub
 
 ```
 git init
@@ -73,7 +115,7 @@ git commit -m "Initial EliteWorker site"
 Then create a new empty repo on GitHub and follow the "push an existing
 repository" instructions it gives you.
 
-## 7. Deploy to Vercel (free, no credit card needed)
+## 8. Deploy to Vercel (free, no credit card needed)
 
 1. Go to https://vercel.com and choose "Continue with GitHub"
 2. Click "Add New Project" and pick this repo
@@ -91,6 +133,8 @@ preview link so you can check changes before they go live.
 
 - `/` — homepage: hero, features, workflow, contact form
 - `/demo` — dedicated demo booking page (Cal.com embed)
+- `/admin` — password-protected dashboard: view contact leads + beta signups,
+  manage admin users (Owner/Viewer roles)
 - Contact form → saves to Supabase + emails you via Mailgun
 - SEO: page titles/descriptions, sitemap.xml, robots.txt, Open Graph tags
 

@@ -9,20 +9,26 @@ function sign(value: string) {
   return createHmac("sha256", secret).update(value).digest("hex");
 }
 
-export function createSessionCookieValue() {
-  const expires = String(Date.now() + SESSION_TTL_MS);
-  return `${expires}.${sign(expires)}`;
+export function createSessionCookieValue(userId: string) {
+  const payload = `${userId}.${Date.now() + SESSION_TTL_MS}`;
+  return `${payload}.${sign(payload)}`;
 }
 
-export function isValidSessionCookieValue(value: string | undefined): boolean {
-  if (!value) return false;
-  const [expires, signature] = value.split(".");
-  if (!expires || !signature) return false;
+// The cookie only proves *who the caller claims to be* — it deliberately does
+// not carry role, so removing/demoting an admin takes effect on their very
+// next request instead of waiting out a week-long stale session.
+export function readSessionUserId(value: string | undefined): string | null {
+  if (!value) return null;
+  const parts = value.split(".");
+  if (parts.length !== 3) return null;
 
-  const expected = sign(expires);
+  const [userId, expires, signature] = parts;
+  const payload = `${userId}.${expires}`;
+  const expected = sign(payload);
   const a = Buffer.from(signature);
   const b = Buffer.from(expected);
-  if (a.length !== b.length || !timingSafeEqual(a, b)) return false;
+  if (a.length !== b.length || !timingSafeEqual(a, b)) return null;
+  if (Number(expires) <= Date.now()) return null;
 
-  return Number(expires) > Date.now();
+  return userId;
 }

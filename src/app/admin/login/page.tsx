@@ -5,22 +5,27 @@ import { useRouter } from "next/navigation";
 
 export default function AdminLoginPage() {
   const router = useRouter();
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [status, setStatus] = useState<"idle" | "sending" | "error">("idle");
+  const [error, setError] = useState("");
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setStatus("sending");
+    setError("");
     try {
       const res = await fetch("/api/admin/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ password }),
+        body: JSON.stringify({ email, password }),
       });
-      if (!res.ok) throw new Error("failed");
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Failed to sign in");
       router.push("/admin");
       router.refresh();
-    } catch {
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Failed to sign in");
       setStatus("error");
     }
   }
@@ -34,13 +39,21 @@ export default function AdminLoginPage() {
         <h1 className="text-lg font-semibold text-ink">Admin login</h1>
         <p className="mt-1 text-sm text-ink/60">Sign in to view beta signups and contact leads.</p>
         <input
-          type="password"
+          type="email"
           required
           autoFocus
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          placeholder="Email"
+          className="mt-5 w-full rounded-lg border border-line bg-paper px-4 py-3 text-sm text-ink placeholder:text-ink/35 focus:border-accent focus:outline-none"
+        />
+        <input
+          type="password"
+          required
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           placeholder="Password"
-          className="mt-5 w-full rounded-lg border border-line bg-paper px-4 py-3 text-sm text-ink placeholder:text-ink/35 focus:border-accent focus:outline-none"
+          className="mt-3 w-full rounded-lg border border-line bg-paper px-4 py-3 text-sm text-ink placeholder:text-ink/35 focus:border-accent focus:outline-none"
         />
         <button
           type="submit"
@@ -49,7 +62,7 @@ export default function AdminLoginPage() {
         >
           {status === "sending" ? "Signing in…" : "Sign in"}
         </button>
-        {status === "error" && <p className="mt-3 text-sm text-red-500">Incorrect password.</p>}
+        {status === "error" && <p className="mt-3 text-sm text-red-500">{error}</p>}
       </form>
     </div>
   );
