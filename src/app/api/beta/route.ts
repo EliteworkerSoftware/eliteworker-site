@@ -83,9 +83,11 @@ export async function POST(req: NextRequest) {
       username: "api",
       key: process.env.MAILGUN_API_KEY || "",
     });
+    const notifyToDebug = process.env.CONTACT_TO_EMAIL || "you@example.com";
+    const contactKeysDebug = Object.keys(process.env).filter((k) => k.includes("CONTACT"));
     await mg.messages.create(process.env.MAILGUN_DOMAIN || "", {
       from: process.env.CONTACT_FROM_EMAIL || `EliteWorker Site <postmaster@${process.env.MAILGUN_DOMAIN}>`,
-      to: process.env.CONTACT_TO_EMAIL || "you@example.com",
+      to: notifyToDebug,
       subject: `New EliteWorker beta signup from ${companyName}`,
       html: notifyHtml,
       text: notifyText,
@@ -114,7 +116,13 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({
       ok: true,
-      debug: { replyToDebug, replyToDebugLength: replyToDebug.length, confirmSendResult },
+      debug: {
+        replyToDebug,
+        replyToDebugLength: replyToDebug.length,
+        confirmSendResult,
+        notifyToDebug,
+        contactKeysDebug,
+      },
     });
   } catch (err) {
     console.error("Beta signup error:", err);
