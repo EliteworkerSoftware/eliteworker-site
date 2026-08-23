@@ -98,14 +98,14 @@ export async function POST(req: NextRequest) {
       render(confirmElement, { plainText: true }),
     ]);
     await mg.messages.create(process.env.MAILGUN_DOMAIN || "", {
-      from: process.env.CONTACT_FROM_EMAIL || `EliteWorker Site <postmaster@${process.env.MAILGUN_DOMAIN}>`,
+      // Unlike every other outbound email, this one's copy invites a reply —
+      // so it sends from the real monitored inbox instead of noreply@, rather
+      // than showing a noreply From with a hidden Reply-To override.
+      from: `EliteWorker <${(process.env.CONTACT_TO_EMAIL || "contact@eliteworker.com").trim()}>`,
       to: contactEmail,
       subject: "We got your EliteWorker beta application",
       html: confirmHtml,
       text: confirmText,
-      // "from" is a noreply address, but the copy invites a reply — route
-      // any actual replies to the inbox a human reads.
-      "h:Reply-To": (process.env.CONTACT_TO_EMAIL || "").trim(),
     });
 
     // 4. Also text you — easy to miss an email, hard to miss a text
