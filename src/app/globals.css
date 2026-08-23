@@ -14,6 +14,11 @@
   --teal-dark: #0f766e;
   --nav: #05080e;
   --nav-line: #1c2636;
+  /* Deep navy, distinct from --nav's near-black, used only for the admin
+     dashboard sidebar — a visual tell that you're in /admin, not on the
+     public site (which keeps using --nav for its header). */
+  --admin-nav: #0f1b3d;
+  --admin-nav-line: #24345f;
 }
 
 @theme inline {
@@ -30,6 +35,8 @@
   --color-teal-dark: var(--teal-dark);
   --color-nav: var(--nav);
   --color-nav-line: var(--nav-line);
+  --color-admin-nav: var(--admin-nav);
+  --color-admin-nav-line: var(--admin-nav-line);
   --font-display: var(--font-space-grotesk);
   --font-sans: var(--font-inter);
   --font-mono: var(--font-jetbrains-mono);

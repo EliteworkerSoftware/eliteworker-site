@@ -17,7 +17,7 @@ export function Sidebar({ role }: { role: AdminRole }) {
   const pathname = usePathname();
 
   return (
-    <nav className="flex shrink-0 flex-col border-nav-line bg-nav px-3 py-3 md:w-60 md:border-r md:px-4 md:py-6">
+    <nav className="flex shrink-0 flex-col border-admin-nav-line bg-admin-nav px-3 py-3 md:w-60 md:border-r md:px-4 md:py-6">
       <div className="px-2 pb-3 md:pb-6">
         <Image
           src="/Eliteworker%20Header%20Logo.svg"
@@ -27,6 +27,7 @@ export function Sidebar({ role }: { role: AdminRole }) {
           className="h-5 w-auto md:h-6"
           priority
         />
+        <p className="mt-1.5 text-[10px] font-semibold tracking-widest text-white/40 uppercase">Administration</p>
       </div>
       <div className="flex gap-1 overflow-x-auto md:flex-col md:overflow-visible">
         {NAV_ITEMS.map((item) => {

@@ -105,6 +105,22 @@ an existing email to reset that account's password, or a new email to add one).
 **Owner** can view submissions and manage admin accounts. **Viewer** can only
 view submissions.
 
+Replying to a lead from the dashboard (instead of your email inbox) needs one
+more table — in the Supabase SQL editor, run:
+
+```sql
+create table eliteworker_lead_replies (
+  id uuid primary key default gen_random_uuid(),
+  created_at timestamptz default now(),
+  lead_id uuid not null references eliteworker_leads(id) on delete cascade,
+  admin_id uuid not null references eliteworker_admin_users(id),
+  admin_name text,
+  message text not null
+);
+
+alter table eliteworker_lead_replies enable row level security;
+```
+
 ## 7. Push to GitHub
 
 ```
@@ -134,7 +150,8 @@ preview link so you can check changes before they go live.
 - `/` — homepage: hero, features, workflow, contact form
 - `/demo` — dedicated demo booking page (Cal.com embed)
 - `/admin` — password-protected dashboard: view contact leads + beta signups,
-  manage admin users (Owner/Viewer roles)
+  reply to a lead by email right from the dashboard, manage admin users
+  (Owner/Viewer roles)
 - Contact form → saves to Supabase + emails you via Mailgun
 - SEO: page titles/descriptions, sitemap.xml, robots.txt, Open Graph tags
 
