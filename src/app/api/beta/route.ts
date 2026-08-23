@@ -104,8 +104,11 @@ export async function POST(req: NextRequest) {
       html: confirmHtml,
       text: confirmText,
       // "from" is a noreply address, but the copy invites a reply — route
-      // any actual replies to the inbox a human reads.
-      "h:Reply-To": process.env.CONTACT_TO_EMAIL || "",
+      // any actual replies to the inbox a human reads. Trimmed defensively:
+      // a stray trailing newline/space in the env var is a valid string
+      // (so it isn't caught by a falsy check) but an invalid header value,
+      // and gets silently dropped rather than erroring.
+      "h:Reply-To": (process.env.CONTACT_TO_EMAIL || "").trim(),
     });
 
     // 4. Also text you — easy to miss an email, hard to miss a text
