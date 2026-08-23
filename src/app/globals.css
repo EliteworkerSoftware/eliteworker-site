@@ -10,6 +10,8 @@
   --brand-light: #60a5fa;
   --accent: #f59e0b;
   --accent-light: #fbbf24;
+  --teal: #0d9488;
+  --teal-dark: #0f766e;
   --nav: #05080e;
   --nav-line: #1c2636;
 }
@@ -24,6 +26,8 @@
   --color-brand-light: var(--brand-light);
   --color-accent: var(--accent);
   --color-accent-light: var(--accent-light);
+  --color-teal: var(--teal);
+  --color-teal-dark: var(--teal-dark);
   --color-nav: var(--nav);
   --color-nav-line: var(--nav-line);
   --font-display: var(--font-space-grotesk);

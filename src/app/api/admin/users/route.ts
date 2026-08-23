@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getCurrentAdmin } from "@/lib/currentAdmin";
-import { hashPassword } from "@/lib/adminPassword";
+import { hashPassword, generateTempPassword } from "@/lib/adminPassword";
 import { getSupabaseAdmin } from "@/lib/supabase";
+import { sendInviteEmail } from "@/lib/adminInvite";
 
 export async function GET() {
   const admin = await getCurrentAdmin();
@@ -12,7 +13,7 @@ export async function GET() {
   const supabase = getSupabaseAdmin();
   const { data, error } = await supabase
     .from("eliteworker_admin_users")
-    .select("id, email, role, created_at")
+    .select("id, email, full_name, role, created_at")
     .order("created_at", { ascending: true });
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
@@ -25,18 +26,17 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Forbidden" }, { status: 403 });
   }
 
-  const { email, password, role } = await req.json();
-  if (!email || !password || (role !== "owner" && role !== "viewer")) {
+  const { email, fullName, role } = await req.json();
+  if (!email || !fullName || (role !== "owner" && role !== "viewer")) {
     return NextResponse.json({ error: "Missing or invalid fields" }, { status: 400 });
   }
-  if (String(password).length < 8) {
-    return NextResponse.json({ error: "Password must be at least 8 characters" }, { status: 400 });
-  }
 
+  const tempPassword = generateTempPassword();
   const supabase = getSupabaseAdmin();
   const { error } = await supabase.from("eliteworker_admin_users").insert({
     email: String(email).toLowerCase().trim(),
-    password_hash: hashPassword(password),
+    full_name: String(fullName).trim(),
+    password_hash: hashPassword(tempPassword),
     role,
   });
 
@@ -44,5 +44,23 @@ export async function POST(req: NextRequest) {
     const message = error.code === "23505" ? "An admin with that email already exists" : error.message;
     return NextResponse.json({ error: message }, { status: 400 });
   }
-  return NextResponse.json({ ok: true });
+
+  // The DB write is authoritative and already succeeded — a Mailgun hiccup
+  // shouldn't turn into a 500 for an account that now exists but has no way
+  // to know its own password, so this failure is reported, not thrown.
+  let emailSent = true;
+  try {
+    await sendInviteEmail({
+      to: String(email).toLowerCase().trim(),
+      fullName: String(fullName).trim(),
+      role,
+      tempPassword,
+      subject: "You've been added to EliteWorker admin",
+    });
+  } catch (err) {
+    console.error("Admin invite email error:", err);
+    emailSent = false;
+  }
+
+  return NextResponse.json({ ok: true, tempPassword, emailSent });
 }
