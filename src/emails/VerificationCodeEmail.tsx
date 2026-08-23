@@ -44,29 +44,37 @@ export function VerificationCodeEmail({ code }: { code: string }) {
         clients from auto-detecting a long digit run as a phone number and
         underlining it (a meta tag alone isn't reliably honored everywhere).
       */}
-      <table role="presentation" cellPadding={0} cellSpacing={0} style={{ borderCollapse: "separate", borderSpacing: "10px 0" }}>
+      <table role="presentation" width="100%" cellPadding={0} cellSpacing={0} style={{ borderCollapse: "collapse" }}>
         <tbody>
           <tr>
-            {digits.map((digit, i) => (
-              <td
-                key={i}
-                style={{
-                  width: 52,
-                  height: 64,
-                  textAlign: "center",
-                  verticalAlign: "middle",
-                  backgroundColor: COLORS.paperAlt,
-                  border: `2px solid ${COLORS.brand}`,
-                  borderRadius: 12,
-                  fontFamily: "'Courier New', Courier, monospace",
-                  fontSize: 30,
-                  fontWeight: 700,
-                  color: COLORS.ink,
-                }}
-              >
-                {digit}
-              </td>
-            ))}
+            <td align="center">
+              <table role="presentation" cellPadding={0} cellSpacing={0} style={{ borderCollapse: "separate", borderSpacing: "10px 0", margin: "0 auto" }}>
+                <tbody>
+                  <tr>
+                    {digits.map((digit, i) => (
+                      <td
+                        key={i}
+                        style={{
+                          width: 52,
+                          height: 64,
+                          textAlign: "center",
+                          verticalAlign: "middle",
+                          backgroundColor: COLORS.paperAlt,
+                          border: `2px solid ${COLORS.brand}`,
+                          borderRadius: 12,
+                          fontFamily: "'Courier New', Courier, monospace",
+                          fontSize: 30,
+                          fontWeight: 700,
+                          color: COLORS.ink,
+                        }}
+                      >
+                        {digit}
+                      </td>
+                    ))}
+                  </tr>
+                </tbody>
+              </table>
+            </td>
           </tr>
         </tbody>
       </table>

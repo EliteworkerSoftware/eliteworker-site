@@ -37,8 +37,8 @@ export function EmailLayout({ preview, children }: { preview: string; children: 
                         <table role="presentation" width="100%" cellPadding={0} cellSpacing={0} style={{ borderCollapse: "collapse" }}>
                           <tbody>
                             <tr>
-                              <td style={{ backgroundColor: COLORS.nav, padding: "44px 40px" }}>
-                                <Img src={LOGO_WHITE_URL} width="180" height="27" alt="EliteWorker" />
+                              <td align="center" style={{ backgroundColor: COLORS.nav, padding: "44px 40px" }}>
+                                <Img src={LOGO_WHITE_URL} width="180" height="27" alt="EliteWorker" style={{ margin: "0 auto" }} />
                               </td>
                             </tr>
                           </tbody>
@@ -60,7 +60,7 @@ export function EmailLayout({ preview, children }: { preview: string; children: 
                           </tbody>
                         </table>
 
-                        <Section style={{ padding: "48px 40px" }}>{children}</Section>
+                        <Section style={{ padding: "48px 40px", textAlign: "center" }}>{children}</Section>
                       </td>
                     </tr>
                   </tbody>
