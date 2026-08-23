@@ -20,7 +20,12 @@ export default function AdminLoginPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
       });
-      const data = await res.json();
+      let data: { error?: string } = {};
+      try {
+        data = await res.json();
+      } catch {
+        data = { error: `Unexpected response from server (${res.status})` };
+      }
       if (!res.ok) throw new Error(data.error || "Failed to sign in");
       router.push("/admin");
       router.refresh();

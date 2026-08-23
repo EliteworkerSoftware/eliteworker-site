@@ -8,6 +8,17 @@ function formatDate(value: string) {
   return new Date(value).toLocaleDateString("en-US", { dateStyle: "medium" });
 }
 
+// A failed request doesn't always come back as JSON (a dev-server compile
+// error or a proxy timeout returns HTML/plain text) — parse defensively so
+// that case surfaces as a normal error message instead of a raw parse crash.
+async function parseJsonSafe(res: Response): Promise<{ error?: string; [key: string]: unknown }> {
+  try {
+    return await res.json();
+  } catch {
+    return { error: `Unexpected response from server (${res.status})` };
+  }
+}
+
 export default function AdminUsersManager({
   initialUsers,
   currentUserId,
@@ -40,7 +51,7 @@ export default function AdminUsersManager({
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password, role }),
       });
-      const data = await res.json();
+      const data = await parseJsonSafe(res);
       if (!res.ok) throw new Error(data.error || "Failed to add admin");
       setEmail("");
       setPassword("");
@@ -58,7 +69,7 @@ export default function AdminUsersManager({
     setError("");
     try {
       const res = await fetch(`/api/admin/users/${id}`, { method: "DELETE" });
-      const data = await res.json();
+      const data = await parseJsonSafe(res);
       if (!res.ok) throw new Error(data.error || "Failed to remove admin");
       await refresh();
     } catch (err) {
