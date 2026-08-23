@@ -41,8 +41,11 @@ export async function GET(req: NextRequest) {
       const confirmUrl = `${SITE_URL}/api/demo-confirm?token=${createConfirmToken(booking.id)}`;
       // Cal.com's own reschedule flow: it looks up the original booking from
       // rescheduleUid and preloads the attendee's name/email/answers itself,
-      // so there's nothing else to pass.
-      const rescheduleUrl = `https://cal.com/${process.env.NEXT_PUBLIC_CAL_LINK}?rescheduleUid=${encodeURIComponent(booking.booking_uid)}`;
+      // so there's nothing else to pass. theme=light matches the /demo
+      // page's embed — without it Cal.com falls back to the visitor's OS/
+      // browser color scheme, which reads as broken dark mode next to an
+      // otherwise light-themed email and site.
+      const rescheduleUrl = `https://cal.com/${process.env.NEXT_PUBLIC_CAL_LINK}?rescheduleUid=${encodeURIComponent(booking.booking_uid)}&theme=light`;
       const when = booking.start_time
         ? new Date(booking.start_time).toLocaleString("en-US", { dateStyle: "full", timeStyle: "short" })
         : "soon";
