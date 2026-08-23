@@ -16,11 +16,18 @@ export function FieldList({ fields }: { fields: Field[] }) {
         padding: "4px 24px",
       }}
     >
-      <table role="presentation" width="100%" cellPadding={0} cellSpacing={0} style={{ borderCollapse: "collapse" }}>
+      <table
+        role="presentation"
+        width="100%"
+        cellPadding={0}
+        cellSpacing={0}
+        style={{ borderCollapse: "collapse", tableLayout: "fixed" }}
+      >
         <tbody>
           {fields.map((field, i) => (
             <tr key={field.label} style={{ borderTop: i === 0 ? "none" : `1px solid ${COLORS.line}` }}>
               <td
+                width="35%"
                 style={{
                   padding: "14px 0",
                   fontFamily: FONT_STACK,
@@ -30,7 +37,6 @@ export function FieldList({ fields }: { fields: Field[] }) {
                   letterSpacing: "0.06em",
                   color: COLORS.inkMuted,
                   verticalAlign: "top",
-                  whiteSpace: "nowrap",
                   paddingRight: 20,
                 }}
               >
@@ -44,6 +50,8 @@ export function FieldList({ fields }: { fields: Field[] }) {
                   lineHeight: "22px",
                   color: COLORS.ink,
                   textAlign: "right",
+                  wordBreak: "break-word",
+                  overflowWrap: "break-word",
                 }}
               >
                 {field.value}
