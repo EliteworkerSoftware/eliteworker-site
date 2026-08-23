@@ -94,7 +94,7 @@ export function Sidebar({ role }: { role: AdminRole }) {
               <Link
                 key={item.href}
                 href={item.href}
-                className={`${DESKTOP_ITEM_CLASSES} ${active ? "bg-white text-ink shadow-sm" : "text-white/60 hover:bg-white/10 hover:text-white/90"}`}
+                className={`${DESKTOP_ITEM_CLASSES} ${active ? "bg-white text-ink shadow-sm" : "text-white hover:bg-white/10"}`}
               >
                 <Icon size={17} className={active ? item.tint : ""} />
                 {item.label}
@@ -105,7 +105,7 @@ export function Sidebar({ role }: { role: AdminRole }) {
             <Link
               href="/admin/users"
               className={`${DESKTOP_ITEM_CLASSES} mt-4 border-t border-admin-nav-line pt-4 pb-2.5 ${
-                isActive("/admin/users") ? "text-white" : "text-white/60 hover:text-white/90"
+                isActive("/admin/users") ? "text-white" : "text-white hover:bg-white/10"
               }`}
             >
               <Users size={17} />

@@ -154,17 +154,20 @@ export function ResourceTable<T extends BaseRow>({
 
   // A tab strip, not a row of pill buttons — a bottom-border indicator on
   // whichever tab is active, tab labels otherwise plain (muted when
-  // inactive), rather than every option looking like its own button.
+  // inactive), rather than every option looking like its own button. Wraps
+  // to a second line on narrow screens instead of scrolling horizontally —
+  // five tabs' worth of labels don't fit a phone width in one row, and a
+  // hidden-until-you-swipe row of tabs is easy to miss entirely.
   const filterBar = (
-    <div className="mb-4 flex gap-5 overflow-x-auto border-b border-line">
+    <div className="mb-4 flex flex-wrap gap-x-4 gap-y-2 border-b border-line">
       <button
         type="button"
         onClick={() => setFilter("all")}
-        className={`shrink-0 border-b-2 pb-2.5 text-sm font-semibold whitespace-nowrap transition ${
+        className={`border-b-2 pb-2 text-sm font-semibold whitespace-nowrap transition ${
           filter === "all" ? "border-ink text-ink" : "border-transparent text-ink/45 hover:text-ink/70"
         }`}
       >
-        All <span className="text-ink/40">({rows.length})</span>
+        All <span className="hidden text-ink/40 sm:inline">({rows.length})</span>
       </button>
       {statusOptions.map((status) => {
         const Icon = statusIcon(status);
@@ -174,13 +177,13 @@ export function ResourceTable<T extends BaseRow>({
             key={status}
             type="button"
             onClick={() => setFilter(status)}
-            className={`flex shrink-0 items-center gap-1.5 border-b-2 pb-2.5 text-sm font-semibold whitespace-nowrap transition ${
+            className={`flex items-center gap-1.5 border-b-2 pb-2 text-sm font-semibold whitespace-nowrap transition ${
               active ? statusAccent(status) : "border-transparent text-ink/45 hover:text-ink/70"
             }`}
           >
             <Icon size={14} />
             {statusLabel(status)}
-            <span className="text-ink/40">({counts[status] || 0})</span>
+            <span className="hidden text-ink/40 sm:inline">({counts[status] || 0})</span>
           </button>
         );
       })}
