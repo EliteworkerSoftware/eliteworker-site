@@ -24,7 +24,7 @@ const DESKTOP_ITEM_CLASSES =
 function Wordmark({ logoClassName }: { logoClassName: string }) {
   return (
     <div className="inline-block text-center">
-      <Image src="/Eliteworker%20Header%20Logo.svg" alt="EliteWorker" width={660} height={101} className={logoClassName} priority />
+      <Image src="/Eliteworker%20Header%20Logo%20White.svg" alt="EliteWorker" width={660} height={101} className={logoClassName} priority />
       <p className="mt-1 text-[9px] font-semibold tracking-widest text-white/50 uppercase">Administration</p>
     </div>
   );

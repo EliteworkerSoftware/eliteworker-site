@@ -41,7 +41,7 @@ export default function AdminLoginPage() {
       <div className="w-full max-w-sm overflow-hidden rounded-2xl border border-admin-nav-line bg-paper shadow-[0_20px_60px_rgba(30,64,175,0.35)]">
         <div className="bg-admin-nav px-8 py-7 text-center">
           <Image
-            src="/Eliteworker%20Header%20Logo.svg"
+            src="/Eliteworker%20Header%20Logo%20White.svg"
             alt="EliteWorker"
             width={660}
             height={101}

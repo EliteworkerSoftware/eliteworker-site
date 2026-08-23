@@ -3,7 +3,7 @@
 import { Fragment, useMemo, useState, type ReactNode } from "react";
 import { ChevronDown, ChevronRight, Trash2, MailOpen, Mail } from "lucide-react";
 import { STATUS_OPTIONS, type TriageTable, type AnyStatus } from "@/lib/adminTriage";
-import { StatusBadge, statusLabel } from "./StatusBadge";
+import { StatusBadge, statusLabel, statusIcon, statusAccent } from "./StatusBadge";
 
 export type Column<T> = { key: string; label: string; render: (row: T) => ReactNode; className?: string };
 
@@ -152,28 +152,38 @@ export function ResourceTable<T extends BaseRow>({
     );
   }
 
+  // A tab strip, not a row of pill buttons — a bottom-border indicator on
+  // whichever tab is active, tab labels otherwise plain (muted when
+  // inactive), rather than every option looking like its own button.
   const filterBar = (
-    <div className="mb-4 flex flex-wrap gap-2">
+    <div className="mb-4 flex gap-5 overflow-x-auto border-b border-line">
       <button
         type="button"
         onClick={() => setFilter("all")}
-        className={`rounded-full border px-3 py-1.5 text-xs font-semibold transition ${
-          filter === "all" ? "border-ink bg-ink text-white" : "border-line text-ink/60 hover:border-ink/30"
+        className={`shrink-0 border-b-2 pb-2.5 text-sm font-semibold whitespace-nowrap transition ${
+          filter === "all" ? "border-ink text-ink" : "border-transparent text-ink/45 hover:text-ink/70"
         }`}
       >
-        All ({rows.length})
+        All <span className="text-ink/40">({rows.length})</span>
       </button>
-      {statusOptions.map((status) => (
-        <button
-          key={status}
-          type="button"
-          onClick={() => setFilter(status)}
-          className={`rounded-full transition ${filter === status ? "ring-2 ring-ink/70 ring-offset-1" : "opacity-70 hover:opacity-100"}`}
-        >
-          <StatusBadge status={status} />
-          <span className="sr-only"> ({counts[status] || 0})</span>
-        </button>
-      ))}
+      {statusOptions.map((status) => {
+        const Icon = statusIcon(status);
+        const active = filter === status;
+        return (
+          <button
+            key={status}
+            type="button"
+            onClick={() => setFilter(status)}
+            className={`flex shrink-0 items-center gap-1.5 border-b-2 pb-2.5 text-sm font-semibold whitespace-nowrap transition ${
+              active ? statusAccent(status) : "border-transparent text-ink/45 hover:text-ink/70"
+            }`}
+          >
+            <Icon size={14} />
+            {statusLabel(status)}
+            <span className="text-ink/40">({counts[status] || 0})</span>
+          </button>
+        );
+      })}
     </div>
   );
 
