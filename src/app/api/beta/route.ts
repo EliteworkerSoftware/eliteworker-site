@@ -97,24 +97,25 @@ export async function POST(req: NextRequest) {
       render(confirmElement),
       render(confirmElement, { plainText: true }),
     ]);
-    await mg.messages.create(process.env.MAILGUN_DOMAIN || "", {
+    const replyToDebug = (process.env.CONTACT_TO_EMAIL || "").trim();
+    const confirmSendResult = await mg.messages.create(process.env.MAILGUN_DOMAIN || "", {
       from: process.env.CONTACT_FROM_EMAIL || `EliteWorker Site <postmaster@${process.env.MAILGUN_DOMAIN}>`,
       to: contactEmail,
       subject: "We got your EliteWorker beta application",
       html: confirmHtml,
       text: confirmText,
-      // "from" is a noreply address, but the copy invites a reply — route
-      // any actual replies to the inbox a human reads. Trimmed defensively:
-      // a stray trailing newline/space in the env var is a valid string
-      // (so it isn't caught by a falsy check) but an invalid header value,
-      // and gets silently dropped rather than erroring.
-      "h:Reply-To": (process.env.CONTACT_TO_EMAIL || "").trim(),
+      "h:Reply-To": replyToDebug,
     });
+    console.log("DEBUG confirmSendResult", JSON.stringify(confirmSendResult));
+    console.log("DEBUG replyToDebug", JSON.stringify(replyToDebug), replyToDebug.length);
 
     // 4. Also text you — easy to miss an email, hard to miss a text
     await sendAlertSms(`New beta signup: ${companyName} (${contactName}). Check /admin for details.`);
 
-    return NextResponse.json({ ok: true });
+    return NextResponse.json({
+      ok: true,
+      debug: { replyToDebug, replyToDebugLength: replyToDebug.length, confirmSendResult },
+    });
   } catch (err) {
     console.error("Beta signup error:", err);
     return NextResponse.json({ error: "Something went wrong" }, { status: 500 });
