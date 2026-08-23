@@ -9,6 +9,8 @@ export function BetaConfirmationEmail({
   contactName: string;
   companyName: string;
 }) {
+  const firstName = contactName.trim().split(/\s+/)[0] || contactName;
+
   return (
     <EmailLayout preview="We got your EliteWorker beta application">
       <Text
@@ -34,7 +36,7 @@ export function BetaConfirmationEmail({
           color: COLORS.ink,
         }}
       >
-        Thanks, {contactName}.
+        Thanks, {firstName}.
       </Heading>
 
       <Text style={{ margin: "0 0 16px", fontFamily: FONT_STACK, fontSize: 16, lineHeight: "26px", color: COLORS.ink }}>
