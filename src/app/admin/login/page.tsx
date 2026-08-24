@@ -17,7 +17,7 @@ async function parseJsonSafe(res: Response): Promise<{ error?: string; [key: str
 const noSubscription = () => () => {};
 
 const inputClasses =
-  "w-full rounded-lg border border-line bg-paper px-4 py-3 text-sm text-ink placeholder:text-ink/35 focus:border-accent focus:outline-none";
+  "w-full rounded-lg border border-white/25 bg-white/10 px-4 py-3 text-sm text-white placeholder:text-white/50 focus:border-white focus:outline-none";
 
 export default function AdminLoginPage() {
   const router = useRouter();
@@ -113,17 +113,19 @@ export default function AdminLoginPage() {
   }
 
   return (
-    <div className="flex min-h-screen bg-admin-nav">
-      <div className="hidden flex-1 flex-col justify-center px-16 lg:flex">
-        <Image
-          src="/Eliteworker%20Header%20Logo%20White.svg"
-          alt="EliteWorker"
-          width={660}
-          height={101}
-          className="h-11 w-auto"
-          priority
-        />
-        <p className="mt-1.5 text-[10px] font-semibold tracking-widest text-white/50 uppercase">Administration</p>
+    <div className="flex min-h-screen flex-col bg-admin-nav lg:flex-row">
+      <div className="flex flex-col justify-center px-6 py-12 lg:flex-1 lg:px-16">
+        <div className="inline-block self-start text-center">
+          <Image
+            src="/Eliteworker%20Header%20Logo%20White.svg"
+            alt="EliteWorker"
+            width={660}
+            height={101}
+            className="h-11 w-auto"
+            priority
+          />
+          <p className="mt-1.5 text-[10px] font-semibold tracking-widest text-white/50 uppercase">Administration</p>
+        </div>
         <h1 className="mt-10 max-w-md text-4xl font-bold leading-tight text-white">
           Built for the team behind EliteWorker.
         </h1>
@@ -132,26 +134,12 @@ export default function AdminLoginPage() {
         </p>
       </div>
 
-      <div className="flex flex-1 items-center justify-center px-6 py-16">
-        <div className="w-full max-w-sm rounded-2xl bg-paper p-8 shadow-[0_20px_60px_rgba(30,64,175,0.35)]">
-          <div className="mb-8 inline-block rounded-lg bg-admin-nav px-3 py-2 lg:hidden">
-            <Image
-              src="/Eliteworker%20Header%20Logo%20White.svg"
-              alt="EliteWorker"
-              width={660}
-              height={101}
-              className="h-7 w-auto"
-              priority
-            />
-            <p className="mt-1 text-[9px] font-semibold tracking-widest text-white/50 uppercase">Administration</p>
-          </div>
-
+      <div className="flex flex-1 items-center justify-center px-6 py-12 lg:py-16">
+        <div className="w-full max-w-sm">
           {!needs2fa ? (
             <>
-              <h2 className="text-2xl font-bold text-ink">Sign in</h2>
-              <p className="mt-1 text-sm text-ink/60">
-                Enter your email and password to continue.
-              </p>
+              <h2 className="text-2xl font-bold text-white">Sign in</h2>
+              <p className="mt-1 text-sm text-white/60">Enter your email and password to continue.</p>
 
               {passkeySupported && (
                 <>
@@ -159,21 +147,21 @@ export default function AdminLoginPage() {
                     type="button"
                     disabled={passkeyBusy}
                     onClick={handlePasskeyLogin}
-                    className="mt-6 flex w-full items-center justify-center gap-2 rounded-lg border border-line px-5 py-3 text-sm font-semibold text-ink transition hover:border-ink/25 disabled:opacity-60"
+                    className="mt-6 flex w-full items-center justify-center gap-2 rounded-lg border border-white/25 px-5 py-3 text-sm font-semibold text-white transition hover:bg-white/10 disabled:opacity-60"
                   >
                     <Fingerprint size={16} />
                     {passkeyBusy ? "Waiting for your device…" : "Sign in with a passkey"}
                   </button>
                   <div className="mt-5 flex items-center gap-3">
-                    <span className="h-px flex-1 bg-line" />
-                    <span className="text-xs text-ink/35">or</span>
-                    <span className="h-px flex-1 bg-line" />
+                    <span className="h-px flex-1 bg-white/20" />
+                    <span className="text-xs text-white/50">or</span>
+                    <span className="h-px flex-1 bg-white/20" />
                   </div>
                 </>
               )}
 
               <form onSubmit={handlePasswordSubmit} className={passkeySupported ? "mt-5" : "mt-6"}>
-                <label className="text-sm text-ink/70">Email address</label>
+                <label className="text-sm text-white/70">Email address</label>
                 <input
                   type="email"
                   required
@@ -183,7 +171,7 @@ export default function AdminLoginPage() {
                   placeholder="you@example.com"
                   className={`mt-1.5 ${inputClasses}`}
                 />
-                <label className="mt-4 block text-sm text-ink/70">Password</label>
+                <label className="mt-4 block text-sm text-white/70">Password</label>
                 <div className="relative mt-1.5">
                   <input
                     type={showPassword ? "text" : "password"}
@@ -196,7 +184,7 @@ export default function AdminLoginPage() {
                   <button
                     type="button"
                     onClick={() => setShowPassword((v) => !v)}
-                    className="absolute inset-y-0 right-0 flex items-center px-3.5 text-ink/40 hover:text-ink/70"
+                    className="absolute inset-y-0 right-0 flex items-center px-3.5 text-white/50 hover:text-white/80"
                     aria-label={showPassword ? "Hide password" : "Show password"}
                   >
                     {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
@@ -205,17 +193,19 @@ export default function AdminLoginPage() {
                 <button
                   type="submit"
                   disabled={status === "sending"}
-                  className="mt-5 w-full rounded-lg bg-brand px-5 py-3 text-sm font-semibold text-white transition hover:brightness-105 disabled:opacity-60"
+                  className="mt-5 w-full rounded-lg bg-accent px-5 py-3 text-sm font-semibold text-white transition hover:brightness-105 disabled:opacity-60"
                 >
                   {status === "sending" ? "Signing in…" : "Sign in"}
                 </button>
-                {status === "error" && <p className="mt-3 text-sm text-red-500">{error}</p>}
+                {status === "error" && (
+                  <p className="mt-3 rounded-md border border-red-400/30 bg-red-500/15 px-3 py-2 text-sm text-red-100">{error}</p>
+                )}
               </form>
             </>
           ) : (
             <form onSubmit={handleCodeSubmit}>
-              <h2 className="text-2xl font-bold text-ink">Enter your code</h2>
-              <p className="mt-1 text-sm text-ink/60">
+              <h2 className="text-2xl font-bold text-white">Enter your code</h2>
+              <p className="mt-1 text-sm text-white/60">
                 Open your authenticator app and enter the current 6-digit code.
               </p>
               <input
@@ -231,11 +221,13 @@ export default function AdminLoginPage() {
               <button
                 type="submit"
                 disabled={status === "sending" || code.length !== 6}
-                className="mt-4 w-full rounded-lg bg-brand px-5 py-3 text-sm font-semibold text-white transition hover:brightness-105 disabled:opacity-60"
+                className="mt-4 w-full rounded-lg bg-accent px-5 py-3 text-sm font-semibold text-white transition hover:brightness-105 disabled:opacity-60"
               >
                 {status === "sending" ? "Verifying…" : "Verify"}
               </button>
-              {status === "error" && <p className="mt-3 text-sm text-red-500">{error}</p>}
+              {status === "error" && (
+                <p className="mt-3 rounded-md border border-red-400/30 bg-red-500/15 px-3 py-2 text-sm text-red-100">{error}</p>
+              )}
               <button
                 type="button"
                 onClick={() => {
@@ -244,7 +236,7 @@ export default function AdminLoginPage() {
                   setError("");
                   setStatus("idle");
                 }}
-                className="mt-3 w-full text-center text-xs font-medium text-ink/40 hover:text-ink/70"
+                className="mt-3 w-full text-center text-xs font-medium text-white/50 hover:text-white/80"
               >
                 Back to sign in
               </button>
