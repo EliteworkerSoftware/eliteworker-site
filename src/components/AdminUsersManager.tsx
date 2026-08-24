@@ -3,7 +3,14 @@
 import { useState } from "react";
 import { RotateCw, Pencil, Check, X } from "lucide-react";
 
-type AdminRow = { id: string; email: string; full_name: string | null; role: "owner" | "viewer"; created_at: string };
+type AdminRow = {
+  id: string;
+  email: string;
+  full_name: string | null;
+  role: "owner" | "viewer";
+  created_at: string;
+  last_login_at: string | null;
+};
 
 function formatDate(value: string) {
   return new Date(value).toLocaleDateString("en-US", { dateStyle: "medium" });
@@ -222,15 +229,17 @@ export default function AdminUsersManager({
             </div>
             <p className="mt-2 text-xs text-ink/40">Added {formatDate(u.created_at)}</p>
             <div className="mt-3 flex items-center gap-4 border-t border-line pt-3">
-              <button
-                type="button"
-                disabled={resendingId === u.id}
-                onClick={() => handleResend(u)}
-                className="inline-flex items-center gap-1 text-xs font-semibold text-brand hover:text-brand-dark disabled:opacity-50"
-              >
-                <RotateCw size={12} className={resendingId === u.id ? "animate-spin" : ""} />
-                Resend
-              </button>
+              {!u.last_login_at && (
+                <button
+                  type="button"
+                  disabled={resendingId === u.id}
+                  onClick={() => handleResend(u)}
+                  className="inline-flex items-center gap-1 text-xs font-semibold text-brand hover:text-brand-dark disabled:opacity-50"
+                >
+                  <RotateCw size={12} className={resendingId === u.id ? "animate-spin" : ""} />
+                  Resend
+                </button>
+              )}
               {u.id !== currentUserId && (
                 <button
                   type="button"
@@ -314,15 +323,17 @@ export default function AdminUsersManager({
                 <td className="px-4 py-3 text-ink/60">{formatDate(u.created_at)}</td>
                 <td className="px-4 py-3">
                   <div className="flex items-center justify-end gap-3">
-                    <button
-                      type="button"
-                      disabled={resendingId === u.id}
-                      onClick={() => handleResend(u)}
-                      className="inline-flex items-center gap-1 text-xs font-semibold text-brand hover:text-brand-dark disabled:opacity-50"
-                    >
-                      <RotateCw size={12} className={resendingId === u.id ? "animate-spin" : ""} />
-                      Resend
-                    </button>
+                    {!u.last_login_at && (
+                      <button
+                        type="button"
+                        disabled={resendingId === u.id}
+                        onClick={() => handleResend(u)}
+                        className="inline-flex items-center gap-1 text-xs font-semibold text-brand hover:text-brand-dark disabled:opacity-50"
+                      >
+                        <RotateCw size={12} className={resendingId === u.id ? "animate-spin" : ""} />
+                        Resend
+                      </button>
+                    )}
                     {u.id !== currentUserId && (
                       <button
                         type="button"

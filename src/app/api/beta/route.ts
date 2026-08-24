@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest, NextResponse, after } from "next/server";
 import Mailgun from "mailgun.js";
 import formData from "form-data";
 import { render } from "@react-email/render";
@@ -61,64 +61,69 @@ export async function POST(req: NextRequest) {
       console.error("Supabase insert error:", dbError);
     }
 
-    // 2. Notify your team by email via Mailgun — the signup is already
-    // saved above, so a Mailgun hiccup here shouldn't make the applicant see
-    // "your submission failed" (and possibly resubmit) when it actually went through.
-    const mailgun = new Mailgun(formData);
-    const mg = mailgun.client({
-      username: "api",
-      key: process.env.MAILGUN_API_KEY || "",
+    // Notifications (team email, applicant confirmation, SMS) run after the
+    // response is already sent — via after(), not just fire-and-forget, so
+    // Vercel keeps the function alive long enough to finish even though the
+    // applicant isn't waiting on it. Previously these were awaited before
+    // responding, so a slow Mailgun/Twilio call could hit Vercel's function
+    // timeout and show the applicant an error even after their signup was
+    // safely saved.
+    after(async () => {
+      const mailgun = new Mailgun(formData);
+      const mg = mailgun.client({
+        username: "api",
+        key: process.env.MAILGUN_API_KEY || "",
+      });
+
+      try {
+        const notifyElement = BetaSignupEmail({
+          companyName,
+          contactName,
+          contactEmail,
+          phone,
+          address,
+          employees,
+          annualRevenue,
+          brands,
+          notes,
+        });
+        const [notifyHtml, notifyText] = await Promise.all([
+          render(notifyElement),
+          render(notifyElement, { plainText: true }),
+        ]);
+        await mg.messages.create(process.env.MAILGUN_DOMAIN || "", {
+          from: process.env.CONTACT_FROM_EMAIL || `EliteWorker Site <postmaster@${process.env.MAILGUN_DOMAIN}>`,
+          to: process.env.CONTACT_TO_EMAIL || "you@example.com",
+          subject: `New EliteWorker beta signup from ${companyName}`,
+          html: notifyHtml,
+          text: notifyText,
+        });
+      } catch (err) {
+        console.error("Beta signup notification email error:", err);
+      }
+
+      try {
+        const confirmElement = BetaConfirmationEmail({ contactName, companyName });
+        const [confirmHtml, confirmText] = await Promise.all([
+          render(confirmElement),
+          render(confirmElement, { plainText: true }),
+        ]);
+        await mg.messages.create(process.env.MAILGUN_DOMAIN || "", {
+          // Unlike every other outbound email, this one's copy invites a reply —
+          // so it sends from the real monitored inbox instead of noreply@, rather
+          // than showing a noreply From with a hidden Reply-To override.
+          from: `EliteWorker <${(process.env.CONTACT_TO_EMAIL || "contact@eliteworker.com").trim()}>`,
+          to: contactEmail,
+          subject: "We got your EliteWorker beta application",
+          html: confirmHtml,
+          text: confirmText,
+        });
+      } catch (err) {
+        console.error("Beta applicant confirmation email error:", err);
+      }
+
+      await sendAlertSms(`New beta signup: ${companyName} (${contactName}). Check /admin for details.`);
     });
-    try {
-      const notifyElement = BetaSignupEmail({
-        companyName,
-        contactName,
-        contactEmail,
-        phone,
-        address,
-        employees,
-        annualRevenue,
-        brands,
-        notes,
-      });
-      const [notifyHtml, notifyText] = await Promise.all([
-        render(notifyElement),
-        render(notifyElement, { plainText: true }),
-      ]);
-      await mg.messages.create(process.env.MAILGUN_DOMAIN || "", {
-        from: process.env.CONTACT_FROM_EMAIL || `EliteWorker Site <postmaster@${process.env.MAILGUN_DOMAIN}>`,
-        to: process.env.CONTACT_TO_EMAIL || "you@example.com",
-        subject: `New EliteWorker beta signup from ${companyName}`,
-        html: notifyHtml,
-        text: notifyText,
-      });
-    } catch (err) {
-      console.error("Beta signup notification email error:", err);
-    }
-
-    // 3. Confirm receipt with the applicant
-    try {
-      const confirmElement = BetaConfirmationEmail({ contactName, companyName });
-      const [confirmHtml, confirmText] = await Promise.all([
-        render(confirmElement),
-        render(confirmElement, { plainText: true }),
-      ]);
-      await mg.messages.create(process.env.MAILGUN_DOMAIN || "", {
-        // Unlike every other outbound email, this one's copy invites a reply —
-        // so it sends from the real monitored inbox instead of noreply@, rather
-        // than showing a noreply From with a hidden Reply-To override.
-        from: `EliteWorker <${(process.env.CONTACT_TO_EMAIL || "contact@eliteworker.com").trim()}>`,
-        to: contactEmail,
-        subject: "We got your EliteWorker beta application",
-        html: confirmHtml,
-        text: confirmText,
-      });
-    } catch (err) {
-      console.error("Beta applicant confirmation email error:", err);
-    }
-
-    // 4. Also text you — easy to miss an email, hard to miss a text
-    await sendAlertSms(`New beta signup: ${companyName} (${contactName}). Check /admin for details.`);
 
     return NextResponse.json({ ok: true });
   } catch (err) {

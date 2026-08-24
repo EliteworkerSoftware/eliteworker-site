@@ -1,3 +1,5 @@
+import Link from "next/link";
+import { ShieldCheck } from "lucide-react";
 import AdminLogoutButton from "@/components/AdminLogoutButton";
 import type { AdminUser } from "@/lib/currentAdmin";
 
@@ -10,7 +12,16 @@ export function Topbar({ admin, title }: { admin: AdminUser; title: string }) {
           Signed in as {admin.full_name || admin.email} · <span className="capitalize">{admin.role}</span>
         </p>
       </div>
-      <AdminLogoutButton />
+      <div className="flex items-center gap-3">
+        <Link
+          href="/admin/security"
+          className="inline-flex items-center gap-1.5 rounded-full border border-line px-3 py-1.5 text-xs font-semibold text-ink/70 transition hover:border-ink/25 hover:text-ink"
+        >
+          <ShieldCheck size={14} />
+          Security
+        </Link>
+        <AdminLogoutButton />
+      </div>
     </div>
   );
 }

@@ -202,6 +202,23 @@ insert into eliteworker_dashboard_goals (id) values ('00000000-0000-0000-0000-00
 on conflict (id) do nothing;
 ```
 
+Two more additions to the admin dashboard: the "Resend invite" button on an
+admin account now disappears once that person has actually logged in (no
+point resending a password they've already used), and every admin can turn
+on two-factor authentication for their own account from the new "Security"
+link next to Log out — any standard authenticator app works (Apple's
+Passwords app, Google Authenticator, Authy, 1Password). Both need one more
+migration:
+
+```sql
+alter table eliteworker_admin_users add column if not exists last_login_at timestamptz;
+alter table eliteworker_admin_users add column if not exists totp_secret text;
+alter table eliteworker_admin_users add column if not exists totp_enabled boolean not null default false;
+```
+
+2FA is opt-in per admin, not forced — each person turns it on for themselves
+once they're ready, so nobody gets locked out by a half-finished rollout.
+
 ## 7. Push to GitHub
 
 ```

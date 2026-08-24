@@ -11,12 +11,24 @@ export async function GET() {
   }
 
   const supabase = getSupabaseAdmin();
-  const { data, error } = await supabase
+  // Falls back to a query without last_login_at if that column doesn't
+  // exist yet (before the migration runs) — the whole list disappearing
+  // is a much worse failure than just not knowing who's logged in yet.
+  const initial = await supabase
     .from("eliteworker_admin_users")
-    .select("id, email, full_name, role, created_at")
+    .select("id, email, full_name, role, created_at, last_login_at")
     .order("created_at", { ascending: true });
+  let data = initial.data;
 
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+  if (initial.error) {
+    const fallback = await supabase
+      .from("eliteworker_admin_users")
+      .select("id, email, full_name, role, created_at")
+      .order("created_at", { ascending: true });
+    if (fallback.error) return NextResponse.json({ error: fallback.error.message }, { status: 500 });
+    data = fallback.data?.map((row) => ({ ...row, last_login_at: null })) ?? null;
+  }
+
   return NextResponse.json({ users: data });
 }
 
