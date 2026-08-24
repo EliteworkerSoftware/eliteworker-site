@@ -124,12 +124,9 @@ export default function AdminLoginPage() {
             className="h-11 w-auto"
             priority
           />
-          <p className="mt-1.5 text-[10px] font-semibold tracking-widest text-white/50 uppercase">Administration</p>
+          <p className="mt-1.5 text-base font-semibold tracking-widest text-white/70 uppercase">Administration</p>
         </div>
-        <h1 className="mt-10 max-w-md text-4xl font-bold leading-tight text-white">
-          Built for the team behind EliteWorker.
-        </h1>
-        <p className="mt-4 max-w-sm text-white/70">
+        <p className="mt-8 max-w-sm text-sm text-white/50">
           Manage leads, beta applications, and demo bookings from one dashboard.
         </p>
       </div>
