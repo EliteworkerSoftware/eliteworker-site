@@ -113,25 +113,25 @@ export default function AdminLoginPage() {
   }
 
   return (
-    <div className="flex min-h-screen flex-col bg-admin-nav lg:flex-row">
-      <div className="flex flex-col justify-center px-6 py-12 lg:flex-1 lg:px-16">
-        <div className="inline-block self-start text-center">
-          <Image
-            src="/Eliteworker%20Header%20Logo%20White.svg"
-            alt="EliteWorker"
-            width={660}
-            height={101}
-            className="h-11 w-auto"
-            priority
-          />
-          <p className="mt-1.5 text-base font-semibold tracking-widest text-white/70 uppercase">Administration</p>
+    <div className="flex min-h-screen items-center justify-center bg-admin-nav px-6 py-12">
+      <div className="flex w-full max-w-4xl flex-col items-start gap-12 lg:flex-row lg:items-center lg:justify-center lg:gap-20">
+        <div className="flex flex-col">
+          <div className="inline-block self-start text-center">
+            <Image
+              src="/Eliteworker%20Header%20Logo%20White.svg"
+              alt="EliteWorker"
+              width={660}
+              height={101}
+              className="h-16 w-auto"
+              priority
+            />
+            <p className="mt-2 text-xl font-semibold tracking-widest text-white/70 uppercase">Administration</p>
+          </div>
+          <p className="mt-8 max-w-sm text-sm text-white/50">
+            Manage leads, beta applications, and demo bookings from one dashboard.
+          </p>
         </div>
-        <p className="mt-8 max-w-sm text-sm text-white/50">
-          Manage leads, beta applications, and demo bookings from one dashboard.
-        </p>
-      </div>
 
-      <div className="flex flex-1 items-center justify-center px-6 py-12 lg:py-16">
         <div className="w-full max-w-sm">
           {!needs2fa ? (
             <>
@@ -244,3 +244,4 @@ export default function AdminLoginPage() {
     </div>
   );
 }
+
