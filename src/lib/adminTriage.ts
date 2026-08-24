@@ -38,6 +38,12 @@ export async function patchTriageFields(
   if (table === "eliteworker_beta_signups" && (typeof body.decline_reason === "string" || body.decline_reason === null)) {
     patch.decline_reason = body.decline_reason;
   }
+  // Stamped so "closed sales this month" can be computed from when a
+  // booking actually converted, not when it was originally booked or
+  // scheduled — those can be a different month entirely.
+  if (table === "eliteworker_demo_bookings" && patch.pipeline_status === "converted") {
+    patch.converted_at = new Date().toISOString();
+  }
   if (Object.keys(patch).length === 0) {
     return { error: "No valid fields to update", status: 400 };
   }

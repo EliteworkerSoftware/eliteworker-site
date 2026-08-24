@@ -175,6 +175,15 @@ the team notification email. One more column for that:
 alter table eliteworker_demo_bookings add column if not exists notes text;
 ```
 
+The Overview page's "This month" metrics (demo bookings, closed sales, new leads)
+need to know *when* a booking actually converted, not just when it was
+originally booked — a booking scheduled in one month can close in the next.
+One more column:
+
+```sql
+alter table eliteworker_demo_bookings add column if not exists converted_at timestamptz;
+```
+
 ## 7. Push to GitHub
 
 ```
