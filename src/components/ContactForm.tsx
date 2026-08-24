@@ -8,8 +8,13 @@ export default function ContactForm() {
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    // React nulls out e.currentTarget once the handler returns, so it can't
+    // be read after the await below — grab the element itself now, before
+    // any async gap, or .reset() throws and gets swallowed by the catch
+    // block, silently flipping a successful submission to the error state.
+    const formEl = e.currentTarget;
     setStatus("sending");
-    const form = new FormData(e.currentTarget);
+    const form = new FormData(formEl);
     const payload = {
       name: form.get("name"),
       email: form.get("email"),
@@ -25,7 +30,7 @@ export default function ContactForm() {
       });
       if (!res.ok) throw new Error("failed");
       setStatus("sent");
-      e.currentTarget.reset();
+      formEl.reset();
     } catch {
       setStatus("error");
     }
