@@ -64,3 +64,33 @@ export function read2faPendingUserId(value: string | undefined): string | null {
 
   return userId;
 }
+
+// Holds a WebAuthn registration/authentication challenge between the
+// "generate options" and "verify response" requests — there's nowhere else
+// to keep it across two separate serverless invocations. Base64url
+// (WebAuthn's own encoding) never contains ".", so it's safe in this same
+// dot-delimited scheme.
+export const WEBAUTHN_CHALLENGE_COOKIE_NAME = "eliteworker_webauthn_challenge";
+const WEBAUTHN_CHALLENGE_TTL_MS = 1000 * 60 * 5;
+export const WEBAUTHN_CHALLENGE_MAX_AGE_SECONDS = WEBAUTHN_CHALLENGE_TTL_MS / 1000;
+
+export function createChallengeCookieValue(challenge: string): string {
+  const payload = `${challenge}.${Date.now() + WEBAUTHN_CHALLENGE_TTL_MS}`;
+  return `${payload}.${sign(payload)}`;
+}
+
+export function readChallengeCookieValue(value: string | undefined): string | null {
+  if (!value) return null;
+  const parts = value.split(".");
+  if (parts.length !== 3) return null;
+
+  const [challenge, expires, signature] = parts;
+  const payload = `${challenge}.${expires}`;
+  const expected = sign(payload);
+  const a = Buffer.from(signature);
+  const b = Buffer.from(expected);
+  if (a.length !== b.length || !timingSafeEqual(a, b)) return null;
+  if (Number(expires) <= Date.now()) return null;
+
+  return challenge;
+}

@@ -219,6 +219,29 @@ alter table eliteworker_admin_users add column if not exists totp_enabled boolea
 2FA is opt-in per admin, not forced — each person turns it on for themselves
 once they're ready, so nobody gets locked out by a half-finished rollout.
 
+Each admin can also add a passkey (Face ID, Touch ID, or Windows Hello
+fingerprint) from the same Security page, and use it to sign in instead of a
+password — same "Security" link, one more table:
+
+```sql
+create table eliteworker_admin_passkeys (
+  id uuid primary key default gen_random_uuid(),
+  admin_id uuid not null references eliteworker_admin_users(id) on delete cascade,
+  credential_id text not null unique,
+  public_key text not null,
+  counter bigint not null default 0,
+  device_type text,
+  backed_up boolean not null default false,
+  device_name text,
+  created_at timestamptz default now(),
+  last_used_at timestamptz
+);
+```
+
+A passkey is tied to the exact domain it was registered on — one added
+while testing on `localhost` won't work on the live `eliteworker.com` site,
+and vice versa. That's normal WebAuthn behavior, not a bug.
+
 ## 7. Push to GitHub
 
 ```
