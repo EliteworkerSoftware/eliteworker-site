@@ -1,6 +1,7 @@
 "use client";
 
-import { Fragment, useMemo, useState, type ReactNode } from "react";
+import { Fragment, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
+import { useSearchParams } from "next/navigation";
 import { ChevronDown, ChevronRight, Filter, Trash2, MailOpen, Mail } from "lucide-react";
 import { STATUS_OPTIONS, type TriageTable, type AnyStatus } from "@/lib/adminTriage";
 import { StatusBadge, statusLabel } from "./StatusBadge";
@@ -51,13 +52,28 @@ export function ResourceTable<T extends BaseRow>({
   canDelete: boolean;
   emptyLabel: string;
 }) {
+  const searchParams = useSearchParams();
+  const highlightId = searchParams.get("highlight");
+
   const [rows, setRows] = useState(initialRows);
-  const [expandedId, setExpandedId] = useState<string | null>(null);
+  const [expandedId, setExpandedId] = useState<string | null>(highlightId);
   const [busyId, setBusyId] = useState<string | null>(null);
   const [error, setError] = useState("");
   const [filter, setFilter] = useState<AnyStatus | "all">("all");
   const styles = ACCENT_STYLES[accent];
   const statusOptions = STATUS_OPTIONS[statusTable];
+  const highlightRef = useRef<HTMLDivElement | HTMLTableRowElement | null>(null);
+
+  // Deep-linked from elsewhere (e.g. the Overview page's Upcoming Demos) via
+  // ?highlight=<id> — open straight to that row and scroll it into view
+  // instead of leaving the visitor to hunt for it in the full list.
+  useEffect(() => {
+    if (!highlightId) return;
+    const row = initialRows.find((r) => r.id === highlightId);
+    if (row && !row.is_read) patch(row.id, { is_read: true });
+    highlightRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [highlightId]);
 
   async function patch(id: string, body: Partial<Pick<BaseRow, "is_read" | "pipeline_status">>) {
     setError("");
@@ -200,9 +216,10 @@ export function ResourceTable<T extends BaseRow>({
           return (
             <div
               key={row.id}
-              className={`overflow-hidden rounded-2xl border border-l-4 border-line bg-paper ${
-                row.is_read ? "border-l-transparent" : styles.border
-              }`}
+              ref={row.id === highlightId ? (el) => { highlightRef.current = el; } : undefined}
+              className={`overflow-hidden rounded-2xl border border-l-4 bg-paper ${
+                row.id === highlightId ? "border-brand" : "border-line"
+              } ${row.is_read ? "border-l-transparent" : styles.border}`}
             >
               <button type="button" onClick={() => toggleExpand(row)} className="flex w-full flex-col gap-2 px-4 py-3 text-left">
                 {/* Status gets the full row to itself — putting it in a
@@ -258,10 +275,11 @@ export function ResourceTable<T extends BaseRow>({
               return (
                 <Fragment key={row.id}>
                   <tr
+                    ref={row.id === highlightId ? (el) => { highlightRef.current = el; } : undefined}
                     onClick={() => toggleExpand(row)}
-                    className={`cursor-pointer border-b border-line border-l-4 last:border-b-0 align-top transition hover:bg-paper-alt ${
-                      row.is_read ? "border-l-transparent" : styles.border
-                    }`}
+                    className={`cursor-pointer border-b border-l-4 last:border-b-0 align-top transition hover:bg-paper-alt ${
+                      row.id === highlightId ? "border-brand" : "border-line"
+                    } ${row.is_read ? "border-l-transparent" : styles.border}`}
                   >
                     <td className="px-4 py-3 text-ink/40">
                       {expanded ? <ChevronDown size={16} /> : <ChevronRight size={16} />}

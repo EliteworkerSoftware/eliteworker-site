@@ -32,6 +32,11 @@ type CalBookingPayload = {
   // API version — check both rather than betting on just one.
   additionalNotes?: string;
   responses?: { notes?: { value?: string } };
+  // Cal.com puts the join link in different places depending on the video
+  // provider — metadata.videoCallUrl covers Google Meet/Cal Video, while
+  // videoCallData.url is the provider's own link for other integrations.
+  metadata?: { videoCallUrl?: string };
+  videoCallData?: { url?: string };
 };
 type CalWebhookEvent = {
   triggerEvent?: string;
@@ -67,6 +72,7 @@ export async function POST(req: NextRequest) {
 
   const attendee = booking.attendees?.[0];
   const notes = booking.additionalNotes || booking.responses?.notes?.value || null;
+  const meetingUrl = booking.metadata?.videoCallUrl || booking.videoCallData?.url || null;
 
   // 1. Save/update the booking so it shows in /admin, even if the email below fails.
   // pipeline_status is only set on true new bookings — omitting it on
@@ -82,6 +88,7 @@ export async function POST(req: NextRequest) {
     event_title: booking.title ?? null,
     status,
     notes,
+    meeting_url: meetingUrl,
   };
   if (event.triggerEvent === "BOOKING_CREATED") {
     // Cal.com sends its own confirmation email to the attendee the moment
@@ -94,6 +101,15 @@ export async function POST(req: NextRequest) {
     .upsert(upsertData, { onConflict: "booking_uid" });
   if (dbError) {
     console.error("Supabase upsert error:", dbError);
+    // meeting_url doesn't exist until the migration in README runs —
+    // retry without it rather than silently dropping the whole booking.
+    delete upsertData.meeting_url;
+    const { error: retryError } = await supabase
+      .from("eliteworker_demo_bookings")
+      .upsert(upsertData, { onConflict: "booking_uid" });
+    if (retryError) {
+      console.error("Supabase upsert retry error:", retryError);
+    }
   }
 
   // 2. Notify only on new bookings, not every cancel/reschedule ping.

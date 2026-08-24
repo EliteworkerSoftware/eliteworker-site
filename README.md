@@ -242,6 +242,17 @@ A passkey is tied to the exact domain it was registered on — one added
 while testing on `localhost` won't work on the live `eliteworker.com` site,
 and vice versa. That's normal WebAuthn behavior, not a bug.
 
+A "Join meeting"/"Join" button now shows up on demo bookings that have a
+video call link (Overview's Upcoming Demos, and each booking's expanded
+row in the Demo Bookings tab) — clicking an upcoming demo on Overview also
+jumps straight to that booking in the Demo Bookings tab. One more column,
+populated automatically from Cal.com's webhook going forward (past
+bookings won't have one retroactively):
+
+```sql
+alter table eliteworker_demo_bookings add column if not exists meeting_url text;
+```
+
 ## 7. Push to GitHub
 
 ```

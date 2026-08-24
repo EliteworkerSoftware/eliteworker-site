@@ -1,5 +1,6 @@
 "use client";
 
+import { Video } from "lucide-react";
 import { ResourceTable, type Column } from "@/components/admin/ResourceTable";
 import { ReplyPanel, type ReplyRecord } from "@/components/admin/ReplyPanel";
 import type { AnyStatus } from "@/lib/adminTriage";
@@ -15,6 +16,7 @@ export type DemoBooking = {
   event_title: string | null;
   status: string;
   notes: string | null;
+  meeting_url: string | null;
   is_read: boolean;
   pipeline_status: AnyStatus;
   reminder_sent_at: string | null;
@@ -54,6 +56,20 @@ export function DemoBookingsTable({ initialRows, canDelete }: { initialRows: Dem
       emptyLabel="No demo bookings yet."
       renderExpanded={(row) => (
         <div className="grid max-w-xl gap-3 text-sm text-ink sm:grid-cols-2">
+          {row.meeting_url && (
+            <div className="sm:col-span-2">
+              <a
+                href={row.meeting_url}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={(e) => e.stopPropagation()}
+                className="inline-flex items-center gap-1.5 rounded-full bg-teal px-4 py-2 text-xs font-semibold text-white transition hover:brightness-105"
+              >
+                <Video size={14} />
+                Join meeting
+              </a>
+            </div>
+          )}
           <div>
             <p className="text-xs font-semibold uppercase tracking-wide text-ink/50">Ends</p>
             <p className="mt-1">{row.end_time ? formatDate(row.end_time) : "—"}</p>

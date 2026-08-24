@@ -33,14 +33,26 @@ async function countConvertedSince(sinceIso: string) {
 
 async function getUpcomingDemos(): Promise<UpcomingDemo[]> {
   const supabase = getSupabaseAdmin();
-  const { data } = await supabase
+  // Falls back to a query without meeting_url if that column doesn't exist
+  // yet (before the migration runs) — same reasoning as the admin users
+  // list: an unknown column fails the whole query, not just that field.
+  const initial = await supabase
+    .from("eliteworker_demo_bookings")
+    .select("id, attendee_name, event_title, start_time, meeting_url")
+    .gte("start_time", new Date().toISOString())
+    .neq("status", "cancelled")
+    .order("start_time", { ascending: true })
+    .limit(5);
+  if (!initial.error) return (initial.data as UpcomingDemo[]) || [];
+
+  const fallback = await supabase
     .from("eliteworker_demo_bookings")
     .select("id, attendee_name, event_title, start_time")
     .gte("start_time", new Date().toISOString())
     .neq("status", "cancelled")
     .order("start_time", { ascending: true })
     .limit(5);
-  return (data as UpcomingDemo[]) || [];
+  return (fallback.data?.map((row) => ({ ...row, meeting_url: null })) as UpcomingDemo[]) || [];
 }
 
 export default async function OverviewPage() {
