@@ -1,6 +1,7 @@
 import { Inbox, ClipboardList, CalendarCheck } from "lucide-react";
 import { getCurrentAdmin } from "@/lib/currentAdmin";
 import { getSupabaseAdmin } from "@/lib/supabase";
+import { getDashboardGoals } from "@/lib/dashboardGoals";
 import { Topbar } from "@/components/admin/Topbar";
 import { StatCard } from "@/components/admin/StatCard";
 import { CircleMeter } from "@/components/admin/CircleMeter";
@@ -20,16 +21,6 @@ async function countSince(table: string, column: string, sinceIso: string) {
   return count ?? 0;
 }
 
-async function countBetween(table: string, column: string, startIso: string, endIso: string) {
-  const supabase = getSupabaseAdmin();
-  const { count } = await supabase
-    .from(table)
-    .select("id", { count: "exact", head: true })
-    .gte(column, startIso)
-    .lt(column, endIso);
-  return count ?? 0;
-}
-
 async function countConvertedSince(sinceIso: string) {
   const supabase = getSupabaseAdmin();
   const { count } = await supabase
@@ -37,17 +28,6 @@ async function countConvertedSince(sinceIso: string) {
     .select("id", { count: "exact", head: true })
     .eq("pipeline_status", "converted")
     .gte("converted_at", sinceIso);
-  return count ?? 0;
-}
-
-async function countConvertedBetween(startIso: string, endIso: string) {
-  const supabase = getSupabaseAdmin();
-  const { count } = await supabase
-    .from("eliteworker_demo_bookings")
-    .select("id", { count: "exact", head: true })
-    .eq("pipeline_status", "converted")
-    .gte("converted_at", startIso)
-    .lt("converted_at", endIso);
   return count ?? 0;
 }
 
@@ -69,11 +49,10 @@ export default async function OverviewPage() {
 
   // Recomputed from the current date on every load — "this month" metrics
   // need no actual reset logic, they just naturally cover a different range
-  // once the calendar turns over. The circle meters' fill is this month
-  // against last month, so last month's range is needed too.
+  // once the calendar turns over. Goals are separate: persisted, and only
+  // change when someone edits them on a meter.
   const now = new Date();
   const startOfMonth = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), 1)).toISOString();
-  const startOfLastMonth = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth() - 1, 1)).toISOString();
 
   const [
     leadsTotal,
@@ -86,9 +65,7 @@ export default async function OverviewPage() {
     leadsThisMonth,
     bookingsThisMonth,
     closedThisMonth,
-    leadsLastMonth,
-    bookingsLastMonth,
-    closedLastMonth,
+    goals,
   ] = await Promise.all([
     countRows("eliteworker_leads"),
     countRows("eliteworker_leads", true),
@@ -100,10 +77,10 @@ export default async function OverviewPage() {
     countSince("eliteworker_leads", "created_at", startOfMonth),
     countSince("eliteworker_demo_bookings", "created_at", startOfMonth),
     countConvertedSince(startOfMonth),
-    countBetween("eliteworker_leads", "created_at", startOfLastMonth, startOfMonth),
-    countBetween("eliteworker_demo_bookings", "created_at", startOfLastMonth, startOfMonth),
-    countConvertedBetween(startOfLastMonth, startOfMonth),
+    getDashboardGoals(),
   ]);
+
+  const canEditGoals = admin.role === "owner";
 
   return (
     <div>
@@ -114,9 +91,30 @@ export default async function OverviewPage() {
         <div>
           <h2 className="font-display text-sm font-bold tracking-wide text-ink/50 uppercase">This month</h2>
           <div className="mt-3 grid gap-5 sm:grid-cols-3">
-            <CircleMeter label="Demo bookings" value={bookingsThisMonth} lastMonthValue={bookingsLastMonth} accent="teal" />
-            <CircleMeter label="Closed sales" value={closedThisMonth} lastMonthValue={closedLastMonth} accent="emerald" />
-            <CircleMeter label="New leads" value={leadsThisMonth} lastMonthValue={leadsLastMonth} accent="brand" />
+            <CircleMeter
+              label="Demo bookings"
+              value={bookingsThisMonth}
+              goal={goals.demo_bookings_goal}
+              goalField="demo_bookings_goal"
+              accent="teal"
+              canEditGoal={canEditGoals}
+            />
+            <CircleMeter
+              label="Closed sales"
+              value={closedThisMonth}
+              goal={goals.closed_sales_goal}
+              goalField="closed_sales_goal"
+              accent="emerald"
+              canEditGoal={canEditGoals}
+            />
+            <CircleMeter
+              label="New leads"
+              value={leadsThisMonth}
+              goal={goals.new_leads_goal}
+              goalField="new_leads_goal"
+              accent="brand"
+              canEditGoal={canEditGoals}
+            />
           </div>
         </div>
 

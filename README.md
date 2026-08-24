@@ -184,6 +184,24 @@ One more column:
 alter table eliteworker_demo_bookings add column if not exists converted_at timestamptz;
 ```
 
+Each "This month" meter now shows progress toward an editable goal (click
+the "Goal: N" text under a meter to change it — Owner role only) instead of
+a plain count. The goal itself is stored separately and only changes when
+someone edits it — a new table for that, seeded with starter defaults:
+
+```sql
+create table eliteworker_dashboard_goals (
+  id uuid primary key default '00000000-0000-0000-0000-000000000001',
+  demo_bookings_goal integer not null default 10,
+  closed_sales_goal integer not null default 5,
+  new_leads_goal integer not null default 20,
+  updated_at timestamptz default now()
+);
+
+insert into eliteworker_dashboard_goals (id) values ('00000000-0000-0000-0000-000000000001')
+on conflict (id) do nothing;
+```
+
 ## 7. Push to GitHub
 
 ```
