@@ -14,6 +14,7 @@ export type DemoBooking = {
   end_time: string | null;
   event_title: string | null;
   status: string;
+  notes: string | null;
   is_read: boolean;
   pipeline_status: AnyStatus;
   reminder_sent_at: string | null;
@@ -65,6 +66,12 @@ export function DemoBookingsTable({ initialRows, canDelete }: { initialRows: Dem
             <p className="text-xs font-semibold uppercase tracking-wide text-ink/50">Reminder email</p>
             <p className="mt-1">{row.reminder_sent_at ? `Sent ${formatDate(row.reminder_sent_at)}` : "Not sent yet"}</p>
           </div>
+          {row.notes && (
+            <div className="sm:col-span-2">
+              <p className="text-xs font-semibold uppercase tracking-wide text-ink/50">Notes from booker</p>
+              <p className="mt-1 leading-relaxed whitespace-pre-wrap">{row.notes}</p>
+            </div>
+          )}
           <div className="sm:col-span-2">
             <ReplyPanel
               replyApi={`/api/admin/bookings/${row.id}/reply`}

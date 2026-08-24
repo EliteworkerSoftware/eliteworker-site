@@ -27,6 +27,11 @@ type CalBookingPayload = {
   startTime?: string;
   endTime?: string;
   attendees?: CalAttendee[];
+  // Cal.com sends the booker's "additional notes" text both as this
+  // top-level field and nested under responses.notes.value, depending on
+  // API version — check both rather than betting on just one.
+  additionalNotes?: string;
+  responses?: { notes?: { value?: string } };
 };
 type CalWebhookEvent = {
   triggerEvent?: string;
@@ -61,6 +66,7 @@ export async function POST(req: NextRequest) {
         : "confirmed";
 
   const attendee = booking.attendees?.[0];
+  const notes = booking.additionalNotes || booking.responses?.notes?.value || null;
 
   // 1. Save/update the booking so it shows in /admin, even if the email below fails.
   // pipeline_status is only set on true new bookings — omitting it on
@@ -75,6 +81,7 @@ export async function POST(req: NextRequest) {
     end_time: booking.endTime ?? null,
     event_title: booking.title ?? null,
     status,
+    notes,
   };
   if (event.triggerEvent === "BOOKING_CREATED") {
     // Cal.com sends its own confirmation email to the attendee the moment
@@ -101,6 +108,7 @@ export async function POST(req: NextRequest) {
         attendeeEmail: attendee?.email || "no email given",
         when,
         eventTitle: booking.title,
+        notes,
       });
       const [html, text] = await Promise.all([
         render(emailElement),

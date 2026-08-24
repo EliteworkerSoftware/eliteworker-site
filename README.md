@@ -167,6 +167,14 @@ in that email marks it **Confirm 2**. This needs two things:
    dashboard setup needed. Locally, `next dev` never fires it — that's expected;
    reminders only send from the deployed site.
 
+Whatever a booker types into Cal.com's "additional notes" field at booking
+time now comes through too — shown in the demo booking's admin row and in
+the team notification email. One more column for that:
+
+```sql
+alter table eliteworker_demo_bookings add column if not exists notes text;
+```
+
 ## 7. Push to GitHub
 
 ```
