@@ -31,25 +31,31 @@ export async function POST(req: NextRequest) {
       console.error("Supabase insert error:", dbError);
     }
 
-    // 2. Notify your team by email via Mailgun
-    const emailElement = ContactLeadEmail({ name, email, company, message });
-    const [html, text] = await Promise.all([
-      render(emailElement),
-      render(emailElement, { plainText: true }),
-    ]);
+    // 2. Notify your team by email via Mailgun — the lead is already saved
+    // above, so a Mailgun hiccup here shouldn't make the visitor see "your
+    // submission failed" (and possibly resubmit) when it actually went through.
+    try {
+      const emailElement = ContactLeadEmail({ name, email, company, message });
+      const [html, text] = await Promise.all([
+        render(emailElement),
+        render(emailElement, { plainText: true }),
+      ]);
 
-    const mailgun = new Mailgun(formData);
-    const mg = mailgun.client({
-      username: "api",
-      key: process.env.MAILGUN_API_KEY || "",
-    });
-    await mg.messages.create(process.env.MAILGUN_DOMAIN || "", {
-      from: process.env.CONTACT_FROM_EMAIL || `EliteWorker Site <postmaster@${process.env.MAILGUN_DOMAIN}>`,
-      to: process.env.CONTACT_TO_EMAIL || "you@example.com",
-      subject: `New EliteWorker inquiry from ${name}`,
-      html,
-      text,
-    });
+      const mailgun = new Mailgun(formData);
+      const mg = mailgun.client({
+        username: "api",
+        key: process.env.MAILGUN_API_KEY || "",
+      });
+      await mg.messages.create(process.env.MAILGUN_DOMAIN || "", {
+        from: process.env.CONTACT_FROM_EMAIL || `EliteWorker Site <postmaster@${process.env.MAILGUN_DOMAIN}>`,
+        to: process.env.CONTACT_TO_EMAIL || "you@example.com",
+        subject: `New EliteWorker inquiry from ${name}`,
+        html,
+        text,
+      });
+    } catch (err) {
+      console.error("Contact notification email error:", err);
+    }
 
     // 3. Also text you — easy to miss an email, hard to miss a text
     await sendAlertSms(`New contact form lead: ${name} (${email}). Check /admin for details.`);
