@@ -2,7 +2,7 @@
 
 import { Fragment, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { useSearchParams } from "next/navigation";
-import { ChevronDown, ChevronRight, Filter, Trash2, MailOpen, Mail } from "lucide-react";
+import { ChevronDown, ChevronRight, Filter, Trash2, MailOpen, Mail, ArchiveRestore } from "lucide-react";
 import { STATUS_OPTIONS, type TriageTable, type AnyStatus } from "@/lib/adminTriage";
 import { StatusBadge, statusLabel } from "./StatusBadge";
 
@@ -60,8 +60,12 @@ export function ResourceTable<T extends BaseRow>({
   const [busyId, setBusyId] = useState<string | null>(null);
   const [error, setError] = useState("");
   const [filter, setFilter] = useState<AnyStatus | "all">("all");
+  const [viewArchived, setViewArchived] = useState(false);
   const styles = ACCENT_STYLES[accent];
   const statusOptions = STATUS_OPTIONS[statusTable];
+  // Archived items get their own tab instead of living in "All" alongside
+  // active ones — this is the list the normal filter dropdown offers.
+  const activeStatusOptions = statusOptions.filter((s) => s !== "archived");
   const highlightRef = useRef<HTMLDivElement | HTMLTableRowElement | null>(null);
 
   // Deep-linked from elsewhere (e.g. the Overview page's Upcoming Demos) via
@@ -125,24 +129,41 @@ export function ResourceTable<T extends BaseRow>({
     for (const row of rows) c[row.pipeline_status] = (c[row.pipeline_status] || 0) + 1;
     return c;
   }, [rows]);
-  const visibleRows = filter === "all" ? rows : rows.filter((r) => r.pipeline_status === filter);
+  const activeRows = rows.filter((r) => r.pipeline_status !== "archived");
+  const archivedRows = rows.filter((r) => r.pipeline_status === "archived");
+  const visibleRows = viewArchived
+    ? archivedRows
+    : filter === "all"
+      ? activeRows
+      : activeRows.filter((r) => r.pipeline_status === filter);
 
   // Shared between the desktop table's expanded row and the mobile card's
   // expanded section — the status select + read toggle + delete button.
   function renderActions(row: T) {
     return (
       <div className="flex flex-wrap items-center gap-3" onClick={(e) => e.stopPropagation()}>
-        <select
-          value={row.pipeline_status}
-          onChange={(e) => patch(row.id, { pipeline_status: e.target.value as AnyStatus })}
-          className={`rounded-lg border border-line bg-paper px-3 py-1.5 text-xs font-medium text-ink outline-none ${styles.ring}`}
-        >
-          {statusOptions.map((status) => (
-            <option key={status} value={status}>
-              {statusLabel(status)}
-            </option>
-          ))}
-        </select>
+        {row.pipeline_status === "archived" ? (
+          <button
+            type="button"
+            onClick={() => patch(row.id, { pipeline_status: activeStatusOptions[0] })}
+            className="inline-flex items-center gap-1.5 rounded-full border border-line px-3 py-1.5 text-xs font-semibold text-ink/70 transition hover:border-ink/25 hover:text-ink"
+          >
+            <ArchiveRestore size={13} />
+            Unarchive
+          </button>
+        ) : (
+          <select
+            value={row.pipeline_status}
+            onChange={(e) => patch(row.id, { pipeline_status: e.target.value as AnyStatus })}
+            className={`rounded-lg border border-line bg-paper px-3 py-1.5 text-xs font-medium text-ink outline-none ${styles.ring}`}
+          >
+            {statusOptions.map((status) => (
+              <option key={status} value={status}>
+                {statusLabel(status)}
+              </option>
+            ))}
+          </select>
+        )}
 
         <button
           type="button"
@@ -168,11 +189,45 @@ export function ResourceTable<T extends BaseRow>({
     );
   }
 
+  // Archived items live in their own tab instead of mixing into "All" —
+  // switching tabs resets the status filter and collapses whatever was
+  // expanded, since it likely isn't even in the newly-visible set.
+  const tabBar = (
+    <div className="mb-3 inline-flex rounded-full border border-line bg-paper p-1">
+      <button
+        type="button"
+        onClick={() => {
+          setViewArchived(false);
+          setFilter("all");
+          setExpandedId(null);
+        }}
+        className={`rounded-full px-3.5 py-1.5 text-xs font-semibold transition ${
+          !viewArchived ? "bg-ink text-white" : "text-ink/50 hover:text-ink"
+        }`}
+      >
+        Active ({activeRows.length})
+      </button>
+      <button
+        type="button"
+        onClick={() => {
+          setViewArchived(true);
+          setExpandedId(null);
+        }}
+        className={`rounded-full px-3.5 py-1.5 text-xs font-semibold transition ${
+          viewArchived ? "bg-ink text-white" : "text-ink/50 hover:text-ink"
+        }`}
+      >
+        Archived ({archivedRows.length})
+      </button>
+    </div>
+  );
+
   // A single filter button — a tab strip either scrolled off-screen or
   // wrapped into a cramped second line on a phone. A native select opens the
   // OS's own picker on mobile (no custom dropdown/backdrop to build or get
   // wrong) and still looks and behaves like a normal button on desktop.
-  const filterBar = (
+  // Not shown in the Archived tab — there's only one status there.
+  const filterBar = !viewArchived && (
     <div className="mb-4">
       <div className="relative inline-block">
         <Filter size={14} className="pointer-events-none absolute top-1/2 left-3.5 -translate-y-1/2 text-ink/40" />
@@ -181,8 +236,8 @@ export function ResourceTable<T extends BaseRow>({
           onChange={(e) => setFilter(e.target.value as AnyStatus | "all")}
           className="appearance-none rounded-full border border-line bg-paper py-2 pr-9 pl-9 text-sm font-semibold text-ink outline-none focus:border-brand"
         >
-          <option value="all">All ({rows.length})</option>
-          {statusOptions.map((status) => (
+          <option value="all">All ({activeRows.length})</option>
+          {activeStatusOptions.map((status) => (
             <option key={status} value={status}>
               {statusLabel(status)} ({counts[status] || 0})
             </option>
@@ -205,6 +260,7 @@ export function ResourceTable<T extends BaseRow>({
   return (
     <div>
       {error && <p className="mb-3 text-sm text-red-500">{error}</p>}
+      {tabBar}
       {filterBar}
 
       {/* Mobile/tablet: a stacked card per row — every column reads as a
