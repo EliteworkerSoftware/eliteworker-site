@@ -114,9 +114,9 @@ export default function AdminLoginPage() {
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-admin-nav px-6 py-12">
-      <div className="flex w-full max-w-4xl flex-col items-start gap-12 lg:flex-row lg:items-center lg:justify-center lg:gap-20">
-        <div className="flex flex-col">
-          <div className="inline-block self-start text-center">
+      <div className="flex w-full max-w-4xl flex-col items-center gap-12 lg:flex-row lg:justify-center lg:gap-20">
+        <div className="flex flex-col items-center text-center lg:items-start lg:text-left">
+          <div className="inline-block text-center">
             <Image
               src="/Eliteworker%20Header%20Logo%20White.svg"
               alt="EliteWorker"
