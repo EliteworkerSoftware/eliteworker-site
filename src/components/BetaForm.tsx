@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { CheckCircle2, X } from "lucide-react";
 import Turnstile from "@/components/Turnstile";
 import { EMPLOYEE_OPTIONS, REVENUE_OPTIONS } from "@/lib/betaFormOptions";
 
@@ -9,7 +10,7 @@ const fieldClass =
 const buttonClass =
   "rounded-full bg-accent px-5 py-2.5 text-sm font-semibold text-white transition hover:brightness-105 disabled:opacity-60";
 
-type Stage = "email" | "code" | "form" | "sent";
+type Stage = "email" | "code" | "form";
 
 export default function BetaForm() {
   const [stage, setStage] = useState<Stage>("email");
@@ -19,6 +20,7 @@ export default function BetaForm() {
   const [verifiedToken, setVerifiedToken] = useState("");
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
+  const [showSuccess, setShowSuccess] = useState(false);
 
   async function handleRequestCode(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -88,7 +90,15 @@ export default function BetaForm() {
         body: JSON.stringify(payload),
       });
       if (!res.ok) throw new Error("failed");
-      setStage("sent");
+      // Reset back to the start (rather than a terminal "sent" stage) so the
+      // form underneath is fresh if the modal gets dismissed and somehow
+      // revisited — matching ContactForm's reset-then-show-modal pattern.
+      setStage("email");
+      setEmail("");
+      setChallengeToken("");
+      setCode("");
+      setVerifiedToken("");
+      setShowSuccess(true);
     } catch {
       setError("Something went wrong — try again or email us directly.");
     } finally {
@@ -96,17 +106,9 @@ export default function BetaForm() {
     }
   }
 
-  if (stage === "sent") {
-    return (
-      <p className="rounded-2xl border border-brand-light/40 bg-brand/6 p-6 text-sm text-ink">
-        You&rsquo;re on the list — we&rsquo;re actively reviewing your application and will be in touch soon. Check
-        your inbox for a confirmation email.
-      </p>
-    );
-  }
-
+  let formContent;
   if (stage === "email") {
-    return (
+    formContent = (
       <form
         onSubmit={handleRequestCode}
         className="grid gap-4 rounded-2xl border border-line bg-paper p-7 shadow-[0_2px_10px_rgba(15,23,42,0.03)]"
@@ -129,10 +131,8 @@ export default function BetaForm() {
         {error && <p className="text-sm text-red-500">{error}</p>}
       </form>
     );
-  }
-
-  if (stage === "code") {
-    return (
+  } else if (stage === "code") {
+    formContent = (
       <form
         onSubmit={handleVerifyCode}
         className="grid gap-4 rounded-2xl border border-line bg-paper p-7 shadow-[0_2px_10px_rgba(15,23,42,0.03)]"
@@ -166,70 +166,114 @@ export default function BetaForm() {
         {error && <p className="text-sm text-red-500">{error}</p>}
       </form>
     );
+  } else {
+    formContent = (
+      <form
+        onSubmit={handleSubmit}
+        className="grid gap-4 rounded-2xl border border-line bg-paper p-7 shadow-[0_2px_10px_rgba(15,23,42,0.03)]"
+      >
+        <p className="text-xs font-medium text-brand">Email verified — {email}</p>
+
+        <input name="companyName" required placeholder="Company name" className={fieldClass} />
+
+        <div className="grid gap-4 sm:grid-cols-2">
+          <input name="firstName" required placeholder="First name" className={fieldClass} />
+          <input name="lastName" required placeholder="Last name" className={fieldClass} />
+        </div>
+
+        <div className="grid gap-4 sm:grid-cols-2">
+          <input name="phone" type="tel" required placeholder="Phone number" className={fieldClass} />
+          <input name="address" required placeholder="Company address" className={fieldClass} />
+        </div>
+
+        <div className="grid gap-4 sm:grid-cols-2">
+          <select name="employees" required defaultValue="" className={fieldClass}>
+            <option value="" disabled>
+              How many employees?
+            </option>
+            {EMPLOYEE_OPTIONS.map((option) => (
+              <option key={option} value={option}>
+                {option.replace("-", "–")}
+              </option>
+            ))}
+          </select>
+          <select name="annualRevenue" required defaultValue="" className={fieldClass}>
+            <option value="" disabled>
+              Annual revenue
+            </option>
+            {REVENUE_OPTIONS.map((option) => (
+              <option key={option} value={option}>
+                {option.replace("-", "–")}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <textarea
+          name="brands"
+          required
+          rows={2}
+          placeholder="What brands do you currently carry? (list at least 5, any category)"
+          className={fieldClass}
+        />
+
+        <textarea
+          name="notes"
+          required
+          rows={3}
+          placeholder="Anything else we should know?"
+          className={fieldClass}
+        />
+
+        <button type="submit" disabled={busy} className={buttonClass}>
+          {busy ? "Sending…" : "Submit"}
+        </button>
+        {error && <p className="text-sm text-red-500">{error}</p>}
+      </form>
+    );
   }
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="grid gap-4 rounded-2xl border border-line bg-paper p-7 shadow-[0_2px_10px_rgba(15,23,42,0.03)]"
-    >
-      <p className="text-xs font-medium text-brand">Email verified — {email}</p>
+    <>
+      {formContent}
 
-      <input name="companyName" required placeholder="Company name" className={fieldClass} />
-
-      <div className="grid gap-4 sm:grid-cols-2">
-        <input name="firstName" required placeholder="First name" className={fieldClass} />
-        <input name="lastName" required placeholder="Last name" className={fieldClass} />
-      </div>
-
-      <div className="grid gap-4 sm:grid-cols-2">
-        <input name="phone" type="tel" required placeholder="Phone number" className={fieldClass} />
-        <input name="address" required placeholder="Company address" className={fieldClass} />
-      </div>
-
-      <div className="grid gap-4 sm:grid-cols-2">
-        <select name="employees" required defaultValue="" className={fieldClass}>
-          <option value="" disabled>
-            How many employees?
-          </option>
-          {EMPLOYEE_OPTIONS.map((option) => (
-            <option key={option} value={option}>
-              {option.replace("-", "–")}
-            </option>
-          ))}
-        </select>
-        <select name="annualRevenue" required defaultValue="" className={fieldClass}>
-          <option value="" disabled>
-            Annual revenue
-          </option>
-          {REVENUE_OPTIONS.map((option) => (
-            <option key={option} value={option}>
-              {option.replace("-", "–")}
-            </option>
-          ))}
-        </select>
-      </div>
-
-      <textarea
-        name="brands"
-        required
-        rows={2}
-        placeholder="What brands do you currently carry? (list at least 5, any category)"
-        className={fieldClass}
-      />
-
-      <textarea
-        name="notes"
-        required
-        rows={3}
-        placeholder="Anything else we should know?"
-        className={fieldClass}
-      />
-
-      <button type="submit" disabled={busy} className={buttonClass}>
-        {busy ? "Sending…" : "Submit"}
-      </button>
-      {error && <p className="text-sm text-red-500">{error}</p>}
-    </form>
+      {showSuccess && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-ink/50 p-4"
+          onClick={() => setShowSuccess(false)}
+        >
+          <div
+            role="dialog"
+            aria-modal="true"
+            onClick={(e) => e.stopPropagation()}
+            className="relative w-full max-w-sm rounded-2xl border-2 border-emerald-500 bg-paper p-8 text-center shadow-2xl"
+          >
+            <button
+              type="button"
+              onClick={() => setShowSuccess(false)}
+              aria-label="Close"
+              className="absolute top-3 right-3 rounded-full p-1 text-ink/35 hover:bg-ink/5 hover:text-ink/60"
+            >
+              <X size={18} />
+            </button>
+            <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-emerald-50">
+              <CheckCircle2 className="text-emerald-500" size={32} />
+            </div>
+            <h2 className="mt-4 text-lg font-bold text-ink">You&rsquo;re on the list</h2>
+            <p className="mt-1.5 text-sm text-ink/60">
+              We&rsquo;re actively reviewing your application and will be in touch soon. Check your inbox for a
+              confirmation email.
+            </p>
+            <button
+              type="button"
+              onClick={() => setShowSuccess(false)}
+              className="mt-6 w-full rounded-full bg-emerald-500 px-5 py-2.5 text-sm font-semibold text-white transition hover:brightness-105"
+            >
+              Got it
+            </button>
+          </div>
+        </div>
+      )}
+    </>
   );
 }
