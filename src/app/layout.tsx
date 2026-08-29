@@ -48,6 +48,41 @@ export const metadata: Metadata = {
   robots: { index: true, follow: true },
 };
 
+// Structured data for search engines and AI answer engines (ChatGPT,
+// Perplexity, etc.) to reliably identify who EliteWorker is and what it
+// does, instead of inferring it from rendered page text. Deliberately omits
+// "offers"/pricing and any rating — the product is still in beta with no
+// public price, and fabricating either would be inaccurate schema.
+const organizationJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: "EliteWorker",
+  url: siteUrl,
+  logo: `${siteUrl}/Eliteworker%20Header%20Logo.svg`,
+  description:
+    "EliteWorker is the operations platform built for smart home integrators — job scheduling, technician dispatch, and project tracking from prewire to final walkthrough.",
+  address: {
+    "@type": "PostalAddress",
+    postOfficeBoxNumber: "1025",
+    addressLocality: "Marlton",
+    addressRegion: "NJ",
+    postalCode: "08053",
+    addressCountry: "US",
+  },
+};
+
+const softwareApplicationJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  name: "EliteWorker",
+  applicationCategory: "BusinessApplication",
+  operatingSystem: "Web",
+  url: siteUrl,
+  description:
+    "Field operations software for smart home and low-voltage integrators: job scheduling, technician dispatch, and project tracking from prewire to final walkthrough.",
+  publisher: { "@type": "Organization", name: "EliteWorker", url: siteUrl },
+};
+
 export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
@@ -56,6 +91,14 @@ export default function RootLayout({
       <body
         className={`${inter.variable} ${spaceGrotesk.variable} ${jetbrainsMono.variable} antialiased`}
       >
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(softwareApplicationJsonLd) }}
+        />
         {children}
       </body>
     </html>

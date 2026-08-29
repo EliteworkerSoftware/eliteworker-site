@@ -1,0 +1,20 @@
+# EliteWorker
+
+> EliteWorker is the operations platform built for smart home and low-voltage integrators — job scheduling, technician dispatch, and project tracking from prewire to final walkthrough.
+
+EliteWorker was built by a smart home integration business owner with 30+ years in the industry, refined inside his own companies before opening it up to other integrators. It replaces the spreadsheets, group texts, and disconnected tools integrators typically use to run jobs, crews, and client communication.
+
+The product is currently in a beta rollout; integrators can apply for early access.
+
+## Pages
+
+- [Home](https://eliteworker.com/): Product overview — what EliteWorker does and who it's for.
+- [About](https://eliteworker.com/about): The company's origin story and founder background.
+- [Join the Beta](https://eliteworker.com/beta): Application form for early access to the platform.
+- [Book a Demo](https://eliteworker.com/demo): Schedule a live walkthrough of EliteWorker.
+- [Contact](https://eliteworker.com/contact): Get in touch with the EliteWorker team.
+- [Blog](https://eliteworker.com/blog): Field operations advice for smart home and low-voltage integrators.
+
+## Blog posts
+
+- [Field Service Scheduling Software for Smart Home Integrators](https://eliteworker.com/blog/field-service-scheduling-software-for-smart-home-integrators): Why general field service tools break down on multi-week smart home installs, and what integrators should actually look for in scheduling software.
