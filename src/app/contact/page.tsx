@@ -23,9 +23,10 @@ export default function ContactPage() {
           title="Let's see your jobs running without the guesswork."
           subtitle="We want to hear more about your business and see if we are a good fit for each other. Please use the form below to get in touch with us"
           scrollCue
+          compactBottom
         />
 
-        <section className="mx-auto max-w-6xl px-6 pt-10 pb-24 md:pt-16 md:pb-32">
+        <section className="mx-auto max-w-6xl px-6 pt-6 pb-24 md:pt-8 md:pb-32">
           <div className="grid items-center gap-14 md:grid-cols-[0.9fr_1.1fr]">
             <FadeIn className="order-last space-y-8 md:order-0">
               <div>
