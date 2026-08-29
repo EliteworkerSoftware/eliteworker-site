@@ -24,12 +24,12 @@ const faqs = [
   {
     question: "Why doesn't general field service software work well for smart home integrators?",
     answer:
-      "Smart home and low-voltage installs aren't single-visit jobs. A project runs through prewire, trim, equipment staging, commissioning, and a final client walkthrough — often over weeks, with different crew members on-site at different stages and the whole thing stalled if a rack or a run of cable hasn't shown up yet. Software built around \"one technician, one visit, one ticket\" has no real concept of a job with stages, dependencies, and a crew that rotates through it over time — so integrators end up bolting a spreadsheet or a shared group chat onto whatever tool they bought to cover the gap.",
+      "Smart home and low-voltage installs aren't single-visit jobs. A project runs through Prewire, Installation, Programming, Quality Check, and Tutorial — often over weeks, and on new-construction projects, over months — with different crew members on-site at different stages and the whole thing stalled if a rack or a run of cable hasn't shown up yet. Software built around \"one technician, one visit, one ticket\" has no real concept of a job with stages, dependencies, and a crew that rotates through it over time — so integrators end up bolting a spreadsheet or a shared group chat onto whatever tool they bought to cover the gap.",
   },
   {
     question: "What should a smart home integration company actually look for in scheduling software?",
     answer:
-      "Five things, in order of how often they get overlooked: job-stage tracking (prewire, trim, commissioning, walkthrough — not just \"open\" or \"closed\"), the ability to assign and reassign crew across a job that spans days or weeks, visibility into what a stage is waiting on (materials, equipment, a subcontractor) before it can start, client communication that's tied to the actual job stage instead of a generic status update, and reporting that shows crew utilization across concurrent projects — not just per-ticket time.",
+      "Five things, in order of how often they get overlooked: job-stage tracking (Prewire, Installation, Programming, Quality Check, Tutorial — not just \"open\" or \"closed\"), the ability to assign and reassign crew across a job that spans days, weeks, or months, visibility into what a stage is waiting on (materials, equipment, a subcontractor) before it can start, client communication that's tied to the actual job stage instead of a generic status update, and reporting that shows crew utilization across concurrent projects — not just per-ticket time.",
   },
   {
     question: "Is EliteWorker available now?",
@@ -76,16 +76,16 @@ export default function BlogPostPage() {
             <p>
               Most field service software was built for jobs that finish in one visit — a technician shows up,
               fixes the thing, closes the ticket. That model works fine for an HVAC repair call. It breaks down
-              almost immediately for a smart home install, where a single project can span prewire, trim,
-              equipment staging, commissioning, and a final client walkthrough — often weeks apart, with different
-              people on-site at each stage.
+              almost immediately for a smart home install, where a single project moves through Prewire,
+              Installation, Programming, Quality Check, and Tutorial — often weeks apart, and months apart on
+              new-construction projects, with different people on-site at each stage.
             </p>
 
             <h2 className="pt-4 text-2xl font-semibold text-ink">Why generic tools fall short here</h2>
             <p>
               Ask most field service platforms what stage a job is in and the honest answer is: they don&rsquo;t
-              really know. They track &ldquo;open&rdquo; and &ldquo;closed,&rdquo; not prewire versus trim versus
-              commissioning. They assume one technician per ticket, not a crew that rotates through a project over
+              really know. They track &ldquo;open&rdquo; and &ldquo;closed,&rdquo; not Prewire versus Installation
+              versus Quality Check. They assume one technician per ticket, not a crew that rotates through a project over
               several weeks. And they have no concept of a job being blocked — waiting on a rack to arrive, waiting
               on a run of cable, waiting on a subcontractor — because single-visit trades rarely run into that.
               Integrators end up running the actual job in a group text and a spreadsheet, with the software just
@@ -97,9 +97,9 @@ export default function BlogPostPage() {
             </h2>
             <ul className="list-disc space-y-3 pl-6">
               <li>
-                <span className="font-semibold text-ink">Job-stage tracking</span> — prewire, trim, commissioning,
-                and walkthrough as real stages, not a single &ldquo;in progress&rdquo; status covering a six-week
-                project.
+                <span className="font-semibold text-ink">Job-stage tracking</span> — Prewire, Installation,
+                Programming, Quality Check, and Tutorial as real stages, not a single &ldquo;in progress&rdquo;
+                status covering a six-week project.
               </li>
               <li>
                 <span className="font-semibold text-ink">Crew assignment across time</span> — the ability to put
@@ -124,7 +124,7 @@ export default function BlogPostPage() {
             <p>
               EliteWorker exists because none of the above fit how a smart home integration business actually runs.
               It was built inside a real integration company, by a 30-year owner-operator who needed exactly this —
-              job-stage tracking, crew dispatch across multi-week installs, and visibility into what&rsquo;s blocking
+              job-stage tracking, crew scheduling across installs that run weeks or months, and visibility into what&rsquo;s blocking
               a job before it turns into a Friday-night phone call to a client. You can read more about{" "}
               <Link href="/about" className="font-semibold text-brand hover:underline">
                 how it started

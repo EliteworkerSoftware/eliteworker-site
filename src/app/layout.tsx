@@ -23,7 +23,7 @@ export const metadata: Metadata = {
     template: "%s | EliteWorker",
   },
   description:
-    "EliteWorker is the operations platform built for smart home integrators — job scheduling, technician dispatch, and project tracking from prewire to final walkthrough.",
+    "EliteWorker is the operations platform built for smart home integrators — job scheduling and project tracking from Prewire to Tutorial.",
   keywords: [
     "smart home integrator software",
     "AV company ERP",
@@ -34,7 +34,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "EliteWorker — Field Operations Software for Smart Home Integrators",
     description:
-      "Run your smart home integration business end to end: scheduling, dispatch, job tracking, and reporting in one platform.",
+      "Run your smart home integration business end to end: scheduling, job tracking, and reporting in one platform.",
     url: siteUrl,
     siteName: "EliteWorker",
     type: "website",
@@ -43,7 +43,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "EliteWorker — Field Operations Software for Smart Home Integrators",
     description:
-      "Run your smart home integration business end to end: scheduling, dispatch, job tracking, and reporting in one platform.",
+      "Run your smart home integration business end to end: scheduling, job tracking, and reporting in one platform.",
   },
   robots: { index: true, follow: true },
 };
@@ -60,7 +60,7 @@ const organizationJsonLd = {
   url: siteUrl,
   logo: `${siteUrl}/Eliteworker%20Header%20Logo.svg`,
   description:
-    "EliteWorker is the operations platform built for smart home integrators — job scheduling, technician dispatch, and project tracking from prewire to final walkthrough.",
+    "EliteWorker is the operations platform built for smart home integrators — job scheduling and project tracking from Prewire to Tutorial.",
   address: {
     "@type": "PostalAddress",
     postOfficeBoxNumber: "1025",
@@ -79,7 +79,7 @@ const softwareApplicationJsonLd = {
   operatingSystem: "Web",
   url: siteUrl,
   description:
-    "Field operations software for smart home and low-voltage integrators: job scheduling, technician dispatch, and project tracking from prewire to final walkthrough.",
+    "Field operations software for smart home and low-voltage integrators: job scheduling and project tracking from Prewire to Tutorial.",
   publisher: { "@type": "Organization", name: "EliteWorker", url: siteUrl },
 };
 

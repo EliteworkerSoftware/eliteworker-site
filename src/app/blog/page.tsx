@@ -30,7 +30,7 @@ export default function BlogIndexPage() {
         <PageIntro
           kicker="Resources"
           title="Field operations advice for integrators."
-          subtitle="Notes on scheduling, dispatch, and running a smart home integration business — from the team building EliteWorker."
+          subtitle="Notes on scheduling and running a smart home integration business — from the team building EliteWorker."
           compactBottom
         />
 

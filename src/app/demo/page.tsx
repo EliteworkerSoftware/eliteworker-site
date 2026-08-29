@@ -21,7 +21,7 @@ export default function DemoPage() {
         <PageIntro
           kicker="Live walkthrough"
           title="Book a demo."
-          subtitle="30 minutes, no slides. Pick a time and we'll show you EliteWorker running on a real account — scheduling, dispatch, and job tracking."
+          subtitle="30 minutes, no slides. Pick a time and we'll show you EliteWorker running on a real account — scheduling and job tracking."
         />
 
         <section className="mx-auto max-w-4xl px-6 py-16">
