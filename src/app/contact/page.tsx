@@ -25,9 +25,9 @@ export default function ContactPage() {
           scrollCue
         />
 
-        <section className="mx-auto max-w-6xl px-6 py-24 md:py-32">
+        <section className="mx-auto max-w-6xl px-6 pt-10 pb-24 md:pt-16 md:pb-32">
           <div className="grid items-center gap-14 md:grid-cols-[0.9fr_1.1fr]">
-            <FadeIn className="space-y-8">
+            <FadeIn className="order-last space-y-8 md:order-0">
               <div>
                 <p className="text-xs font-semibold uppercase tracking-[0.22em] text-brand">Prefer a live walkthrough?</p>
                 <p className="mt-3 max-w-sm text-sm leading-7 text-ink/60">
@@ -56,7 +56,7 @@ export default function ContactPage() {
               </p>
             </FadeIn>
 
-            <FadeIn delay={100}>
+            <FadeIn delay={100} className="order-first md:order-0">
               <ContactForm />
             </FadeIn>
           </div>
