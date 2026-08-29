@@ -7,12 +7,30 @@ import { verifyTurnstile } from "@/lib/turnstile";
 import { sendAlertSms } from "@/lib/sms";
 import { ContactLeadEmail } from "@/emails/ContactLeadEmail";
 import { isLikelySpamPitch } from "@/lib/spamPitchFilter";
+import { isValidEmail } from "@/lib/email";
+
+// Bounds what a direct POST (bypassing the form's own input limits) can push
+// into Supabase and out through the team-notification email.
+const NAME_LIMIT = 200;
+const COMPANY_LIMIT = 200;
+const MESSAGE_LIMIT = 5000;
 
 export async function POST(req: NextRequest) {
   try {
     const { name, email, company, message, turnstileToken } = await req.json();
 
-    if (!name || !email || !message) {
+    if (typeof name !== "string" || !name.trim() || name.length > NAME_LIMIT) {
+      return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
+    }
+    if (!isValidEmail(email)) {
+      return NextResponse.json({ error: "Enter a valid email address" }, { status: 400 });
+    }
+    if (typeof message !== "string" || !message.trim() || message.length > MESSAGE_LIMIT) {
+      return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
+    }
+    // Company is optional in the form, but if it's present it still has to
+    // be an actual string within a sane length, not some other JSON type.
+    if (company != null && (typeof company !== "string" || company.length > COMPANY_LIMIT)) {
       return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
     }
 

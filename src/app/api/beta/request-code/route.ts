@@ -4,15 +4,14 @@ import formData from "form-data";
 import { render } from "@react-email/render";
 import { createChallengeToken, generateCode } from "@/lib/emailVerification";
 import { verifyTurnstile } from "@/lib/turnstile";
+import { isValidEmail } from "@/lib/email";
 import { VerificationCodeEmail } from "@/emails/VerificationCodeEmail";
-
-const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 export async function POST(req: NextRequest) {
   try {
     const { email, turnstileToken } = await req.json();
 
-    if (!email || typeof email !== "string" || !EMAIL_RE.test(email)) {
+    if (!isValidEmail(email)) {
       return NextResponse.json({ error: "Enter a valid email address" }, { status: 400 });
     }
 

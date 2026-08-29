@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Turnstile from "@/components/Turnstile";
+import { EMPLOYEE_OPTIONS, REVENUE_OPTIONS } from "@/lib/betaFormOptions";
 
 const fieldClass =
   "rounded-lg border border-line bg-paper px-4 py-3 text-sm text-ink placeholder:text-ink/35 focus:border-accent focus:outline-none";
@@ -191,21 +192,21 @@ export default function BetaForm() {
           <option value="" disabled>
             How many employees?
           </option>
-          <option value="1-5">1–5</option>
-          <option value="6-20">6–20</option>
-          <option value="21-50">21–50</option>
-          <option value="51-100">51–100</option>
-          <option value="100+">100+</option>
+          {EMPLOYEE_OPTIONS.map((option) => (
+            <option key={option} value={option}>
+              {option.replace("-", "–")}
+            </option>
+          ))}
         </select>
         <select name="annualRevenue" required defaultValue="" className={fieldClass}>
           <option value="" disabled>
             Annual revenue
           </option>
-          <option value="Under $500K">Under $500K</option>
-          <option value="$500K-$1M">$500K–$1M</option>
-          <option value="$1M-$5M">$1M–$5M</option>
-          <option value="$5M-$20M">$5M–$20M</option>
-          <option value="$20M+">$20M+</option>
+          {REVENUE_OPTIONS.map((option) => (
+            <option key={option} value={option}>
+              {option.replace("-", "–")}
+            </option>
+          ))}
         </select>
       </div>
 
