@@ -6,6 +6,7 @@ import { getSupabaseAdmin } from "@/lib/supabase";
 import { verifyTurnstile } from "@/lib/turnstile";
 import { sendAlertSms } from "@/lib/sms";
 import { ContactLeadEmail } from "@/emails/ContactLeadEmail";
+import { isLikelySpamPitch } from "@/lib/spamPitchFilter";
 
 export async function POST(req: NextRequest) {
   try {
@@ -21,16 +22,27 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Verification failed — please try again" }, { status: 400 });
     }
 
+    // Turnstile only screens out bots — it does nothing against a real
+    // person manually pitching web design/SEO services through the form.
+    // Those get saved (nothing is silently dropped) but filed straight into
+    // "archived" and skip the team notification below, since they're a known
+    // false-positive-prone pattern rather than a hard reject.
+    const isSpamPitch = isLikelySpamPitch(message);
+
     // Save the lead to Supabase — this is the only part the visitor actually
     // needs to wait on. Once it's saved, their submission is a success no
     // matter what happens next.
     const supabase = getSupabaseAdmin();
     const { error: dbError } = await supabase
       .from("eliteworker_leads")
-      .insert({ name, email, company, message });
+      .insert({ name, email, company, message, ...(isSpamPitch ? { pipeline_status: "archived" } : {}) });
 
     if (dbError) {
       console.error("Supabase insert error:", dbError);
+    }
+
+    if (isSpamPitch) {
+      return NextResponse.json({ ok: true });
     }
 
     // Team notification (email + SMS) runs after the response is already

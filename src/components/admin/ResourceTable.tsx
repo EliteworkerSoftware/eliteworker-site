@@ -131,6 +131,12 @@ export function ResourceTable<T extends BaseRow>({
   }, [rows]);
   const activeRows = rows.filter((r) => r.pipeline_status !== "archived");
   const archivedRows = rows.filter((r) => r.pipeline_status === "archived");
+  // Reaching "archived" without ever being expanded (and thus auto-marked
+  // read via toggleExpand) only happens for rows filed straight into
+  // archived server-side — e.g. the contact form's spam-pitch filter — since
+  // a human archiving one always opens it first. So this count is, in
+  // practice, "how many new ones landed here automatically."
+  const archivedUnreadCount = archivedRows.filter((r) => !r.is_read).length;
   const visibleRows = viewArchived
     ? archivedRows
     : filter === "all"
@@ -213,11 +219,16 @@ export function ResourceTable<T extends BaseRow>({
           setViewArchived(true);
           setExpandedId(null);
         }}
-        className={`rounded-full px-3.5 py-1.5 text-xs font-semibold transition ${
+        className={`relative rounded-full px-3.5 py-1.5 text-xs font-semibold transition ${
           viewArchived ? "bg-ink text-white" : "text-ink/50 hover:text-ink"
         }`}
       >
         Archived ({archivedRows.length})
+        {archivedUnreadCount > 0 && (
+          <span className="absolute -top-1.5 -right-1.5 inline-flex h-4 min-w-4 items-center justify-center rounded-full bg-red-500 px-1 text-[10px] font-bold text-white">
+            {archivedUnreadCount}
+          </span>
+        )}
       </button>
     </div>
   );
