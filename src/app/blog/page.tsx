@@ -8,7 +8,8 @@ import { BLOG_POSTS } from "@/lib/blogPosts";
 
 export const metadata: Metadata = {
   title: "Blog",
-  description: "Field operations advice for smart home and low-voltage integrators, from the team building EliteWorker.",
+  description:
+    "Resources covering everything from the first customer interaction and sale, through complete job management, to after-sale care — for smart home and low-voltage integrators.",
 };
 
 function formatDate(value: string) {
@@ -30,7 +31,7 @@ export default function BlogIndexPage() {
         <PageIntro
           kicker="Resources"
           title="Field operations advice for integrators."
-          subtitle="Notes on scheduling and running a smart home integration business — from the team building EliteWorker."
+          subtitle="Resources covering everything from the first customer interaction and sale, through complete job management, to after-sale care — for smart home and low-voltage integrators, from the team building EliteWorker."
           compactBottom
         />
 

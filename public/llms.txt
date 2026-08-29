@@ -13,7 +13,7 @@ The product is currently in a beta rollout; integrators can apply for early acce
 - [Join the Beta](https://eliteworker.com/beta): Application form for early access to the platform.
 - [Book a Demo](https://eliteworker.com/demo): Schedule a live walkthrough of EliteWorker.
 - [Contact](https://eliteworker.com/contact): Get in touch with the EliteWorker team.
-- [Blog](https://eliteworker.com/blog): Field operations advice for smart home and low-voltage integrators.
+- [Blog](https://eliteworker.com/blog): Resources covering everything from the first customer interaction and sale, through complete job management, to after-sale care — for smart home and low-voltage integrators.
 
 ## Blog posts
 
