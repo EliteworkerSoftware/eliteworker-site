@@ -5,6 +5,7 @@ import Footer from "@/components/Footer";
 import PageIntro from "@/components/PageIntro";
 import FadeIn from "@/components/FadeIn";
 import { PillButton } from "@/components/PillButton";
+import { StageTimeline } from "@/components/StageTimeline";
 import { getBlogPost } from "@/lib/blogPosts";
 
 const post = getBlogPost("field-service-scheduling-software-for-smart-home-integrators")!;
@@ -70,6 +71,12 @@ export default function BlogPostPage() {
 
       <main>
         <PageIntro kicker="Resources" title={post.title} subtitle={post.excerpt} compactBottom />
+
+        <div className="mx-auto max-w-2xl px-6 pt-10 md:pt-14">
+          <FadeIn>
+            <StageTimeline />
+          </FadeIn>
+        </div>
 
         <article className="mx-auto max-w-3xl px-6 pt-10 pb-16 md:pt-14">
           <FadeIn className="space-y-6 text-base leading-8 text-ink/75">

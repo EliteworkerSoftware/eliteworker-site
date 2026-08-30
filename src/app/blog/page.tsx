@@ -4,6 +4,7 @@ import NavBar from "@/components/NavBar";
 import Footer from "@/components/Footer";
 import PageIntro from "@/components/PageIntro";
 import FadeIn from "@/components/FadeIn";
+import { BlogCardHeader } from "@/components/BlogCardHeader";
 import { BLOG_POSTS } from "@/lib/blogPosts";
 
 export const metadata: Metadata = {
@@ -41,14 +42,17 @@ export default function BlogIndexPage() {
               <FadeIn key={post.slug} delay={i * 60}>
                 <Link
                   href={`/blog/${post.slug}`}
-                  className="block rounded-2xl border border-line bg-paper p-7 shadow-[0_2px_10px_rgba(15,23,42,0.03)] transition hover:border-brand-light"
+                  className="block overflow-hidden rounded-2xl border border-line bg-paper shadow-[0_2px_10px_rgba(15,23,42,0.03)] transition hover:border-brand-light"
                 >
-                  <p className="text-xs font-semibold uppercase tracking-[0.18em] text-ink/40">
-                    {formatDate(post.publishedAt)}
-                  </p>
-                  <h2 className="mt-2 text-xl font-semibold text-ink md:text-2xl">{post.title}</h2>
-                  <p className="mt-3 text-sm leading-7 text-ink/60">{post.excerpt}</p>
-                  <p className="mt-4 text-sm font-semibold text-brand">Read more →</p>
+                  <BlogCardHeader Icon={post.icon} category={post.category} className="h-32" />
+                  <div className="p-7">
+                    <p className="text-xs font-semibold uppercase tracking-[0.18em] text-ink/40">
+                      {formatDate(post.publishedAt)}
+                    </p>
+                    <h2 className="mt-2 text-xl font-semibold text-ink md:text-2xl">{post.title}</h2>
+                    <p className="mt-3 text-sm leading-7 text-ink/60">{post.excerpt}</p>
+                    <p className="mt-4 text-sm font-semibold text-brand">Read more →</p>
+                  </div>
                 </Link>
               </FadeIn>
             ))}
