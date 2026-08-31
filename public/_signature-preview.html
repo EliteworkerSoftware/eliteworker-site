@@ -8,54 +8,66 @@
   location in public/, so icons show up with no dev server and nothing
   committed or deployed. Not the file to send/use for real — that's
   Gregg-Maina-Email-Signature.html on the Desktop.
+
+  Closed palette on purpose — only colors that actually appear in the
+  eliteworker logo mark itself (brandDark #1e40af, brand #3b82f6, brandLight
+  #60a5fa) plus accent orange #f59e0b and ink black #0f172a. No grays: the
+  divider and the muted tagline both use brandLight instead of a neutral gray,
+  so nothing outside that 5-color set shows up anywhere in the signature.
+  Each color still has one job: ink for structure/body text, brand blue for
+  the eyebrow role label (same use as the "APPLICATION RECEIVED" style label
+  in the production email template), accent orange only on the single
+  CTA-styled link, brandLight for quiet/secondary elements. The vertical rule
+  uses rowspan across all 7 rows so its height is exact, not guessed. It's a
+  gradient (brandDark -> brand -> accent) with a solid brand blue
+  background-color fallback for clients like Outlook desktop that don't
+  render CSS gradients.
+  Spacing kept tight/dense on purpose — a signature reads as a compact block,
+  not body copy, and the earlier looser version felt disconnected from the
+  site/email's tighter, denser feel.
 -->
-<table cellpadding="0" cellspacing="0" border="0" style="width:520px;">
+<table cellpadding="0" cellspacing="0" border="0" style="width:300px;">
   <tr>
-    <td style="background-color:#1e40af;width:6px;padding:0;"></td>
-    <td style="width:20px;padding:0;"></td>
-    <td style="padding:0;">
-      <table cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td style="padding:0 0 2px 0;font-family:Arial,Helvetica,sans-serif;font-size:22px;font-weight:bold;color:#0f172a;letter-spacing:-0.3px;">
-            Gregg Maina
-          </td>
-        </tr>
-        <tr>
-          <td style="padding:0 0 14px 0;font-family:Arial,Helvetica,sans-serif;font-size:13px;font-weight:bold;color:#1e40af;">
-            Business Operations Consultant
-          </td>
-        </tr>
+    <td rowspan="7" style="background-color:#3b82f6;background-image:linear-gradient(180deg, #1e40af 0%, #3b82f6 55%, #f59e0b 100%);width:4px;padding:0;font-size:0;line-height:0;">&nbsp;</td>
+    <td style="padding:0 0 2px 12px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;font-size:21px;font-weight:700;color:#0f172a;letter-spacing:-0.01em;line-height:1.1;">
+      Gregg Maina
+    </td>
+  </tr>
+  <tr>
+    <td style="padding:0 0 0 12px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;font-size:11px;font-weight:700;color:#3b82f6;letter-spacing:0.06em;text-transform:uppercase;line-height:1.2;">
+      Business Operations Consultant
+    </td>
+  </tr>
 
-        <tr>
-          <td style="padding:0 0 7px 0;font-family:Arial,Helvetica,sans-serif;font-size:13px;color:#0f172a;">
-            <img src="./signature-icons/phone.png" width="15" height="15" alt="Phone" style="display:inline-block;vertical-align:middle;margin-right:8px;border:0;width:15px;height:15px;" />
-            <a href="tel:+18006097946" style="color:#0f172a;text-decoration:none;vertical-align:middle;">1-800-609-7946</a>
-          </td>
-        </tr>
-        <tr>
-          <td style="padding:0 0 7px 0;font-family:Arial,Helvetica,sans-serif;font-size:13px;color:#0f172a;">
-            <img src="./signature-icons/email.png" width="15" height="15" alt="Email" style="display:inline-block;vertical-align:middle;margin-right:8px;border:0;width:15px;height:15px;" />
-            <a href="mailto:gregg@eliteworker.com" style="color:#0f172a;text-decoration:none;vertical-align:middle;">gregg@eliteworker.com</a>
-          </td>
-        </tr>
-        <tr>
-          <td style="padding:0 0 16px 0;font-family:Arial,Helvetica,sans-serif;font-size:13px;color:#0f172a;">
-            <img src="./signature-icons/globe.png" width="15" height="15" alt="Website" style="display:inline-block;vertical-align:middle;margin-right:8px;border:0;width:15px;height:15px;" />
-            <a href="https://eliteworker.com" style="color:#3b82f6;text-decoration:none;font-weight:bold;vertical-align:middle;">eliteworker.com</a>
-          </td>
-        </tr>
+  <tr>
+    <td style="padding:12px 0 5px 15px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;font-size:13px;color:#0f172a;line-height:1.15;">
+      <img src="./signature-icons/phone.png" width="12" height="12" alt="Phone" style="display:inline-block;vertical-align:middle;margin-right:8px;border:0;width:12px;height:12px;" />
+      <a href="tel:+18006097946" style="color:#0f172a;text-decoration:none;vertical-align:middle;">1-800-609-7946</a>
+    </td>
+  </tr>
+  <tr>
+    <td style="padding:0 0 5px 15px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;font-size:13px;color:#0f172a;line-height:1.15;">
+      <img src="./signature-icons/email.png" width="12" height="12" alt="Email" style="display:inline-block;vertical-align:middle;margin-right:8px;border:0;width:12px;height:12px;" />
+      <a href="mailto:gregg@eliteworker.com" style="color:#0f172a;text-decoration:none;vertical-align:middle;">gregg@eliteworker.com</a>
+    </td>
+  </tr>
+  <tr>
+    <td style="padding:0 0 14px 15px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;font-size:13px;color:#0f172a;line-height:1.15;">
+      <img src="./signature-icons/globe.png" width="12" height="12" alt="Website" style="display:inline-block;vertical-align:middle;margin-right:8px;border:0;width:12px;height:12px;" />
+      <a href="https://eliteworker.com" style="color:#f59e0b;text-decoration:none;font-weight:700;vertical-align:middle;">eliteworker.com</a>
+    </td>
+  </tr>
 
-        <tr>
-          <td style="padding:6px 0 4px 0;border-top:1px solid #e3e8f0;">
-            <img src="./email-logo.png" alt="EliteWorker" width="160" height="24" style="display:block;border:0;width:160px;height:24px;margin-top:8px;" />
-          </td>
-        </tr>
-        <tr>
-          <td style="padding:0;font-family:Arial,Helvetica,sans-serif;font-size:11px;font-style:italic;color:#5b6472;">
-            The operations platform built for smart home integrators
-          </td>
-        </tr>
-      </table>
+  <tr>
+    <td style="padding:0 0 5px 15px;">
+      <div style="border-top:1px solid #60a5fa;padding-top:10px;">
+        <img src="./email-logo.png" alt="EliteWorker" width="128" height="19" style="display:block;border:0;width:128px;height:19px;" />
+      </div>
+    </td>
+  </tr>
+  <tr>
+    <td style="padding:0 0 0 15px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;font-size:11px;color:#5b6472;line-height:1.3;">
+      The operations platform built for smart home integrators
     </td>
   </tr>
 </table>
