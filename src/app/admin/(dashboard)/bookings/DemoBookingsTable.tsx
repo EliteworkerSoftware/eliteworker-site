@@ -11,6 +11,7 @@ export type DemoBooking = {
   booking_uid: string;
   attendee_name: string | null;
   attendee_email: string | null;
+  attendee_phone: string | null;
   start_time: string | null;
   end_time: string | null;
   event_title: string | null;
@@ -36,6 +37,7 @@ const columns: Column<DemoBooking>[] = [
   },
   { key: "attendee_name", label: "Attendee", render: (row) => row.attendee_name || "—" },
   { key: "attendee_email", label: "Email", render: (row) => row.attendee_email || "—" },
+  { key: "attendee_phone", label: "Phone", render: (row) => row.attendee_phone || "—" },
   { key: "event_title", label: "Event", render: (row) => row.event_title || "—" },
   {
     key: "status",

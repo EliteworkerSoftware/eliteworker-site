@@ -20,7 +20,7 @@ function verifySignature(rawBody: string, signature: string | null): boolean {
   return a.length === b.length && timingSafeEqual(a, b);
 }
 
-type CalAttendee = { name?: string; email?: string };
+type CalAttendee = { name?: string; email?: string; phoneNumber?: string };
 type CalBookingPayload = {
   uid?: string;
   title?: string;
@@ -31,7 +31,12 @@ type CalBookingPayload = {
   // top-level field and nested under responses.notes.value, depending on
   // API version — check both rather than betting on just one.
   additionalNotes?: string;
-  responses?: { notes?: { value?: string } };
+  // The phone number question can land in any of these depending on how
+  // it's configured on the event type (built-in attendee phone field vs. a
+  // custom "phone"-type booking question) — same defensive multi-check as
+  // notes above rather than betting on one field name.
+  responses?: { notes?: { value?: string }; phone?: { value?: string }; attendeePhoneNumber?: { value?: string } };
+  smsReminderNumber?: string;
   // Cal.com puts the join link in different places depending on the video
   // provider — metadata.videoCallUrl covers Google Meet/Cal Video, while
   // videoCallData.url is the provider's own link for other integrations.
@@ -73,6 +78,8 @@ export async function POST(req: NextRequest) {
   const attendee = booking.attendees?.[0];
   const notes = booking.additionalNotes || booking.responses?.notes?.value || null;
   const meetingUrl = booking.metadata?.videoCallUrl || booking.videoCallData?.url || null;
+  const attendeePhone =
+    attendee?.phoneNumber || booking.responses?.attendeePhoneNumber?.value || booking.responses?.phone?.value || booking.smsReminderNumber || null;
 
   // 1. Save/update the booking so it shows in /admin, even if the email below fails.
   // pipeline_status is only set on true new bookings — omitting it on
@@ -83,6 +90,7 @@ export async function POST(req: NextRequest) {
     booking_uid: booking.uid,
     attendee_name: attendee?.name ?? null,
     attendee_email: attendee?.email ?? null,
+    attendee_phone: attendeePhone,
     start_time: booking.startTime ?? null,
     end_time: booking.endTime ?? null,
     event_title: booking.title ?? null,
@@ -101,9 +109,10 @@ export async function POST(req: NextRequest) {
     .upsert(upsertData, { onConflict: "booking_uid" });
   if (dbError) {
     console.error("Supabase upsert error:", dbError);
-    // meeting_url doesn't exist until the migration in README runs —
-    // retry without it rather than silently dropping the whole booking.
+    // meeting_url/attendee_phone don't exist until the migration in README
+    // runs — retry without them rather than silently dropping the whole booking.
     delete upsertData.meeting_url;
+    delete upsertData.attendee_phone;
     const { error: retryError } = await supabase
       .from("eliteworker_demo_bookings")
       .upsert(upsertData, { onConflict: "booking_uid" });
@@ -122,6 +131,7 @@ export async function POST(req: NextRequest) {
       const emailElement = DemoBookedEmail({
         attendeeName: attendee?.name || attendee?.email || "Someone",
         attendeeEmail: attendee?.email || "no email given",
+        attendeePhone,
         when,
         eventTitle: booking.title,
         notes,

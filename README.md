@@ -270,6 +270,20 @@ on conflict (id) do nothing;
 upload/delete goes through `/api/admin/profile/avatar` using the service role
 key — same bypass-RLS pattern as the rest of the admin tables.)
 
+Demo bookings now capture the attendee's phone number too, shown as its own
+column in the Demo Bookings tab. New column, populated automatically from
+Cal.com's webhook going forward:
+
+```sql
+alter table eliteworker_demo_bookings add column if not exists attendee_phone text;
+```
+
+**This only fills in if the booking form actually asks for a phone number —**
+that's configured on Cal.com's side, not in this codebase (the `/demo` page
+just embeds their calendar widget). In your Cal.com dashboard: **Event Types
+→ your demo event → Advanced → Booking Questions**, add "Phone number" (or
+enable the built-in Attendee Phone Number field) and toggle it **Required**.
+
 ## 7. Push to GitHub
 
 ```

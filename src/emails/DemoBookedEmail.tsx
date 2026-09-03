@@ -8,12 +8,14 @@ import { COLORS, SITE_URL } from "./constants";
 export function DemoBookedEmail({
   attendeeName,
   attendeeEmail,
+  attendeePhone,
   when,
   eventTitle,
   notes,
 }: {
   attendeeName: string;
   attendeeEmail: string;
+  attendeePhone?: string | null;
   when: string;
   eventTitle?: string | null;
   notes?: string | null;
@@ -50,6 +52,7 @@ export function DemoBookedEmail({
         fields={[
           { label: "Attendee", value: attendeeName },
           { label: "Email", value: attendeeEmail },
+          { label: "Phone", value: attendeePhone || "—" },
           { label: "When", value: when },
           { label: "Event", value: eventTitle || "—" },
         ]}
