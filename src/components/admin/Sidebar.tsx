@@ -44,9 +44,11 @@ export function Sidebar({ admin }: { admin: AdminUser }) {
       {/* Mobile/tablet: a slim top bar with the logo and the account menu —
           the nav lives in a fixed bottom tab bar instead, so logo + tabs
           never compete for the same cramped strip at the top of the screen. */}
-      <div className="flex items-center justify-between border-b border-admin-nav-line bg-admin-nav px-3 py-2.5 md:hidden">
+      <div className="relative flex items-center justify-center border-b border-admin-nav-line bg-admin-nav px-3 py-2.5 md:hidden">
         <Wordmark logoClassName="h-5 w-auto" />
-        <AdminProfileMenu admin={admin} />
+        <div className="absolute right-3">
+          <AdminProfileMenu admin={admin} />
+        </div>
       </div>
 
       {/* The bottom tab bar stays black (--nav) rather than the admin blue —
