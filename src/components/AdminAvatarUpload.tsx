@@ -56,7 +56,7 @@ export default function AdminAvatarUpload({ admin }: { admin: AdminUser }) {
   }
 
   return (
-    <div className="rounded-2xl border border-line bg-paper p-6">
+    <div>
       <p className="font-semibold text-ink">Profile photo</p>
       <p className="mt-1.5 text-sm text-ink/60">Shown next to your name in the admin dashboard.</p>
 

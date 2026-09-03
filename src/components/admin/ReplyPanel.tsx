@@ -75,9 +75,9 @@ export function ReplyPanel({
       </p>
 
       {replies.length > 0 && (
-        <div className="mt-2 space-y-2">
+        <div className="mt-2 divide-y divide-line">
           {replies.map((reply) => (
-            <div key={reply.id} className="rounded-lg border border-line bg-paper px-3 py-2">
+            <div key={reply.id} className="py-2.5">
               <p className="text-xs text-ink/45">
                 {formatDate(reply.created_at)} {reply.admin_name ? `· ${reply.admin_name}` : ""}
               </p>

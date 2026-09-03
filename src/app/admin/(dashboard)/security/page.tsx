@@ -24,9 +24,13 @@ export default async function SecurityPage() {
   return (
     <div>
       <Topbar admin={admin} title="Security" />
-      <div className="max-w-xl space-y-4 p-5 sm:p-8">
-        <AdminPasskeySettings initialPasskeys={(passkeys as Passkey[]) || []} />
-        <AdminTwoFactorSettings initialEnabled={totpEnabled} />
+      <div className="max-w-xl divide-y divide-line p-5 sm:p-8">
+        <div className="pb-6">
+          <AdminPasskeySettings initialPasskeys={(passkeys as Passkey[]) || []} />
+        </div>
+        <div className="pt-6">
+          <AdminTwoFactorSettings initialEnabled={totpEnabled} />
+        </div>
       </div>
     </div>
   );

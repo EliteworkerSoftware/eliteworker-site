@@ -80,7 +80,7 @@ export default function AdminTwoFactorSettings({ initialEnabled }: { initialEnab
 
   if (enabled) {
     return (
-      <div className="rounded-2xl border border-line bg-paper p-6">
+      <div>
         <div className="flex items-center gap-2 text-emerald-700">
           <ShieldCheck size={19} />
           <p className="font-semibold">Two-factor authentication is on</p>
@@ -135,7 +135,7 @@ export default function AdminTwoFactorSettings({ initialEnabled }: { initialEnab
   }
 
   return (
-    <div className="rounded-2xl border border-line bg-paper p-6">
+    <div>
       <div className="flex items-center gap-2 text-ink/70">
         <ShieldOff size={19} />
         <p className="font-semibold text-ink">Two-factor authentication is off</p>

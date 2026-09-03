@@ -9,10 +9,16 @@ export default function DashboardLoading() {
         <div className="h-5 w-40 animate-pulse rounded bg-line" />
         <div className="h-8 w-20 animate-pulse rounded-full bg-line" />
       </div>
-      <div className="space-y-4 p-5 sm:p-8">
-        <div className="h-24 animate-pulse rounded-2xl border border-line bg-paper" />
-        <div className="h-24 animate-pulse rounded-2xl border border-line bg-paper" />
-        <div className="h-24 animate-pulse rounded-2xl border border-line bg-paper" />
+      <div className="divide-y divide-line p-5 sm:p-8">
+        <div className="h-24 animate-pulse py-3">
+          <div className="h-full w-full rounded-lg bg-line/60" />
+        </div>
+        <div className="h-24 animate-pulse py-3">
+          <div className="h-full w-full rounded-lg bg-line/60" />
+        </div>
+        <div className="h-24 animate-pulse py-3">
+          <div className="h-full w-full rounded-lg bg-line/60" />
+        </div>
       </div>
     </div>
   );

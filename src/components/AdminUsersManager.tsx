@@ -170,10 +170,10 @@ export default function AdminUsersManager({
         </div>
       )}
 
-      {/* Mobile/tablet: one card per admin instead of a wide table. */}
-      <div className="space-y-3 md:hidden">
+      {/* Mobile/tablet: one stacked row per admin instead of a wide table. */}
+      <div className="divide-y divide-line md:hidden">
         {users.map((u) => (
-          <div key={u.id} className="rounded-2xl border border-line bg-paper p-4">
+          <div key={u.id} className="py-3">
             <div className="flex items-start justify-between gap-3">
               <div className="min-w-0">
                 {editingId === u.id ? (
@@ -255,7 +255,7 @@ export default function AdminUsersManager({
       </div>
 
       {/* Desktop: the full table. */}
-      <div className="hidden overflow-x-auto rounded-2xl border border-line bg-paper md:block">
+      <div className="hidden overflow-x-auto md:block">
         <table className="w-full min-w-140 text-left text-sm">
           <thead>
             <tr className="border-b border-line text-xs font-semibold uppercase tracking-wide text-ink/50">
@@ -353,7 +353,7 @@ export default function AdminUsersManager({
 
       <form
         onSubmit={handleAdd}
-        className="mt-4 flex flex-wrap items-end gap-3 rounded-2xl border border-line bg-paper p-5"
+        className="mt-6 flex flex-wrap items-end gap-3 border-t border-line pt-5"
       >
         <div className="min-w-30">
           <label className="text-xs font-medium text-ink/60">First name</label>

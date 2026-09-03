@@ -69,7 +69,7 @@ export default function AdminPasskeySettings({ initialPasskeys }: { initialPassk
   }
 
   return (
-    <div className="rounded-2xl border border-line bg-paper p-6">
+    <div>
       <div className="flex items-center gap-2 text-ink/70">
         <Fingerprint size={19} />
         <p className="font-semibold text-ink">Passkeys</p>
@@ -79,9 +79,9 @@ export default function AdminPasskeySettings({ initialPasskeys }: { initialPassk
       </p>
 
       {passkeys.length > 0 && (
-        <div className="mt-4 space-y-2">
+        <div className="mt-4 divide-y divide-line">
           {passkeys.map((p) => (
-            <div key={p.id} className="flex items-center justify-between gap-3 rounded-lg border border-line px-3 py-2">
+            <div key={p.id} className="flex items-center justify-between gap-3 py-2.5">
               <div>
                 <p className="text-sm font-medium text-ink">{p.device_name || "Unnamed passkey"}</p>
                 <p className="text-xs text-ink/45">

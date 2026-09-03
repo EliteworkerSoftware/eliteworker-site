@@ -3,10 +3,8 @@ import type { LucideIcon } from "lucide-react";
 
 type Accent = "brand" | "accent" | "teal";
 
-// A solid color stripe + bare icon, not a soft pastel-tinted badge — matches
-// the bold-stripe motif already used on the login screen and in emails,
-// rather than the softer "friendly SaaS" look the rest of the admin section
-// moved away from.
+// A solid color underline + bare icon, not a card — the accent shows as a
+// thin line that brightens on hover rather than a boxed background.
 const ACCENT_STYLES: Record<Accent, { bar: string; icon: string }> = {
   brand: { bar: "bg-brand", icon: "text-brand" },
   accent: { bar: "bg-accent", icon: "text-accent" },
@@ -30,21 +28,16 @@ export function StatCard({
 }) {
   const styles = ACCENT_STYLES[accent];
   return (
-    <Link
-      href={href}
-      className="block overflow-hidden rounded-2xl border border-line bg-paper transition hover:border-ink/20 hover:shadow-[0_4px_20px_rgba(15,23,42,0.08)]"
-    >
-      <div className={`h-1.5 w-full ${styles.bar}`} />
-      <div className="p-6">
-        <div className="flex items-center justify-between">
-          <Icon size={20} strokeWidth={2.25} className={styles.icon} />
-          {unread > 0 && (
-            <span className="rounded-full bg-red-600 px-2.5 py-1 text-xs font-semibold text-white">{unread} unread</span>
-          )}
-        </div>
-        <p className="font-display mt-4 text-3xl font-bold text-ink">{total}</p>
-        <p className="mt-1 text-sm text-ink/50">{label}</p>
+    <Link href={href} className="group block">
+      <div className="flex items-center justify-between">
+        <Icon size={20} strokeWidth={2.25} className={styles.icon} />
+        {unread > 0 && (
+          <span className="rounded-full bg-red-600 px-2.5 py-1 text-xs font-semibold text-white">{unread} unread</span>
+        )}
       </div>
+      <p className="font-display mt-4 text-3xl font-bold text-ink">{total}</p>
+      <p className="mt-1 text-sm text-ink/50">{label}</p>
+      <div className={`mt-4 h-px w-full ${styles.bar} opacity-25 transition group-hover:opacity-100`} />
     </Link>
   );
 }

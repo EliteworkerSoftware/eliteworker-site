@@ -263,7 +263,7 @@ export function ResourceTable<T extends BaseRow>({
     return (
       <div>
         {filterBar}
-        <div className="rounded-2xl border border-line bg-paper px-4 py-8 text-center text-ink/40">{emptyLabel}</div>
+        <div className="py-12 text-center text-sm text-ink/40">{emptyLabel}</div>
       </div>
     );
   }
@@ -274,21 +274,21 @@ export function ResourceTable<T extends BaseRow>({
       {tabBar}
       {filterBar}
 
-      {/* Mobile/tablet: a stacked card per row — every column reads as a
+      {/* Mobile/tablet: a stacked row per entry — every column reads as a
           label:value pair instead of needing a wide table with horizontal
           scroll. */}
-      <div className="space-y-3 md:hidden">
+      <div className="divide-y divide-line md:hidden">
         {visibleRows.map((row) => {
           const expanded = expandedId === row.id;
           return (
             <div
               key={row.id}
               ref={row.id === highlightId ? (el) => { highlightRef.current = el; } : undefined}
-              className={`overflow-hidden rounded-2xl border border-l-4 bg-paper ${
-                row.id === highlightId ? "border-brand" : "border-line"
-              } ${row.is_read ? "border-l-transparent" : styles.border}`}
+              className={`border-l-4 pl-3 ${
+                row.id === highlightId ? "border-brand" : row.is_read ? "border-transparent" : styles.border
+              }`}
             >
-              <button type="button" onClick={() => toggleExpand(row)} className="flex w-full flex-col gap-2 px-4 py-3 text-left">
+              <button type="button" onClick={() => toggleExpand(row)} className="flex w-full flex-col gap-2 py-3 pr-1 text-left">
                 {/* Status gets the full row to itself — putting it in a
                     shrink-0 column next to the data (as before) squeezed the
                     label:value rows into less width, forcing values to
@@ -309,7 +309,7 @@ export function ResourceTable<T extends BaseRow>({
                 </div>
               </button>
               {expanded && (
-                <div className="border-t border-line bg-paper-alt px-4 py-5">
+                <div className="border-t border-line py-5 pr-1">
                   <div className="mb-4">{renderExpanded(row, { setLocalStatus: (status) => setLocalStatus(row.id, status) })}</div>
                   {renderActions(row)}
                 </div>
@@ -318,12 +318,12 @@ export function ResourceTable<T extends BaseRow>({
           );
         })}
         {visibleRows.length === 0 && (
-          <div className="rounded-2xl border border-line bg-paper px-4 py-8 text-center text-ink/40">Nothing matches this filter.</div>
+          <div className="py-12 text-center text-sm text-ink/40">Nothing matches this filter.</div>
         )}
       </div>
 
       {/* Desktop: the full table. */}
-      <div className="hidden overflow-x-auto rounded-2xl border border-line bg-paper md:block">
+      <div className="hidden overflow-x-auto md:block">
         <table className="w-full text-left text-sm">
           <thead>
             <tr className="border-b border-line text-xs font-semibold uppercase tracking-wide text-ink/50">
@@ -344,7 +344,7 @@ export function ResourceTable<T extends BaseRow>({
                   <tr
                     ref={row.id === highlightId ? (el) => { highlightRef.current = el; } : undefined}
                     onClick={() => toggleExpand(row)}
-                    className={`cursor-pointer border-b border-l-4 last:border-b-0 align-top transition hover:bg-paper-alt ${
+                    className={`cursor-pointer border-b border-l-4 last:border-b-0 align-top transition hover:bg-ink/3 ${
                       row.id === highlightId ? "border-brand" : "border-line"
                     } ${row.is_read ? "border-l-transparent" : styles.border}`}
                   >
@@ -364,7 +364,7 @@ export function ResourceTable<T extends BaseRow>({
                     </td>
                   </tr>
                   {expanded && (
-                    <tr className="border-b border-line bg-paper-alt last:border-b-0">
+                    <tr className="border-b border-line last:border-b-0">
                       <td colSpan={columns.length + 2} className="px-4 py-5">
                         <div className="mb-4">
                           {renderExpanded(row, { setLocalStatus: (status) => setLocalStatus(row.id, status) })}
