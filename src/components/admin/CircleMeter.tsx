@@ -81,7 +81,7 @@ export function CircleMeter({
   }
 
   return (
-    <div className="flex flex-col items-center rounded-2xl border border-line bg-paper p-6 text-center">
+    <div className="flex flex-col items-center p-6 text-center">
       <div className="relative h-28 w-28">
         <svg viewBox="0 0 100 100" className="h-full w-full -rotate-90">
           <circle cx="50" cy="50" r={RADIUS} fill="none" stroke="var(--line)" strokeWidth="8" />
