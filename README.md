@@ -253,6 +253,23 @@ bookings won't have one retroactively):
 alter table eliteworker_demo_bookings add column if not exists meeting_url text;
 ```
 
+Admins can now upload a profile photo (Security page in `/admin`), shown next
+to their name in the dashboard's account menu instead of just initials. This
+needs a new column plus a public Storage bucket to hold the images — in the
+Supabase SQL editor, run:
+
+```sql
+alter table eliteworker_admin_users add column if not exists avatar_url text;
+
+insert into storage.buckets (id, name, public)
+values ('admin-avatars', 'admin-avatars', true)
+on conflict (id) do nothing;
+```
+
+(The bucket is public-read so avatar images load directly by URL, but every
+upload/delete goes through `/api/admin/profile/avatar` using the service role
+key — same bypass-RLS pattern as the rest of the admin tables.)
+
 ## 7. Push to GitHub
 
 ```

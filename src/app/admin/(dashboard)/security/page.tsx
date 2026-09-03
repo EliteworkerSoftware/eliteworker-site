@@ -1,6 +1,7 @@
 import { getCurrentAdmin } from "@/lib/currentAdmin";
 import { getSupabaseAdmin } from "@/lib/supabase";
 import { Topbar } from "@/components/admin/Topbar";
+import AdminAvatarUpload from "@/components/AdminAvatarUpload";
 import AdminTwoFactorSettings from "@/components/AdminTwoFactorSettings";
 import AdminPasskeySettings, { type Passkey } from "@/components/AdminPasskeySettings";
 
@@ -25,6 +26,7 @@ export default async function SecurityPage() {
     <div>
       <Topbar admin={admin} title="Security" />
       <div className="max-w-xl space-y-4 p-5 sm:p-8">
+        <AdminAvatarUpload admin={admin} />
         <AdminPasskeySettings initialPasskeys={(passkeys as Passkey[]) || []} />
         <AdminTwoFactorSettings initialEnabled={totpEnabled} />
       </div>

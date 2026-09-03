@@ -47,9 +47,14 @@ export function AdminProfileMenu({ admin }: { admin: AdminUser }) {
         aria-label="Account menu"
         aria-expanded={open}
         aria-haspopup="menu"
-        className="flex h-9 w-9 items-center justify-center rounded-full bg-accent text-xs font-semibold text-white transition hover:brightness-105"
+        className="flex h-9 w-9 shrink-0 items-center justify-center overflow-hidden rounded-full bg-accent text-xs font-semibold text-white transition hover:brightness-105"
       >
-        {initials(admin)}
+        {admin.avatar_url ? (
+          // eslint-disable-next-line @next/next/no-img-element -- Supabase Storage URL, not a local/optimizable asset
+          <img src={admin.avatar_url} alt="" className="h-full w-full object-cover" />
+        ) : (
+          initials(admin)
+        )}
       </button>
 
       {open && (
