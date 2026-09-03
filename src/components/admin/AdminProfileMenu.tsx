@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { ShieldCheck, LogOut } from "lucide-react";
+import { User, ShieldCheck, LogOut } from "lucide-react";
 import type { AdminUser } from "@/lib/currentAdmin";
 
 function initials({ full_name, email }: AdminUser) {
@@ -47,9 +47,14 @@ export function AdminProfileMenu({ admin }: { admin: AdminUser }) {
         aria-label="Account menu"
         aria-expanded={open}
         aria-haspopup="menu"
-        className="flex h-9 w-9 items-center justify-center rounded-full bg-accent text-xs font-semibold text-white transition hover:brightness-105"
+        className="flex h-9 w-9 shrink-0 items-center justify-center overflow-hidden rounded-full bg-accent text-xs font-semibold text-white transition hover:brightness-105"
       >
-        {initials(admin)}
+        {admin.avatar_url ? (
+          // eslint-disable-next-line @next/next/no-img-element -- Supabase Storage URL, not a local/optimizable asset
+          <img src={admin.avatar_url} alt="" className="h-full w-full object-cover" />
+        ) : (
+          initials(admin)
+        )}
       </button>
 
       {open && (
@@ -61,6 +66,15 @@ export function AdminProfileMenu({ admin }: { admin: AdminUser }) {
             <p className="truncate text-sm font-medium text-ink">{admin.full_name || admin.email}</p>
             <p className="text-xs capitalize text-ink/50">{admin.role}</p>
           </div>
+          <Link
+            href="/admin/profile"
+            role="menuitem"
+            onClick={() => setOpen(false)}
+            className="flex items-center gap-2.5 px-4 py-2.5 text-sm text-ink/70 transition hover:bg-ink/5 hover:text-ink"
+          >
+            <User size={16} />
+            Profile
+          </Link>
           <Link
             href="/admin/security"
             role="menuitem"

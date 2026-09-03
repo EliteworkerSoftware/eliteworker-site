@@ -4,7 +4,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { LayoutDashboard, Inbox, ClipboardList, CalendarCheck, Users } from "lucide-react";
-import type { AdminRole } from "@/lib/currentAdmin";
+import { AdminProfileMenu } from "@/components/admin/AdminProfileMenu";
+import type { AdminUser } from "@/lib/currentAdmin";
 
 const NAV_ITEMS = [
   { href: "/admin", label: "Overview", shortLabel: "Overview", icon: LayoutDashboard, tint: "text-ink/60" },
@@ -30,8 +31,9 @@ function Wordmark({ logoClassName }: { logoClassName: string }) {
   );
 }
 
-export function Sidebar({ role }: { role: AdminRole }) {
+export function Sidebar({ admin }: { admin: AdminUser }) {
   const pathname = usePathname();
+  const role = admin.role;
 
   function isActive(href: string) {
     return href === "/admin" ? pathname === "/admin" : pathname.startsWith(href);
@@ -39,11 +41,12 @@ export function Sidebar({ role }: { role: AdminRole }) {
 
   return (
     <>
-      {/* Mobile/tablet: a slim top bar with just the logo — the nav lives in
-          a fixed bottom tab bar instead, so logo + tabs never compete for
-          the same cramped strip at the top of the screen. */}
-      <div className="flex justify-center border-b border-admin-nav-line bg-admin-nav px-3 py-2.5 md:hidden">
+      {/* Mobile/tablet: a slim top bar with the logo and the account menu —
+          the nav lives in a fixed bottom tab bar instead, so logo + tabs
+          never compete for the same cramped strip at the top of the screen. */}
+      <div className="flex items-center justify-between border-b border-admin-nav-line bg-admin-nav px-3 py-2.5 md:hidden">
         <Wordmark logoClassName="h-5 w-auto" />
+        <AdminProfileMenu admin={admin} />
       </div>
 
       {/* The bottom tab bar stays black (--nav) rather than the admin blue —
