@@ -1,7 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getSupabaseAdmin } from "@/lib/supabase";
-import { createConfirmToken } from "@/lib/demoConfirmToken";
+import { createConfirmToken, createBookingActionToken } from "@/lib/demoConfirmToken";
 import { sendDemoReminderEmail } from "@/lib/sendDemoReminderEmail";
+import { generateBookingIcs } from "@/lib/bookingIcs";
+import { createEvent as createGoogleEvent } from "@/lib/googleCalendar";
 import { SITE_URL } from "@/emails/constants";
 
 // Vercel Cron sends this header on every scheduled invocation when
@@ -26,8 +28,9 @@ export async function GET(req: NextRequest) {
 
   const { data: bookings, error } = await supabase
     .from("eliteworker_demo_bookings")
-    .select("id, booking_uid, attendee_name, attendee_email, start_time, event_title")
+    .select("id, booking_uid, attendee_name, attendee_email, start_time, end_time, event_title, meeting_url")
     .eq("pipeline_status", "confirm_1")
+    .neq("status", "cancelled")
     .is("reminder_sent_at", null)
     .gte("start_time", windowStart)
     .lte("start_time", windowEnd);
@@ -39,16 +42,28 @@ export async function GET(req: NextRequest) {
     if (!booking.attendee_email) continue;
     try {
       const confirmUrl = `${SITE_URL}/api/demo-confirm?token=${createConfirmToken(booking.id)}`;
-      // Cal.com's own reschedule flow: it looks up the original booking from
-      // rescheduleUid and preloads the attendee's name/email/answers itself,
-      // so there's nothing else to pass. theme=light matches the /demo
-      // page's embed — without it Cal.com falls back to the visitor's OS/
-      // browser color scheme, which reads as broken dark mode next to an
-      // otherwise light-themed email and site.
-      const rescheduleUrl = `https://cal.com/${process.env.NEXT_PUBLIC_CAL_LINK}?rescheduleUid=${encodeURIComponent(booking.booking_uid)}&theme=light`;
+      const rescheduleUrl = `${SITE_URL}/booking/reschedule?token=${createBookingActionToken(booking.id, "reschedule")}`;
+      const cancelUrl = `${SITE_URL}/api/booking/manage/cancel?token=${createBookingActionToken(booking.id, "cancel")}`;
       const when = booking.start_time
         ? new Date(booking.start_time).toLocaleString("en-US", { dateStyle: "full", timeStyle: "short" })
         : "soon";
+      const ics =
+        booking.start_time && booking.end_time
+          ? generateBookingIcs({
+              uid: booking.booking_uid,
+              title: booking.event_title || "EliteWorker Demo",
+              description: "EliteWorker demo",
+              start: new Date(booking.start_time),
+              end: new Date(booking.end_time),
+              organizerEmail: (process.env.CONTACT_TO_EMAIL || "contact@eliteworker.com").trim(),
+              organizerName: "EliteWorker",
+              attendeeEmail: booking.attendee_email,
+              attendeeName: booking.attendee_name || "there",
+              meetingUrl: booking.meeting_url,
+              method: "REQUEST",
+              sequence: 0,
+            })
+          : undefined;
       await sendDemoReminderEmail({
         to: booking.attendee_email,
         name: booking.attendee_name || "there",
@@ -56,6 +71,8 @@ export async function GET(req: NextRequest) {
         eventTitle: booking.event_title,
         confirmUrl,
         rescheduleUrl,
+        cancelUrl,
+        ics,
       });
       await supabase
         .from("eliteworker_demo_bookings")
@@ -67,5 +84,36 @@ export async function GET(req: NextRequest) {
     }
   }
 
-  return NextResponse.json({ ok: true, checked: bookings?.length || 0, sent });
+  // Backfill: retry creating the Google Calendar event for any upcoming,
+  // active booking that never got one (e.g. the API call failed at booking
+  // time). Piggybacks on this existing daily cron rather than adding a
+  // second vercel.json entry.
+  const { data: missingEvents } = await supabase
+    .from("eliteworker_demo_bookings")
+    .select("id, attendee_name, attendee_email, attendee_phone, notes, start_time, end_time")
+    .is("google_event_id", null)
+    .neq("status", "cancelled")
+    .gte("start_time", new Date().toISOString());
+
+  let backfilled = 0;
+  for (const booking of missingEvents || []) {
+    if (!booking.start_time || !booking.end_time) continue;
+    try {
+      const result = await createGoogleEvent({
+        summary: `EliteWorker Demo — ${booking.attendee_name || "Attendee"}`,
+        description: `Attendee: ${booking.attendee_name || ""} (${booking.attendee_email || ""}${booking.attendee_phone ? `, ${booking.attendee_phone}` : ""})${booking.notes ? `\n\nNotes: ${booking.notes}` : ""}`,
+        start: booking.start_time,
+        end: booking.end_time,
+      });
+      await supabase
+        .from("eliteworker_demo_bookings")
+        .update({ google_event_id: result.eventId, meeting_url: result.meetingUrl })
+        .eq("id", booking.id);
+      backfilled++;
+    } catch (err) {
+      console.error("Google Calendar backfill error:", err);
+    }
+  }
+
+  return NextResponse.json({ ok: true, checked: bookings?.length || 0, sent, backfilled });
 }

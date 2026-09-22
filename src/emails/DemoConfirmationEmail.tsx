@@ -5,25 +5,29 @@ import { PillButton } from "./components/PillButton";
 import { Spacer } from "./components/Spacer";
 import { COLORS } from "./constants";
 
-export function DemoReminderEmail({
-  name,
+// Attendee-facing confirmation for a fresh booking — separate from
+// DemoBookedEmail (which is the internal team notification), same split as
+// BetaSignupEmail (team) vs BetaConfirmationEmail (applicant). The .ics
+// invite is attached at send time, not rendered here.
+export function DemoConfirmationEmail({
+  attendeeName,
   when,
   eventTitle,
-  confirmUrl,
-  rescheduleUrl,
+  meetingUrl,
   cancelUrl,
+  rescheduleUrl,
 }: {
-  name: string;
+  attendeeName: string;
   when: string;
   eventTitle?: string | null;
-  confirmUrl: string;
-  rescheduleUrl: string;
+  meetingUrl?: string | null;
   cancelUrl: string;
+  rescheduleUrl: string;
 }) {
-  const firstName = name.trim().split(/\s+/)[0] || name;
+  const firstName = attendeeName.trim().split(/\s+/)[0] || attendeeName;
 
   return (
-    <EmailLayout preview="Your EliteWorker demo is coming up — please confirm">
+    <EmailLayout preview="You're booked for your EliteWorker demo">
       <Text
         style={{
           margin: "0 0 4px",
@@ -35,7 +39,7 @@ export function DemoReminderEmail({
           color: COLORS.brand,
         }}
       >
-        Demo reminder
+        Demo booked
       </Text>
       <Heading
         style={{
@@ -47,25 +51,22 @@ export function DemoReminderEmail({
           color: COLORS.ink,
         }}
       >
-        See you soon, {firstName}?
+        You&rsquo;re all set, {firstName}
       </Heading>
 
       <Text style={{ margin: "0 0 24px", fontFamily: FONT_STACK, fontSize: 16, lineHeight: "26px", color: COLORS.ink }}>
-        Just confirming you&rsquo;re still good for your EliteWorker demo tomorrow — or grab a different time if
-        something came up.
+        We&rsquo;ve added your demo to our calendar and attached an invite to this email — open it to add it to yours.
       </Text>
 
-      <FieldList fields={[{ label: "When", value: when }, { label: "Event", value: eventTitle || "Demo" }]} />
+      <FieldList
+        fields={[
+          { label: "When", value: when },
+          { label: "Event", value: eventTitle || "Demo" },
+          ...(meetingUrl ? [{ label: "Join link", value: meetingUrl }] : []),
+        ]}
+      />
 
       <Spacer height={28} />
-      {/* Two inline-block boxes, not a table row — a table cell can only
-          shrink (squeezing/wrapping the button's own text) when the two
-          buttons don't fit side by side on a narrow phone. inline-block
-          instead wraps the whole second button down to its own line,
-          keeping each button's label intact either way. */}
-      <div style={{ display: "inline-block", verticalAlign: "top", margin: "0 5px 10px" }}>
-        <PillButton href={confirmUrl}>Confirm I&rsquo;ll be there</PillButton>
-      </div>
       <div style={{ display: "inline-block", verticalAlign: "top", margin: "0 5px 10px" }}>
         <PillButton href={rescheduleUrl} variant="secondary">
           Reschedule
@@ -79,10 +80,10 @@ export function DemoReminderEmail({
 
       <Spacer height={18} />
       <Text style={{ margin: 0, fontFamily: FONT_STACK, fontSize: 13, lineHeight: "22px", color: COLORS.inkMuted }}>
-        Need something else entirely? Just reply to this email and we&rsquo;ll sort it out.
+        Questions before then? Just reply to this email.
       </Text>
     </EmailLayout>
   );
 }
 
-export default DemoReminderEmail;
+export default DemoConfirmationEmail;

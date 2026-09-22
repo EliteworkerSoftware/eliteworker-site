@@ -10,6 +10,8 @@ export async function sendDemoReminderEmail({
   eventTitle,
   confirmUrl,
   rescheduleUrl,
+  cancelUrl,
+  ics,
 }: {
   to: string;
   name: string;
@@ -17,8 +19,10 @@ export async function sendDemoReminderEmail({
   eventTitle?: string | null;
   confirmUrl: string;
   rescheduleUrl: string;
+  cancelUrl: string;
+  ics?: { filename: string; content: string };
 }) {
-  const emailElement = DemoReminderEmail({ name, when, eventTitle, confirmUrl, rescheduleUrl });
+  const emailElement = DemoReminderEmail({ name, when, eventTitle, confirmUrl, rescheduleUrl, cancelUrl });
   const [html, text] = await Promise.all([render(emailElement), render(emailElement, { plainText: true })]);
 
   const mailgun = new Mailgun(formData);
@@ -32,5 +36,6 @@ export async function sendDemoReminderEmail({
     subject: "Reminder: your EliteWorker demo is coming up",
     html,
     text,
+    ...(ics ? { attachment: [{ data: Buffer.from(ics.content), filename: ics.filename }] } : {}),
   });
 }
