@@ -64,8 +64,16 @@ export default function Footer() {
         </div>
       </div>
 
-      <div className="border-t border-line px-6 py-7 text-center text-sm text-ink/40">
-        © {new Date().getFullYear()} EliteWorker. All rights reserved.
+      <div className="flex flex-col items-center gap-3 border-t border-line px-6 py-7 text-center text-sm text-ink/40 sm:flex-row sm:justify-between">
+        <p>© {new Date().getFullYear()} EliteWorker. All rights reserved.</p>
+        <div className="flex items-center gap-4">
+          <Link href="/privacy" className="transition hover:text-brand">
+            Privacy Policy
+          </Link>
+          <Link href="/privacy#terms" className="transition hover:text-brand">
+            Terms &amp; Conditions
+          </Link>
+        </div>
       </div>
     </footer>
   );
