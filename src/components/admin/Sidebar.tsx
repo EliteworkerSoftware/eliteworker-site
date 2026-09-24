@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { LayoutDashboard, Inbox, ClipboardList, CalendarCheck, Users } from "lucide-react";
+import { LayoutDashboard, Inbox, ClipboardList, CalendarCheck, Users, BarChart3 } from "lucide-react";
 import { AdminProfileMenu } from "@/components/admin/AdminProfileMenu";
 import type { AdminUser } from "@/lib/currentAdmin";
 
@@ -12,6 +12,7 @@ const NAV_ITEMS = [
   { href: "/admin/leads", label: "Leads", shortLabel: "Leads", icon: Inbox, tint: "text-brand" },
   { href: "/admin/beta", label: "Beta Applications", shortLabel: "Beta", icon: ClipboardList, tint: "text-accent" },
   { href: "/admin/bookings", label: "Demo Bookings", shortLabel: "Bookings", icon: CalendarCheck, tint: "text-teal" },
+  { href: "/admin/analytics", label: "Analytics", shortLabel: "Analytics", icon: BarChart3, tint: "text-brand" },
 ] as const;
 
 const TAB_CLASSES =
@@ -57,7 +58,7 @@ export function Sidebar({ admin }: { admin: AdminUser }) {
         className="fixed inset-x-0 bottom-0 z-40 border-t border-nav-line bg-nav px-1 pt-1 md:hidden"
         style={{ paddingBottom: "max(0.25rem, env(safe-area-inset-bottom))" }}
       >
-        <div className={`grid gap-1 ${role === "owner" ? "grid-cols-5" : "grid-cols-4"}`}>
+        <div className={`grid gap-1 ${role === "owner" ? "grid-cols-6" : "grid-cols-5"}`}>
           {NAV_ITEMS.map((item) => {
             const active = isActive(item.href);
             const Icon = item.icon;

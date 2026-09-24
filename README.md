@@ -284,6 +284,42 @@ just embeds their calendar widget). In your Cal.com dashboard: **Event Types
 → your demo event → Advanced → Booking Questions**, add "Phone number" (or
 enable the built-in Attendee Phone Number field) and toggle it **Required**.
 
+### Website analytics (`/admin/analytics`)
+
+First-party visitor analytics — the same system as onproit.com. Every public
+page view, time on page, and link/button click is recorded (admin pages are
+skipped; so are localhost and Vercel preview deployments), grouped by visitor
+session, and shown alongside demo bookings, beta applications, and contact
+leads. Run this once in the Supabase SQL editor:
+
+```sql
+create table if not exists eliteworker_page_views (
+  id uuid primary key default gen_random_uuid(),
+  created_at timestamptz not null default now(),
+  path text not null,
+  referrer text,
+  country text,
+  region text,
+  city text,
+  is_mobile boolean,
+  event_type text,
+  is_likely_bot boolean not null default false,
+  user_agent text,
+  session_id text,
+  duration_seconds integer,
+  click_label text,
+  click_href text
+);
+
+create index if not exists eliteworker_page_views_created_at_idx on eliteworker_page_views (created_at desc);
+create index if not exists eliteworker_page_views_session_id_idx on eliteworker_page_views (session_id);
+
+alter table eliteworker_page_views enable row level security;
+```
+
+(RLS with no policies on purpose — only the server's service role key writes
+and reads it, same as the other tables.)
+
 ## 7. Push to GitHub
 
 ```

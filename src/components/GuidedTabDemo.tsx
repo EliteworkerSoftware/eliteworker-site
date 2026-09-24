@@ -124,7 +124,8 @@ export function GuidedTabDemo({
 
   useEffect(() => {
     if (!started) return;
-    setDone(false);
+    // `done` starts false and the replay button resets it before bumping
+    // runId, so there's no need to reset it here.
     const timers = timeline.map((kf) => setTimeout(() => setFrame(kf), kf.at));
     const last = timeline[timeline.length - 1];
     timers.push(setTimeout(() => setDone(true), last.at + last.duration + 300));
