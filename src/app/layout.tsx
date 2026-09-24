@@ -16,7 +16,7 @@ const jetbrainsMono = JetBrains_Mono({
   weight: ["400", "500"],
 });
 
-const siteUrl = "https://eliteworker.com";
+const siteUrl = "https://www.eliteworker.com";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),

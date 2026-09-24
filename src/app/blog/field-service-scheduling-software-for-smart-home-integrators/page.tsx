@@ -9,7 +9,7 @@ import { StageTimeline } from "@/components/StageTimeline";
 import { getBlogPost } from "@/lib/blogPosts";
 
 const post = getBlogPost("field-service-scheduling-software-for-smart-home-integrators")!;
-const siteUrl = "https://eliteworker.com";
+const siteUrl = "https://www.eliteworker.com";
 
 export const metadata: Metadata = {
   title: post.title,

@@ -320,6 +320,54 @@ alter table eliteworker_page_views enable row level security;
 (RLS with no policies on purpose — only the server's service role key writes
 and reads it, same as the other tables.)
 
+### SEO keyword pipeline (Analytics → Target keywords)
+
+Same system as onproit.com. A daily job pulls every real Google search
+eliteworker.com appears for from Search Console into a keyword list (new ones
+get a green "New" badge), looks up monthly search volume via DataForSEO
+(capped by `DATAFORSEO_MONTHLY_BUDGET_USD`, default $3), and a second daily
+job pings Bing/Yandex (IndexNow) and resubmits the sitemap to Google. Run
+this once in the Supabase SQL editor:
+
+```sql
+create table if not exists eliteworker_target_keywords (
+  id uuid primary key default gen_random_uuid(),
+  created_at timestamptz not null default now(),
+  keyword text not null unique,
+  target_url text,
+  priority text not null default 'medium',
+  notes text,
+  source text not null default 'manual',
+  status text not null default 'discovered',
+  last_impressions integer,
+  last_clicks integer,
+  last_position numeric,
+  last_synced_at timestamptz,
+  content_url text,
+  queued_at timestamptz,
+  content_published_at timestamptz,
+  seen_at timestamptz,
+  search_volume integer,
+  volume_checked_at timestamptz
+);
+alter table eliteworker_target_keywords enable row level security;
+
+create table if not exists eliteworker_dataforseo_usage (
+  month text primary key,
+  spend_usd numeric not null default 0,
+  calls integer not null default 0,
+  updated_at timestamptz not null default now()
+);
+alter table eliteworker_dataforseo_usage enable row level security;
+```
+
+Env vars (Vercel): `GOOGLE_SEARCH_CONSOLE_CLIENT_EMAIL`,
+`GOOGLE_SEARCH_CONSOLE_PRIVATE_KEY`, `GOOGLE_SEARCH_CONSOLE_SITE_URL`
+(e.g. `sc-domain:eliteworker.com`), `INDEXNOW_KEY` (must match the
+`src/app/<key>.txt` folder name), and optionally `DATAFORSEO_LOGIN`,
+`DATAFORSEO_PASSWORD`, `DATAFORSEO_MONTHLY_BUDGET_USD`. The Search Console
+service account needs **Full** permission on the eliteworker.com property.
+
 ## 7. Push to GitHub
 
 ```

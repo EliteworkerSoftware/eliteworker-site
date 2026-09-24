@@ -1,7 +1,7 @@
 import type { MetadataRoute } from "next";
 import { BLOG_POSTS } from "@/lib/blogPosts";
 
-const siteUrl = "https://eliteworker.com";
+const siteUrl = "https://www.eliteworker.com";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const lastModified = new Date();

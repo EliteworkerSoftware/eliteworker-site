@@ -1,0 +1,89 @@
+import type { SupabaseClient } from "@supabase/supabase-js";
+import {
+  ESTIMATED_COST_PER_REQUEST_USD,
+  fetchSearchVolumes,
+  getMonthlyBudgetUsd,
+  isDataForSeoConfigured,
+  isValidVolumeKeyword,
+} from "@/lib/dataforseo";
+import { DATAFORSEO_USAGE_TABLE, KEYWORDS_TABLE } from "@/lib/keywords";
+
+// Re-check a keyword's volume at most this often — Google Ads volume is a
+// monthly average, so checking more often only spends money.
+const RECHECK_AFTER_DAYS = 30;
+
+// Agent-suggested keywords have no Search Console history, so real search
+// volume is the only signal for how much they're worth chasing.
+function priorityFromVolume(volume: number | null): "high" | "medium" | "low" {
+  if (volume != null && volume >= 50) return "high";
+  if (volume != null && volume >= 10) return "medium";
+  return "low";
+}
+
+// Looks up search volume for every tracked keyword without a recent one, in
+// a single DataForSEO request — at most one paid call per run, and none if
+// it would push this month's spend past the budget.
+export async function enrichSearchVolumes(supabase: SupabaseClient): Promise<Record<string, unknown>> {
+  if (!isDataForSeoConfigured()) return { skipped: "not configured" };
+
+  const month = new Date().toISOString().slice(0, 7);
+  const budget = getMonthlyBudgetUsd();
+  const { data: usage } = await supabase
+    .from(DATAFORSEO_USAGE_TABLE)
+    .select("spend_usd, calls")
+    .eq("month", month)
+    .maybeSingle();
+  const spent = Number(usage?.spend_usd ?? 0);
+  const calls = Number(usage?.calls ?? 0);
+
+  if (spent + ESTIMATED_COST_PER_REQUEST_USD > budget) {
+    return { skipped: "monthly budget reached", spent, budget };
+  }
+
+  const staleBefore = new Date(Date.now() - RECHECK_AFTER_DAYS * 86_400_000).toISOString();
+  const { data: rows, error } = await supabase
+    .from(KEYWORDS_TABLE)
+    .select("id, keyword, source, last_impressions")
+    .in("status", ["discovered", "queued"])
+    .or(`volume_checked_at.is.null,volume_checked_at.lt.${staleBefore}`);
+  if (error) return { error: error.message };
+
+  const candidates = (rows ?? []).filter((r) => isValidVolumeKeyword(r.keyword)).slice(0, 1000);
+  if (candidates.length === 0) return { skipped: "nothing to check", spent, budget };
+
+  const recordSpend = (cost: number) =>
+    supabase.from(DATAFORSEO_USAGE_TABLE).upsert({
+      month,
+      spend_usd: spent + cost,
+      calls: calls + 1,
+      updated_at: new Date().toISOString(),
+    });
+
+  let volumes;
+  let cost;
+  try {
+    const result = await fetchSearchVolumes(candidates.map((r) => r.keyword));
+    volumes = result.volumes;
+    cost = result.costUsd;
+    await recordSpend(cost);
+  } catch (err) {
+    // A failed task can still be billed — record whatever it reported.
+    const failedCost = (err as { costUsd?: number }).costUsd;
+    if (failedCost) await recordSpend(failedCost);
+    return { error: err instanceof Error ? err.message : String(err) };
+  }
+
+  const byKeyword = new Map(volumes.map((v) => [v.keyword.toLowerCase(), v.searchVolume]));
+  const checkedAt = new Date().toISOString();
+
+  // Every candidate gets stamped, even with no volume returned, so a keyword
+  // Google has no data for isn't re-sent (and re-paid for) every day.
+  for (const r of candidates) {
+    const volume = byKeyword.get(r.keyword.toLowerCase()) ?? null;
+    const update: Record<string, unknown> = { search_volume: volume, volume_checked_at: checkedAt };
+    if (r.source === "agent" && r.last_impressions == null) update.priority = priorityFromVolume(volume);
+    await supabase.from(KEYWORDS_TABLE).update(update).eq("id", r.id);
+  }
+
+  return { checked: candidates.length, spent: spent + cost, budget };
+}
